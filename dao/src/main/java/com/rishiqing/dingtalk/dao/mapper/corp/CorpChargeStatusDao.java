@@ -1,0 +1,28 @@
+package com.rishiqing.dingtalk.dao.mapper.corp;
+
+import com.rishiqing.dingtalk.dao.model.corp.CorpChargeStatusDO;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+/**
+ * @author Wallace Mao
+ * Date: 2018-11-02 17:07
+ */
+@Repository("corpChargeStatusDao")
+public interface CorpChargeStatusDao {
+
+    /**
+     * 保存corpChargeStatusDO
+     * @param corpChargeStatusDO
+     */
+    public void saveOrUpdateCorpChargeStatus(CorpChargeStatusDO corpChargeStatusDO);
+
+    /**
+     * 根据suiteKey和corpId获取唯一的CorpChargeStatus
+     * @param suiteKey
+     * @param corpId
+     * @return
+     */
+    public CorpChargeStatusDO getCorpChargeStatusBySuiteKeyAndCorpId(@Param("suiteKey") String suiteKey, @Param("corpId") String corpId);
+
+}

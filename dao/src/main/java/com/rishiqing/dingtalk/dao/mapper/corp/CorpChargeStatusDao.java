@@ -19,10 +19,9 @@ public interface CorpChargeStatusDao {
 
     /**
      * 根据suiteKey和corpId获取唯一的CorpChargeStatus
-     * @param suiteKey
      * @param corpId
      * @return
      */
-    public CorpChargeStatusDO getCorpChargeStatusBySuiteKeyAndCorpId(@Param("suiteKey") String suiteKey, @Param("corpId") String corpId);
+    public CorpChargeStatusDO getCorpChargeStatusBySuiteKeyAndCorpId(@Param("corpId") String corpId);
 
 }

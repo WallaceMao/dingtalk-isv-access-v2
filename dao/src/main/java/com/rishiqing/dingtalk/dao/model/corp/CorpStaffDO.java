@@ -7,7 +7,7 @@ import java.util.Date;
  * @author Wallace Mao
  * Date: 2018-10-31 23:59
  */
-public class StaffDO {
+public class CorpStaffDO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
@@ -312,7 +312,7 @@ public class StaffDO {
 
     @Override
     public String toString() {
-        return "StaffDO{" +
+        return "CorpStaffDO{" +
                 "corpId='" + corpId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +

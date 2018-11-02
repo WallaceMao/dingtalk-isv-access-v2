@@ -19,16 +19,16 @@ public interface CorpCallbackFailDao {
     public void saveOrUpdateCorpCallbackFail(CorpCallbackFailDO corpCallbackFailDO);
 
     /**
+     * 根据id删除失败回调事件
+     * @param id
+     */
+    public void deleteCorpCallbackFailById(@Param("id") Long id);
+
+    /**
      * 分页获取回调失败事件列表
      * @param offset
      * @param limit
      * @return
      */
     public List<CorpCallbackFailDO> getCorpCallbackFailList(@Param("offset") Integer offset, @Param("limit") Integer limit);
-
-    /**
-     * 根据id删除失败回调事件
-     * @param id
-     */
-    public void deleteCorpCallbackFailById(@Param("id") Long id);
 }

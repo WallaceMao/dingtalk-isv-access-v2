@@ -1,8 +1,5 @@
 package com.rishiqing.dingtalk.dao.model.suite;
 
-import com.rishiqing.dingtalk.biz.corp.enumtype.AuthFailType;
-import com.rishiqing.dingtalk.biz.corp.enumtype.SuitePushType;
-
 import java.util.Date;
 
 /**
@@ -20,11 +17,11 @@ public class CorpSuiteAuthFailDO {
     //  套件key
     private String suiteKey;
     //  失败类型
-    private AuthFailType authFailType;
+    private String authFailType;
     //  失败信息
     private String failInfo;
     //  套件的推送类型
-    private SuitePushType suitePushType;
+    private String suitePushType;
 
     public Long getId() {
         return id;
@@ -66,11 +63,11 @@ public class CorpSuiteAuthFailDO {
         this.suiteKey = suiteKey;
     }
 
-    public AuthFailType getAuthFailType() {
+    public String getAuthFailType() {
         return authFailType;
     }
 
-    public void setAuthFailType(AuthFailType authFailType) {
+    public void setAuthFailType(String authFailType) {
         this.authFailType = authFailType;
     }
 
@@ -82,11 +79,11 @@ public class CorpSuiteAuthFailDO {
         this.failInfo = failInfo;
     }
 
-    public SuitePushType getSuitePushType() {
+    public String getSuitePushType() {
         return suitePushType;
     }
 
-    public void setSuitePushType(SuitePushType suitePushType) {
+    public void setSuitePushType(String suitePushType) {
         this.suitePushType = suitePushType;
     }
 

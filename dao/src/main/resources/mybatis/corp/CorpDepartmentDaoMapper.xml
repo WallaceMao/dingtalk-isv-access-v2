@@ -133,5 +133,4 @@
 			WHERE corp_id=#{corpId} AND parent_id=#{parentId}
 		 ]]>
     </select>
-
 </mapper>

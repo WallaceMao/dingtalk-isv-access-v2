@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.web.controller.demo;
 
-import com.rishiqing.dingtalk.biz.isv.model.GlobalSuite;
+import com.rishiqing.dingtalk.biz.model.GlobalSuite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

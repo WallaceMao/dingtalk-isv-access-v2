@@ -1,8 +1,5 @@
 package com.rishiqing.dingtalk.dao.model.corp;
 
-
-import com.rishiqing.dingtalk.biz.corp.enumtype.CorpFailType;
-
 import java.util.Date;
 
 /**
@@ -20,7 +17,7 @@ public class CorpOrgSyncFailDO {
     //  企业corpId
     private String corpId;
     //  失败的类型
-    private CorpFailType corpFailType;
+    private String corpFailType;
     //  失败的信息
     private String failInfo;
 
@@ -64,11 +61,11 @@ public class CorpOrgSyncFailDO {
         this.suiteKey = suiteKey;
     }
 
-    public CorpFailType getCorpFailType() {
+    public String getCorpFailType() {
         return corpFailType;
     }
 
-    public void setCorpFailType(CorpFailType corpFailType) {
+    public void setCorpFailType(String corpFailType) {
         this.corpFailType = corpFailType;
     }
 

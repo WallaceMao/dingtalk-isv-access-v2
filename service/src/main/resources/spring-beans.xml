@@ -4,7 +4,52 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--全局缓存的suite-->
-    <bean id="suite" class="com.rishiqing.dingtalk.biz.isv.model.GlobalSuite" init-method="init"/>
-    <!--service-->
-    <bean id="suiteManageService" class="com.rishiqing.dingtalk.biz.isv.service.impl.SuiteManageServiceImpl" />
+    <bean id="globalSuite" class="com.rishiqing.dingtalk.biz.model.GlobalSuite" init-method="init"/>
+    <!--基础service-->
+    <bean id="suiteManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.SuiteManageServiceImpl" />
+    <bean id="corpSuiteAuthManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.CorpSuiteAuthManageServiceImpl" />
+    <bean id="corpAppManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.CorpAppManageServiceImpl" />
+    <bean id="corpManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpManageServiceImpl" />
+    <bean id="deptManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpDepartmentManageServiceImpl" />
+    <bean id="staffManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpStaffManageServiceImpl" />
+    <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
+    <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
+    <!--业务相关的service-->
+    <bean id="suiteCallbackBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteCallbackBizServiceImpl" />
+    <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
+    <bean id="corpBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.CorpBizServiceImpl" />
+    <bean id="failBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.FailBizServiceImpl" />
+    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenGlobalLockBizServiceImpl" />
+    <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
+    <!--辅助service-->
+    <bean id="deptService" class="com.rishiqing.dingtalk.biz.service.util.DeptService" />
+    <bean id="staffService" class="com.rishiqing.dingtalk.biz.service.util.StaffService" />
+    <!--http工具-->
+    <bean id="httpRequestClient" class="com.rishiqing.dingtalk.biz.http.HttpRequestClient" />
+    <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.SuiteTopRequestHelper" />
+
+    <!--eventBus-->
+    <!--eventBus: corpSuite-->
+    <bean id="asyncCorpSuiteAuthExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncCorpSuiteAuthEventExecutorFactory" />
+    <bean id="asyncCorpSuiteAuthExecutor" factory-bean="asyncCorpSuiteAuthExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncCorpSuiteAuthEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncCorpSuiteAuthExecutor"/>
+    </bean>
+    <bean id="corpSuiteAuthEventListener" class="com.rishiqing.dingtalk.biz.event.CorpSuiteAuthEventListener" />
+    <!--eventBus: corpOrgSync-->
+    <bean id="asyncCorpOrgSyncExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncCorpOrgSyncEventExecutorFactory" />
+    <bean id="asyncCorpOrgSyncExecutor" factory-bean="asyncCorpOrgSyncExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncCorpOrgSyncEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncCorpOrgSyncExecutor"/>
+    </bean>
+    <bean id="corpOrgSyncEventListener" class="com.rishiqing.dingtalk.biz.event.CorpOrgSyncEventListener"/>
+    <!--eventBus: 初始化-->
+    <bean id="listenerInitService" class="com.rishiqing.dingtalk.biz.event.ListenerInitService" init-method="register">
+        <property name="eventListenerMap">
+            <map>
+                <entry key-ref="asyncCorpSuiteAuthEventBus" value-ref="corpSuiteAuthEventListener" />
+                <entry key-ref="asyncCorpOrgSyncEventBus" value-ref="corpOrgSyncEventListener" />
+            </map>
+        </property>
+    </bean>
 </beans>

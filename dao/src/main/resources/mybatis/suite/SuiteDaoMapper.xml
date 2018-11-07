@@ -60,10 +60,7 @@
         ) ON DUPLICATE KEY UPDATE gmt_modified=now(), rsq_app_name=#{rsqAppName}, rsq_app_token=#{rsqAppToken}
     </insert>
 
-    <select id="getSuiteBySuiteKey" resultMap="suiteMap">
-        SELECT <include refid="select-all-fields"/>  FROM isv_suite
-        <![CDATA[
-			WHERE suite_key=#{suiteKey}
-		 ]]>
+    <select id="getSuite" resultMap="suiteMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_suite LIMIT 1;
     </select>
 </mapper>

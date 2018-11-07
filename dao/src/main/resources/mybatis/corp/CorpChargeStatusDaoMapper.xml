@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rishiqing.dingtalk.dao.mapper.corp.CorpChargeStatusDao">
 
-    <resultMap type="com.rishiqing.dingtalk.dao.model.CorpChargeStatusDO" id="corpChargeStatusMap">
+    <resultMap type="com.rishiqing.dingtalk.dao.model.corp.CorpChargeStatusDO" id="corpChargeStatusMap">
         <id property="id" column="id" />
         <result property="gmtCreate" column="gmt_create" />
         <result property="gmtModified" column="gmt_modified" />

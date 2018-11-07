@@ -8,7 +8,6 @@ import java.util.Date;
  * Date: 2018-10-31 23:59
  */
 public class CorpDepartmentDO {
-
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;

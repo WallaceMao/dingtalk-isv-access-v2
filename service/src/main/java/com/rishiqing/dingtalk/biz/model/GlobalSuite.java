@@ -1,0 +1,56 @@
+package com.rishiqing.dingtalk.biz.model;
+
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
+import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @author Wallace Mao
+ * Date: 2018-10-31 20:40
+ */
+public class GlobalSuite {
+    @Autowired
+    private SuiteManageService suiteManageService;
+
+    private SuiteVO suite;
+
+    private void init(){
+        this.suite = suiteManageService.getSuite();
+    }
+
+    public Long getId() {
+        return this.suite.getId();
+    }
+
+    public String getSuiteName() {
+        return this.suite.getSuiteName();
+    }
+
+    public String getSuiteKey() {
+        return this.suite.getSuiteKey();
+    }
+
+    public String getSuiteSecret() {
+        return this.suite.getSuiteSecret();
+    }
+
+    public String getEncodingAesKey() {
+        return this.suite.getEncodingAesKey();
+    }
+
+    public String getToken() {
+        return this.suite.getToken();
+    }
+
+    public String getRsqAppName() {
+        return this.suite.getRsqAppName();
+    }
+
+    public String getRsqAppToken() {
+        return this.suite.getRsqAppToken();
+    }
+
+    public String getSuiteId() {
+        return this.suite.getSuiteId();
+    }
+}

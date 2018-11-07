@@ -1,7 +1,6 @@
 package com.rishiqing.dingtalk.dao.mapper.suite;
 
 import com.rishiqing.dingtalk.dao.model.suite.SuiteDO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository("suiteDao")
@@ -13,9 +12,8 @@ public interface SuiteDao {
     void saveOrUpdateSuite(SuiteDO suiteDO);
 
     /**
-     * 根据suiteKey获取suite
-     * @param suiteKey
+     * 获取suite
      * @return
      */
-    SuiteDO getSuiteBySuiteKey(@Param("suiteKey") String suiteKey);
+    SuiteDO getSuite();
 }

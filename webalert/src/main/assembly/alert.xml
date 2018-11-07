@@ -47,7 +47,7 @@
         <!--<moduleSet>-->
             <!--<useAllReactorProjects>true</useAllReactorProjects>-->
             <!--<includes>-->
-                <!--<include>com.dingtalk:biz:*</include>-->
+                <!--<include>com.dingtalk:api:*</include>-->
             <!--</includes>-->
             <!--<binaries>-->
                 <!--<outputDirectory>./WEB-INF/lib</outputDirectory>-->

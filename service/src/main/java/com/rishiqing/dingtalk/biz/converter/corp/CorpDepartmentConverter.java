@@ -3,12 +3,15 @@ package com.rishiqing.dingtalk.biz.converter.corp;
 import com.rishiqing.dingtalk.dao.model.corp.CorpDepartmentDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-07 2:59
  */
 public class CorpDepartmentConverter {
-    public static CorpDepartmentVO DepartmentDO2DepartmentVO(CorpDepartmentDO departmentDO){
+    public static CorpDepartmentVO corpDepartmentDO2CorpDepartmentVO(CorpDepartmentDO departmentDO){
         if(null==departmentDO){
             return null;
         }
@@ -34,7 +37,7 @@ public class CorpDepartmentConverter {
         return departmentVO;
     }
 
-    public static CorpDepartmentDO DepartmentVO2DepartmentDO(CorpDepartmentVO departmentVO){
+    public static CorpDepartmentDO corpDepartmentVO2CorpDepartmentDO(CorpDepartmentVO departmentVO){
         if(null==departmentVO){
             return null;
         }
@@ -58,5 +61,16 @@ public class CorpDepartmentConverter {
 
         departmentDO.setRsqId(departmentVO.getRsqId());
         return departmentDO;
+    }
+
+    public static List<CorpDepartmentVO> corpDepartmentDOList2CorpDepartmentVOList(List<CorpDepartmentDO> deptList) {
+        if(deptList == null){
+            return null;
+        }
+        List<CorpDepartmentVO> voList = new ArrayList<>(deptList.size());
+        for(CorpDepartmentDO deptDO : deptList){
+            voList.add(corpDepartmentDO2CorpDepartmentVO(deptDO));
+        }
+        return voList;
     }
 }

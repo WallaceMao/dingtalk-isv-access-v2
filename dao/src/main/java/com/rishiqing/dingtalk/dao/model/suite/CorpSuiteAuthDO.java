@@ -22,6 +22,8 @@ public class CorpSuiteAuthDO {
     private Integer codeType;
     //  服务窗永久授权码
     private String chPermanentCode;
+    //  开通应用的管理员的id
+    private String authUserId;
 
     public Long getId() {
         return id;
@@ -88,6 +90,14 @@ public class CorpSuiteAuthDO {
         this.chPermanentCode = chPermanentCode;
     }
 
+    public String getAuthUserId() {
+        return authUserId;
+    }
+
+    public void setAuthUserId(String authUserId) {
+        this.authUserId = authUserId;
+    }
+
     @Override
     public String toString() {
         return "CorpSuiteAuthDO{" +
@@ -99,6 +109,7 @@ public class CorpSuiteAuthDO {
                 ", permanentCode='" + permanentCode + '\'' +
                 ", codeType=" + codeType +
                 ", chPermanentCode='" + chPermanentCode + '\'' +
+                ", authUserId='" + authUserId + '\'' +
                 '}';
     }
 }

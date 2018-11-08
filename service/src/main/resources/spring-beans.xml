@@ -12,6 +12,7 @@
     <bean id="corpManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpManageServiceImpl" />
     <bean id="deptManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpDepartmentManageServiceImpl" />
     <bean id="staffManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpStaffManageServiceImpl" />
+    <bean id="orderManageService" class="com.rishiqing.dingtalk.biz.service.base.order.impl.OrderManageServiceImpl" />
     <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
     <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
     <!--业务相关的service-->
@@ -19,14 +20,21 @@
     <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
     <bean id="corpBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.CorpBizServiceImpl" />
     <bean id="failBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.FailBizServiceImpl" />
-    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenGlobalLockBizServiceImpl" />
+    <bean id="rsqAccountBizService" class="com.rishiqing.self.biz.service.impl.RsqAccountBizServiceImpl" />
+    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl" />
     <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
     <!--辅助service-->
+    <bean id="corpLockService" class="com.rishiqing.dingtalk.biz.service.util.impl.CorpLockServiceImpl" />
     <bean id="deptService" class="com.rishiqing.dingtalk.biz.service.util.DeptService" />
     <bean id="staffService" class="com.rishiqing.dingtalk.biz.service.util.StaffService" />
     <!--http工具-->
-    <bean id="httpRequestClient" class="com.rishiqing.dingtalk.biz.http.HttpRequestClient" />
     <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.SuiteTopRequestHelper" />
+    <bean id="corpRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.CorpTopRequestHelper" />
+    <bean id="httpRequestClient" class="com.rishiqing.dingtalk.biz.http.HttpRequestClient" />
+    <bean id="rsqRequestHelper" class="com.rishiqing.self.biz.http.impl.RsqApiRequestHelper">
+        <property name="rsqDomain" value="${rsqapi.environment}" />
+        <property name="httpRequestClient" ref="httpRequestClient"/>
+    </bean>
 
     <!--eventBus-->
     <!--eventBus: corpSuite-->

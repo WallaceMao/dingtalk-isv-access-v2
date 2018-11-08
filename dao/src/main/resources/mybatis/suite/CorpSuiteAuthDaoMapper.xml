@@ -10,6 +10,7 @@
         <result property="corpId" column="corp_id" />
         <result property="permanentCode" column="permanent_code" />
         <result property="chPermanentCode" column="ch_permanent_code" />
+        <result property="authUserId" column="auth_user_id" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -19,7 +20,8 @@
         suite_key,
         corp_id,
         permanent_code,
-        ch_permanent_code
+        ch_permanent_code,
+        auth_user_id
     </sql>
 
     <insert id="addOrUpdateCorpSuiteAuth" useGeneratedKeys="true" keyProperty="id">
@@ -29,15 +31,21 @@
         suite_key,
         corp_id,
         permanent_code,
-        ch_permanent_code
+        ch_permanent_code,
+        auth_user_id
         )VALUES(
         now(),
         now(),
         #{suiteKey},
         #{corpId},
         #{permanentCode},
-        #{chPermanentCode}
-        )ON DUPLICATE KEY UPDATE gmt_modified=now(),permanent_code=#{permanentCode},ch_permanent_code=#{chPermanentCode}
+        #{chPermanentCode},
+        #{authUserId}
+        )ON DUPLICATE KEY UPDATE
+            gmt_modified=now(),
+            permanent_code=#{permanentCode},
+            ch_permanent_code=#{chPermanentCode},
+            auth_user_id=#{authUserId}
     </insert>
 
     <delete id="deleteCorpSuiteAuthByCorpId">

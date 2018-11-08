@@ -20,6 +20,7 @@ public class CorpSuiteAuthConverter {
         corpSuiteAuthVO.setCorpId(corpSuiteAuthDO.getCorpId());
         corpSuiteAuthVO.setPermanentCode(corpSuiteAuthDO.getPermanentCode());
         corpSuiteAuthVO.setChPermanentCode(corpSuiteAuthDO.getChPermanentCode());
+        corpSuiteAuthVO.setAuthUserId(corpSuiteAuthDO.getAuthUserId());
         return corpSuiteAuthVO;
     }
 
@@ -35,6 +36,7 @@ public class CorpSuiteAuthConverter {
         corpSuiteAuthDO.setCorpId(corpSuiteAuthVO.getCorpId());
         corpSuiteAuthDO.setPermanentCode(corpSuiteAuthVO.getPermanentCode());
         corpSuiteAuthDO.setChPermanentCode(corpSuiteAuthVO.getChPermanentCode());
+        corpSuiteAuthDO.setAuthUserId(corpSuiteAuthVO.getAuthUserId());
         return corpSuiteAuthDO;
     }
 }

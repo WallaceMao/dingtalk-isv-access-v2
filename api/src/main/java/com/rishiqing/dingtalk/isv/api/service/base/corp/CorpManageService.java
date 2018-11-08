@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.isv.api.service.base.corp;
 
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 
 /**
@@ -8,4 +9,10 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
  */
 public interface CorpManageService {
     void saveOrUpdateCorp(CorpVO corpVO);
+
+    CorpTokenVO getCorpTokenByCorpId(String corpId);
+
+    CorpVO getCorpByCorpId(String corpId);
+
+    void updateRsqInfo(CorpVO corpVO);
 }

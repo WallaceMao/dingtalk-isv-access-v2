@@ -2,6 +2,8 @@ package com.rishiqing.dingtalk.isv.api.model.corp;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -31,7 +33,7 @@ public class CorpStaffVO implements Serializable {
     //  是否已经激活, true表示已激活, false表示未激活
     private Boolean active;
     //  在对应的部门中的排序, Map结构的json字符串, key是部门的Id, value是人员在这个部门的排序值
-    private String orderInDepts;
+    private Map<Long, Long> orderInDepts;
     //  是否为企业的管理员, true表示是, false表示不是
     private Boolean isAdmin;
     //  是否为企业的老板, true表示是, false表示不是
@@ -39,11 +41,11 @@ public class CorpStaffVO implements Serializable {
     //  钉钉Id
     private String dingId;
     //  在对应的部门中是否为主管, Map结构的json字符串, key是部门的Id, value是人员在这个部门中是否为主管, true表示是, false表示不是
-    private String isLeaderInDepts;
+    private Map<Long, Boolean> isLeaderInDepts;
     //  是否号码隐藏, true表示隐藏, false表示不隐藏
     private Boolean isHide;
     //  成员所属部门id列表
-    private String department;
+    private List<Long> department;
     //  职位信息
     private String position;
     //  头像url
@@ -51,7 +53,7 @@ public class CorpStaffVO implements Serializable {
     //  员工工号
     private String jobnumber;
     //  扩展属性，可以设置多种属性(但手机上最多只能显示10个扩展属性，具体显示哪些属性，请到OA管理后台->设置->通讯录信息设置和OA管理后台->设置->手机端显示信息设置)性
-    private String extattr;
+    private Map<String, String> extattr;
 
     //  钉钉免登接口使用code换取用户信息时获取到的用户信息。是否是管理员，code免登时获取到
     private Boolean isSys;
@@ -166,11 +168,11 @@ public class CorpStaffVO implements Serializable {
         this.active = active;
     }
 
-    public String getOrderInDepts() {
+    public Map<Long, Long> getOrderInDepts() {
         return orderInDepts;
     }
 
-    public void setOrderInDepts(String orderInDepts) {
+    public void setOrderInDepts(Map<Long, Long> orderInDepts) {
         this.orderInDepts = orderInDepts;
     }
 
@@ -198,11 +200,11 @@ public class CorpStaffVO implements Serializable {
         this.dingId = dingId;
     }
 
-    public String getIsLeaderInDepts() {
+    public Map<Long, Boolean> getIsLeaderInDepts() {
         return isLeaderInDepts;
     }
 
-    public void setIsLeaderInDepts(String isLeaderInDepts) {
+    public void setIsLeaderInDepts(Map<Long, Boolean> isLeaderInDepts) {
         this.isLeaderInDepts = isLeaderInDepts;
     }
 
@@ -214,11 +216,11 @@ public class CorpStaffVO implements Serializable {
         isHide = hide;
     }
 
-    public String getDepartment() {
+    public List<Long> getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(List<Long> department) {
         this.department = department;
     }
 
@@ -246,11 +248,11 @@ public class CorpStaffVO implements Serializable {
         this.jobnumber = jobnumber;
     }
 
-    public String getExtattr() {
+    public Map<String, String> getExtattr() {
         return extattr;
     }
 
-    public void setExtattr(String extattr) {
+    public void setExtattr(Map<String, String> extattr) {
         this.extattr = extattr;
     }
 

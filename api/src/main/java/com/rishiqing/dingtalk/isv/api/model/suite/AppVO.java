@@ -16,6 +16,10 @@ public class AppVO implements Serializable {
     private String suiteKey;
     //  应用id
     private Long appId;
+    //  应用的名称
+    private String appName;
+    //  应用的主色调
+    private String mainColor;
     //  开通应用时推送的消息
     private String activeMessage;
 
@@ -59,6 +63,22 @@ public class AppVO implements Serializable {
         this.appId = appId;
     }
 
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getMainColor() {
+        return mainColor;
+    }
+
+    public void setMainColor(String mainColor) {
+        this.mainColor = mainColor;
+    }
+
     public String getActiveMessage() {
         return activeMessage;
     }
@@ -75,6 +95,8 @@ public class AppVO implements Serializable {
                 ", gmtModified=" + gmtModified +
                 ", suiteKey='" + suiteKey + '\'' +
                 ", appId=" + appId +
+                ", appName='" + appName + '\'' +
+                ", mainColor='" + mainColor + '\'' +
                 ", activeMessage='" + activeMessage + '\'' +
                 '}';
     }

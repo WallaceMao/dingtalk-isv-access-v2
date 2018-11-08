@@ -10,7 +10,7 @@ import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManag
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
-import com.rishiqing.dingtalk.isv.api.service.biz.OpenGlobalLockBizService;
+import com.rishiqing.dingtalk.isv.api.service.util.OpenGlobalLockService;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     private static final String DB_CHECK_LOCK_KEY = "auth_check";
     @Autowired
-    private OpenGlobalLockBizService openGlobalLockBizService;
+    private OpenGlobalLockService openGlobalLockService;
     @Autowired
     private OpenSyncBizDataManageService openSyncBizDataManageService;
     @Autowired
@@ -37,7 +37,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
 
     @Override
     public void checkDingPushEvent(){
-        OpenGlobalLockVO lock = openGlobalLockBizService.requireOpenGlobalLock(DB_CHECK_LOCK_KEY);
+        OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_LOCK_KEY);
         System.out.println(">>>>>>>>>>>>>>>>>" + lock);
         if(lock == null){
             return;
@@ -52,7 +52,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
         }catch (Exception e){
             throw new RuntimeException(e);
         }finally {
-            openGlobalLockBizService.releaseOpenGlobalLock(DB_CHECK_LOCK_KEY);
+            openGlobalLockService.releaseOpenGlobalLock(DB_CHECK_LOCK_KEY);
         }
     }
 

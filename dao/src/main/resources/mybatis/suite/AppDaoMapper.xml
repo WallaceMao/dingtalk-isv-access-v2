@@ -9,6 +9,8 @@
         <result property="suiteKey" column="suite_key" />
         <result property="appId" column="app_id" />
         <result property="activeMessage" column="active_message" />
+        <result property="appName" column="app_name" />
+        <result property="mainColor" column="main_color" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -17,7 +19,9 @@
         gmt_modified,
         suite_key,
         app_id,
-        active_message
+        active_message,
+        app_name,
+        main_color
     </sql>
 
     <insert id="saveOrUpdateApp" useGeneratedKeys="true" keyProperty="id">
@@ -26,13 +30,17 @@
         gmt_modified,
         suite_key,
         app_id,
-        active_message
+        active_message,
+        app_name,
+        main_color
         )VALUES(
         now(),
         now(),
         #{suiteKey},
         #{appId},
         #{activeMessage}
+        #{appName}
+        #{mainColor}
         )
     </insert>
 

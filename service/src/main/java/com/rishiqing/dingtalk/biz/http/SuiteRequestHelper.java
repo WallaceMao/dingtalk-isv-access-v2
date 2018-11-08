@@ -1,6 +1,7 @@
 package com.rishiqing.dingtalk.biz.http;
 
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 
 /**
@@ -10,6 +11,8 @@ import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 public interface SuiteRequestHelper {
     @Deprecated
     CorpSuiteAuthVO getPermanentCode(String suiteKey, String tmpAuthCode, String suiteAccessToken);
+
+    CorpTokenVO getCorpToken(String corpId);
 
     CorpJSAPITicketVO getJSTicket(String suiteKey, String corpId, String accessToken);
 }

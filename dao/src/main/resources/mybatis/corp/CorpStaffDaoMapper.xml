@@ -2,14 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rishiqing.dingtalk.dao.mapper.corp.CorpStaffDao">
 
-    <resultMap type="com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO" id="corpStaffIdsMap">
-        <result property="userId" column="user_id"></result>
-        <result property="rsqUserId" column="rsq_user_id"></result>
-        <result property="emplId" column="user_id"></result>
-        <result property="avatar" column="avatar"></result>
-        <result property="name" column="name"></result>
-    </resultMap>
-
     <resultMap type="com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO" id="corpStaffMap">
         <id property="id" column="id" />
         <result property="gmtCreate" column="gmt_create" />
@@ -273,37 +265,4 @@
         #{rsqPassword}
         )
     </insert>
-
-    <select id="getUserIdFromRsqId" resultMap="corpStaffIdsMap">
-        SELECT user_id, rsq_user_id, avatar, `name`  FROM isv_corp_staff
-        WHERE corp_id = #{corpId}
-        AND rsq_user_id IN
-        <foreach collection="rsqIds" item="item" index="index"
-                 open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        ORDER BY FIELD(rsq_user_id,
-        <foreach collection="rsqIds" item="item" index="index"
-                 open="" separator="," close="">
-            #{item}
-        </foreach>
-        )
-    </select>
-
-    <select id="getRsqIdFromUserId" resultMap="corpStaffIdsMap">
-        SELECT user_id, rsq_user_id, avatar, `name` FROM isv_corp_staff
-        WHERE corp_id = #{corpId}
-        AND user_id IN
-        <foreach collection="userIds" item="item" index="index"
-                 open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        ORDER BY FIELD(user_id,
-        <foreach collection="userIds" item="item" index="index"
-                 open="" separator="," close="">
-            #{item}
-        </foreach>
-        )
-    </select>
-
 </mapper>

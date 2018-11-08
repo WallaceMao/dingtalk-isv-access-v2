@@ -48,6 +48,10 @@
         SELECT <include refid="select-all-fields"/>  FROM isv_app
     </select>
 
+    <select id="getAppListLimit" resultMap="appMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_app limit #{limit}
+    </select>
+
     <select id="getAppByAppId" resultMap="appMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_app
         <![CDATA[

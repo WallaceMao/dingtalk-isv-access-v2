@@ -127,6 +127,13 @@
 		 ]]>
     </select>
 
+    <select id="getCorpDepartmentListByCorpIdLimit" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId}
+		 ]]> LIMIT #{limit}
+    </select>
+
     <select id="getCorpDepartmentListByParentId" resultMap="corpDepartmentMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
         <![CDATA[

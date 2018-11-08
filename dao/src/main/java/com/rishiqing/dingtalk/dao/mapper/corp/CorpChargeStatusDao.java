@@ -22,6 +22,6 @@ public interface CorpChargeStatusDao {
      * @param corpId
      * @return
      */
-    public CorpChargeStatusDO getCorpChargeStatusBySuiteKeyAndCorpId(@Param("corpId") String corpId);
+    public CorpChargeStatusDO getCorpChargeStatusByCorpId(@Param("corpId") String corpId);
 
 }

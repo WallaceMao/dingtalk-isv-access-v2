@@ -30,4 +30,6 @@ public interface AppDao {
      * @return
      */
     public AppDO getAppByAppId(@Param("appId") Long appId);
+
+    public AppDO getAppListLimit(@Param("limit") Long limit);
 }

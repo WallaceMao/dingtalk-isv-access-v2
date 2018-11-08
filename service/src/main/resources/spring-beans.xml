@@ -7,12 +7,15 @@
     <bean id="globalSuite" class="com.rishiqing.dingtalk.biz.model.GlobalSuite" init-method="init"/>
     <!--基础service-->
     <bean id="suiteManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.SuiteManageServiceImpl" />
+    <bean id="appManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.AppManageServiceImpl" />
     <bean id="corpSuiteAuthManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.CorpSuiteAuthManageServiceImpl" />
     <bean id="corpAppManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.CorpAppManageServiceImpl" />
     <bean id="corpManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpManageServiceImpl" />
     <bean id="deptManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpDepartmentManageServiceImpl" />
     <bean id="staffManageService" class="com.rishiqing.dingtalk.biz.service.base.corp.impl.CorpStaffManageServiceImpl" />
     <bean id="orderManageService" class="com.rishiqing.dingtalk.biz.service.base.order.impl.OrderManageServiceImpl" />
+    <bean id="idMapStaffManageService" class="com.rishiqing.dingtalk.biz.service.base.front.impl.IdMapStaffManageServiceImpl" />
+    <bean id="popupManageService" class="com.rishiqing.dingtalk.biz.service.base.front.impl.PopupManageServiceImpl" />
     <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
     <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
     <!--业务相关的service-->
@@ -20,6 +23,8 @@
     <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
     <bean id="corpBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.CorpBizServiceImpl" />
     <bean id="failBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.FailBizServiceImpl" />
+    <bean id="popupBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.PopupBizServiceImpl" />
+    <bean id="messageBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.MessageBizServiceImpl" />
     <bean id="rsqAccountBizService" class="com.rishiqing.self.biz.service.impl.RsqAccountBizServiceImpl" />
     <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl" />
     <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
@@ -30,6 +35,7 @@
     <!--http工具-->
     <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.SuiteTopRequestHelper" />
     <bean id="corpRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.CorpTopRequestHelper" />
+    <bean id="messageRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.MessageTopRequestHelper" />
     <bean id="httpRequestClient" class="com.rishiqing.dingtalk.biz.http.HttpRequestClient" />
     <bean id="rsqRequestHelper" class="com.rishiqing.self.biz.http.impl.RsqApiRequestHelper">
         <property name="rsqDomain" value="${rsqapi.environment}" />

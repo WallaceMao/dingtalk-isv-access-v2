@@ -49,6 +49,14 @@ public interface CorpDepartmentDao {
     public List<CorpDepartmentDO> getCorpDepartmentListByCorpId(@Param("corpId") String corpId);
 
     /**
+     * 获取有限数量的部门
+     * @param corpId
+     * @param limit
+     * @return
+     */
+    public List<CorpDepartmentDO> getCorpDepartmentListByCorpIdLimit(@Param("corpId") String corpId, @Param("limit") Long limit);
+
+    /**
      * 根据corpId查询部门列表
      * @param parentId
      * @return

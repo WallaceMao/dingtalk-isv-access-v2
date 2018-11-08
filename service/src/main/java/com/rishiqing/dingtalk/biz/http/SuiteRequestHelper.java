@@ -14,5 +14,5 @@ public interface SuiteRequestHelper {
 
     CorpTokenVO getCorpToken(String corpId);
 
-    CorpJSAPITicketVO getJSTicket(String suiteKey, String corpId, String accessToken);
+    CorpJSAPITicketVO getCorpJSAPITicket(CorpTokenVO corpToken);
 }

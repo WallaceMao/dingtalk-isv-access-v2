@@ -1,7 +1,9 @@
 package com.rishiqing.dingtalk.biz.http.impl;
 
 import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.request.OapiGetJsapiTicketRequest;
 import com.dingtalk.api.request.OapiServiceGetCorpTokenRequest;
+import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiServiceGetCorpTokenResponse;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
@@ -46,6 +48,7 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_corp_token");
         OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
         req.setAuthCorpid(corpId);
+        req.setHttpMethod("GET");
         try {
             SuiteVO suite = suiteManageService.getSuite();
             SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
@@ -63,10 +66,29 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
         }
-
     }
+
     @Override
-    public CorpJSAPITicketVO getJSTicket(String suiteKey, String corpId, String accessToken) {
-        return null;
+    public CorpJSAPITicketVO getCorpJSAPITicket(CorpTokenVO corpToken) {
+        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/get_jsapi_ticket");
+        OapiGetJsapiTicketRequest req = new OapiGetJsapiTicketRequest();
+        req.setHttpMethod("GET");
+        try {
+            SuiteVO suite = suiteManageService.getSuite();
+            SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
+            OapiGetJsapiTicketResponse resp = client.execute(
+                    req,
+                    suite.getSuiteKey(),
+                    suite.getSuiteSecret(),
+                    suiteTicketVO.getSuiteTicket());
+            CorpJSAPITicketVO corpJSAPITicketVO = new CorpJSAPITicketVO();
+            corpJSAPITicketVO.setSuiteKey(suite.getSuiteKey());
+            corpJSAPITicketVO.setCorpId(corpToken.getCorpId());
+            corpJSAPITicketVO.setCorpJSAPITicket(resp.getTicket());
+            corpJSAPITicketVO.setExpiredTime(new Date(resp.getExpiresIn()));
+            return corpJSAPITicketVO;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
     }
 }

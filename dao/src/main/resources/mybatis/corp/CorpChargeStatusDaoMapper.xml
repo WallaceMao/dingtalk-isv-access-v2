@@ -77,7 +77,7 @@
         `status`=#{status}
     </insert>
 
-    <select id="getCorpChargeStatusBySuiteKeyAndCorpId" resultMap="corpChargeStatusMap">
+    <select id="getCorpChargeStatusByCorpId" resultMap="corpChargeStatusMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_corp_charge_status
         <![CDATA[
 			WHERE corp_id=#{corpId}

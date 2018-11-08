@@ -47,7 +47,6 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
      * @param accessToken
      * @return
      */
-    @Override
     public CorpJSAPITicketVO getJSTicket(String suiteKey, String corpId, String accessToken) {
         String url = getOapiDomain() + "/get_jsapi_ticket?access_token=" + accessToken;
         String str = httpRequestClient.doHttpGet(url);
@@ -110,6 +109,11 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
 
     @Override
     public CorpTokenVO getCorpToken(String corpId) {
+        return null;
+    }
+
+    @Override
+    public CorpJSAPITicketVO getCorpJSAPITicket(CorpTokenVO corpToken) {
         return null;
     }
 

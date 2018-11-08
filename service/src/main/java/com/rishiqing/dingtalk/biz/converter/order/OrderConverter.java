@@ -2,8 +2,10 @@ package com.rishiqing.dingtalk.biz.converter.order;
 
 import com.rishiqing.dingtalk.dao.mapper.order.OrderStatusDao;
 import com.rishiqing.dingtalk.dao.model.order.OrderEventDO;
+import com.rishiqing.dingtalk.dao.model.order.OrderSpecItemDO;
 import com.rishiqing.dingtalk.dao.model.order.OrderStatusDO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderSpecItemVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 
 /**
@@ -63,5 +65,22 @@ public class OrderConverter {
         orderStatusVO.setDistributorCorpName(orderStatusDO.getDistributorCorpName());
         orderStatusVO.setStatus(orderStatusDO.getStatus());
         return orderStatusVO;
+    }
+
+    public static OrderSpecItemVO orderSpecItemDo2OrderSpecItemVO(OrderSpecItemDO itemDO) {
+        if(itemDO == null){
+            return null;
+        }
+        OrderSpecItemVO itemVO = new OrderSpecItemVO();
+        itemVO.setId(itemDO.getId());
+        itemVO.setGmtCreate(itemDO.getGmtCreate());
+        itemVO.setGmtModified(itemDO.getGmtModified());
+        itemVO.setSuiteKey(itemDO.getSuiteKey());
+        itemVO.setGoodsCode(itemDO.getGoodsCode());
+        itemVO.setItemCode(itemDO.getItemCode());
+        itemVO.setItemName(itemDO.getItemName());
+        itemVO.setInnerKey(itemDO.getInnerKey());
+        itemVO.setRsqProductName(itemDO.getRsqProductName());
+        return itemVO;
     }
 }

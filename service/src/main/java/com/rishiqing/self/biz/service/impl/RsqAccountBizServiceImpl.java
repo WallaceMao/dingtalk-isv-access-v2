@@ -72,13 +72,11 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         this.checkOrderCharge(corpId);
         //  2  创建企业部门。创建部门时存在三种情况：
         //  a. 包含deptId为1的部门，即全公司的部门已经获取到。这种情况
-        //  b. 不包含任何部门。当用户开通时选择仅管理员可见会出现这种情况
-        //  c. 不包含deptId为1的部门，但是是全公司部门的一个子集
-        CorpDepartmentVO rootDept = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, 1L);
-        if(rootDept != null){
-            this.createRecursiveSubDepartment(rootDept);
-        }else{
-            
+        //  b. 不包含deptId为1的部门，但是是全公司部门的一个子集
+        //  c. 不包含任何部门。当用户开通时选择仅管理员可见会出现这种情况
+        CorpDepartmentVO topDept = corpDepartmentManageService.getTopCorpDepartment(corpId);
+        if(topDept != null){
+            this.createRecursiveSubDepartment(topDept);
         }
 
         //  3  新建企业部门成员
@@ -126,6 +124,70 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         corpManageService.updateRsqInfo(corpVO);
 
         return corpVO;
+    }
+
+    /**
+     * 查看是否有需要充值的订单，如果有那么调用接口进行充值
+     * @param corpId
+     */
+    private void checkOrderCharge(String corpId){
+        OrderEventVO dbEvent = orderManageService.getOrderEventByCorpIdAndLatest(corpId);
+        if(dbEvent == null){
+            return;
+        }
+        OrderStatusVO dbOrderStatus = orderManageService.getOrderStatusByOrderId(dbEvent.getOrderId());
+        //  要么orderStatus不存在，要么orderStatus的状态为初始的状态，这两种情况都进行充值
+        if(dbOrderStatus == null || SystemConstant.ORDER_STATUS_PAID.equals(dbOrderStatus.getStatus())){
+            //  使用eventBus异步调用
+            OrderChargeEvent event = new OrderChargeEvent();
+            event.setSuiteKey(dbEvent.getSuiteKey());
+            event.setOrderEventId(dbEvent.getId());
+            asyncOrderChargeEventBus.post(event);
+        }
+    }
+
+    /**
+     * 将departmentVO同步到日事清，并递归同步其子部门
+     * @param departmentVO
+     * @return
+     */
+    private void createRecursiveSubDepartment(CorpDepartmentVO departmentVO){
+        String corpId = departmentVO.getCorpId();
+        Long deptId = departmentVO.getDeptId();
+
+        this.createRsqDepartment(departmentVO);
+
+        List<CorpDepartmentVO> deptList =  corpDepartmentManageService.getCorpDepartmentListByCorpIdAndParentId(corpId, deptId);
+        if(0 == deptList.size()){
+            return;
+        }
+        for(CorpDepartmentVO dept : deptList){
+            createRecursiveSubDepartment(dept);
+        }
+    }
+
+    /**
+     * 将一个公司的所有员工同步到日事清
+     * @param corpId
+     * @return
+     */
+    private void createAllCorpStaff(String corpId){
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpId(corpId);
+        for(CorpStaffVO staffVO : list){
+            this.createRsqTeamStaff(staffVO);
+        }
+    }
+
+    /**
+     * 设置corpId中的所有管理员
+     * @param corpId
+     * @return
+     */
+    private void updateAllCorpAdmin(String corpId){
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdmin(corpId, true);
+        for(CorpStaffVO staffVO : list){
+            this.updateRsqTeamAdmin(staffVO);
+        }
     }
 
     /**
@@ -272,79 +334,16 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     /**
-     * 将departmentVO同步到日事清，并递归同步其子部门
-     * @param departmentVO
-     * @return
-     */
-    private void createRecursiveSubDepartment(CorpDepartmentVO departmentVO){
-        String corpId = departmentVO.getCorpId();
-        Long deptId = departmentVO.getDeptId();
-
-        this.createRsqDepartment(departmentVO);
-
-        List<CorpDepartmentVO> deptList =  corpDepartmentManageService.getCorpDepartmentListByCorpIdAndParentId(corpId, deptId);
-        if(0 == deptList.size()){
-            return;
-        }
-        for(CorpDepartmentVO dept : deptList){
-            createRecursiveSubDepartment(dept);
-        }
-    }
-
-    /**
      * 将一个公司的所有部门同步到日事清
      * @param corpId
      * @return
      */
+    @Deprecated
     private void createAllCorpDepartment(String corpId){
         List<CorpDepartmentVO> deptList = corpDepartmentManageService.getCorpDepartmentListByCorpId(corpId);
 
         for(CorpDepartmentVO dept : deptList){
             this.createRsqDepartment(dept);
-        }
-    }
-
-    /**
-     * 将一个公司的所有员工同步到日事清
-     * @param corpId
-     * @return
-     */
-    private void createAllCorpStaff(String corpId){
-        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpId(corpId);
-        for(CorpStaffVO staffVO : list){
-            this.createRsqTeamStaff(staffVO);
-        }
-    }
-
-    /**
-     * 设置corpId中的所有管理员
-     * @param corpId
-     * @return
-     */
-    private void updateAllCorpAdmin(String corpId){
-        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdmin(corpId, true);
-        for(CorpStaffVO staffVO : list){
-            this.updateRsqTeamAdmin(staffVO);
-        }
-    }
-
-    /**
-     * 查看是否有需要充值的订单，如果有那么调用接口进行充值
-     * @param corpId
-     */
-    private void checkOrderCharge(String corpId){
-        OrderEventVO dbEvent = orderManageService.getOrderEventByCorpIdAndLatest(corpId);
-        if(dbEvent == null){
-            return;
-        }
-        OrderStatusVO dbOrderStatus = orderManageService.getOrderStatusByOrderId(dbEvent.getOrderId());
-        //  要么orderStatus不存在，要么orderStatus的状态为初始的状态，这两种情况都进行充值
-        if(dbOrderStatus == null || SystemConstant.ORDER_STATUS_PAID.equals(dbOrderStatus.getStatus())){
-            //  使用eventBus异步调用
-            OrderChargeEvent event = new OrderChargeEvent();
-            event.setSuiteKey(dbEvent.getSuiteKey());
-            event.setOrderEventId(dbEvent.getId());
-            asyncOrderChargeEventBus.post(event);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.dao.model.corp;
+package com.rishiqing.dingtalk.dao.model.front;
 
 import java.util.Date;
 

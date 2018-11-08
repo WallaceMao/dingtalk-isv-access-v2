@@ -1,6 +1,6 @@
-package com.rishiqing.dingtalk.dao.mapper.corp;
+package com.rishiqing.dingtalk.dao.mapper.front;
 
-import com.rishiqing.dingtalk.dao.model.corp.StaffPopupConfigDO;
+import com.rishiqing.dingtalk.dao.model.front.StaffPopupConfigDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,7 @@
 package com.rishiqing.dingtalk.isv.api.service.base.order;
 
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderSpecItemVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 
 /**
@@ -11,4 +12,6 @@ public interface OrderManageService {
     OrderEventVO getOrderEventByCorpIdAndLatest(String corpId);
 
     OrderStatusVO getOrderStatusByOrderId(Long orderId);
+
+    OrderSpecItemVO getOrderSpecItemByGoodsCodeAndItemCode(String goodsCode, String itemCode);
 }

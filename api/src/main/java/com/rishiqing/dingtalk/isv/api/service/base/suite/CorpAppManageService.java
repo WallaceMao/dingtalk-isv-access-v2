@@ -8,4 +8,6 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
  */
 public interface CorpAppManageService {
     void saveOrUpdateCorpApp(CorpAppVO corpAppVO);
+
+    CorpAppVO getCorpAppByCorpIdAndAppId(String corpId, Long appId);
 }

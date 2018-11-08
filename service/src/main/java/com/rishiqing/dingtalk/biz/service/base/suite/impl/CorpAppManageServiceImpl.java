@@ -20,4 +20,11 @@ public class CorpAppManageServiceImpl implements CorpAppManageService {
                 CorpAppConverter.corpAppVO2CorpAppDO(corpAppVO)
         );
     }
+
+    @Override
+    public CorpAppVO getCorpAppByCorpIdAndAppId(String corpId, Long appId) {
+        return CorpAppConverter.corpAppDO2CorpAppVO(
+                corpAppDao.getCorpAppByCorpIdAndAppId(corpId, appId)
+        );
+    }
 }

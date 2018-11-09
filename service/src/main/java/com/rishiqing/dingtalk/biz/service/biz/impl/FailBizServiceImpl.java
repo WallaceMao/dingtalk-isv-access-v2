@@ -1,16 +1,21 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
+import com.rishiqing.dingtalk.biz.converter.fail.FailConverter;
 import com.rishiqing.dingtalk.dao.mapper.corp.CorpOrgSyncFailDao;
-import com.rishiqing.dingtalk.dao.model.corp.CorpOrgSyncFailDO;
+import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
 import com.rishiqing.dingtalk.isv.api.enumtype.CorpFailType;
 import com.rishiqing.dingtalk.isv.api.enumtype.SuitePushType;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgSyncEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
+import com.rishiqing.dingtalk.isv.api.model.fail.CorpOrgSyncFailVO;
+import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
 import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthFailDao;
-import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthFailDO;
+import com.rishiqing.dingtalk.dao.model.fail.CorpSuiteAuthFailDO;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -33,6 +38,7 @@ public class FailBizServiceImpl implements FailBizService {
         corpSuiteAuthFailDO.setCorpId(corpSuiteAuthEvent.getCorpId());
         corpSuiteAuthFailDO.setAuthFailType(AuthFailType.ACTIVE_CORP_APP_FAILE.getKey());
         corpSuiteAuthFailDO.setSuitePushType(SuitePushType.TMP_AUTH_CODE.getKey());
+        corpSuiteAuthFailDO.setFailInfo(corpSuiteAuthEvent.getInfo());
         corpSuiteAuthFailDao.saveOrUpdateCorpSuiteAuthFail(corpSuiteAuthFailDO);
     }
 
@@ -46,7 +52,31 @@ public class FailBizServiceImpl implements FailBizService {
         corpOrgSyncFailDO.setSuiteKey(corpOrgSyncEvent.getSuiteKey());
         corpOrgSyncFailDO.setCorpId(corpOrgSyncEvent.getCorpId());
         corpOrgSyncFailDO.setCorpFailType(CorpFailType.PUT_ISV_CORP.getKey());
-        corpOrgSyncFailDO.setFailInfo("error");
+        corpOrgSyncFailDO.setFailInfo(corpOrgSyncEvent.getInfo());
         corpOrgSyncFailDao.saveOrUpdateCorpOrgSyncFail(corpOrgSyncFailDO);
+    }
+
+    @Override
+    public List<CorpSuiteAuthFailVO> getCorpSuiteAuthFailList() {
+        return FailConverter.corpSuiteAuthFailDOList2CorpSuiteAuthFailVOList(
+                corpSuiteAuthFailDao.getCorpSuiteAuthFailList(0, 50)
+        );
+    }
+
+    @Override
+    public List<CorpOrgSyncFailVO> getCorpOrgSyncFailList() {
+        return FailConverter.corpOrgSyncFailDOList2CorpOrgSyncFailVOList(
+                corpOrgSyncFailDao.getCorpOrgSyncFailList(0, 50)
+        );
+    }
+
+    @Override
+    public void deleteCorpSuiteAuthFailById(Long id) {
+        corpSuiteAuthFailDao.deleteCorpSuiteAuthFailById(id);
+    }
+
+    @Override
+    public void deleteCorpOrgSyncFailById(Long id) {
+        corpOrgSyncFailDao.deleteCorpOrgSyncFailById(id);
     }
 }

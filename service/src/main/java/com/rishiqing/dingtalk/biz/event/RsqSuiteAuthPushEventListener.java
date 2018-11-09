@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Wallace Mao
  * Date: 2018-11-07 2:14
  */
-public class CorpOrgSyncEventListener implements EventListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("EVENT_LOGGER");
+public class RsqSuiteAuthPushEventListener implements EventListener {
+    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_RSQ_SUITE_AUTH_LOGGER");
 
     @Autowired
     private RsqAccountBizService rsqAccountBizService;

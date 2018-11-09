@@ -33,8 +33,6 @@ import java.util.List;
  * Date: 2018-11-03 17:43
  */
 public class CorpBizServiceImpl implements CorpBizService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CORP_SUITE_AUTH_LOGGER");
-
     @Autowired
     private SuiteManageService suiteManageService;
     @Autowired
@@ -51,7 +49,11 @@ public class CorpBizServiceImpl implements CorpBizService {
     private EventBus asyncCorpOrgSyncEventBus;
 
     /**
-     * 激活应用。本方法只处理将企业部门以及人员信息从钉钉抓取到auth server。
+     * 激活应用。
+     * 激活应用兼容两种方式：
+     * （1）传统callback的方式。只有corpId，那么在本方法中会获取授权公司信息、授权用户信息、授权信息、授权范围等。
+     * （2）钉钉云推送的方式。会获取到包含授权公司信息、授权用户信息、授权信息的json字段
+     * 本方法只处理将企业部门以及人员信息从钉钉抓取到auth server。
      * 分为如下几步：
      * 1. 获取企业基本信息（实际上是授权信息），如果没有通讯录可见范围的话要获取通讯录可见范围
      * 2. 保存企业基本信息

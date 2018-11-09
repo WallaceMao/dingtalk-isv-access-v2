@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.dao.mapper.corp;
 
-import com.rishiqing.dingtalk.dao.model.corp.CorpOrgSyncFailDO;
+import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

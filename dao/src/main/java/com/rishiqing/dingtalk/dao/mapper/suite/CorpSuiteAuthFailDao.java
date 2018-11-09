@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.dao.mapper.suite;
 
-import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthFailDO;
+import com.rishiqing.dingtalk.dao.model.fail.CorpSuiteAuthFailDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

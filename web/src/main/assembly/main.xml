@@ -11,6 +11,10 @@
             <!--web文件-->
             <directory>src/main/webapp</directory>
             <outputDirectory>./</outputDirectory>
+            <excludes>
+                <!--排除默认的log4j2配置文件-->
+                <exclude>**/log4j2.xml</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <!--编译后的class文件-->
@@ -25,12 +29,7 @@
     </fileSets>
     <files>
         <file>
-            <source>src/main/webapp/WEB-INF/log4j2.xml</source>
-            <outputDirectory>./WEB-INF</outputDirectory>
-            <destName>dev-log-config</destName>
-        </file>
-        <file>
-            <source>src/main/webapp/WEB-INF/${env}-log-config</source>
+            <source>src/main/assembly/log4j2/log4j2-${env}.xml</source>
             <outputDirectory>./WEB-INF</outputDirectory>
             <destName>log4j2.xml</destName>
         </file>

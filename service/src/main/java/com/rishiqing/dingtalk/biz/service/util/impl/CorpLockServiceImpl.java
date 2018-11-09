@@ -17,7 +17,7 @@ import java.util.Date;
  * Date: 2018-11-07 10:58
  */
 public class CorpLockServiceImpl implements CorpLockService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CORP_LOCK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger("SYS_CORP_LOCK_LOGGER");
 
     @Autowired
     CorpLockDao corpLockDao;

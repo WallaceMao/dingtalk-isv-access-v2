@@ -8,6 +8,9 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.biz.exception.HttpRequestException;
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +26,6 @@ import java.util.Map;
  * Date: 2018-11-03 17:52
  */
 public class SuiteOapiRequestHelper implements SuiteRequestHelper {
-    private static final Logger bizLogger = LoggerFactory.getLogger("HTTP_INVOKE_LOGGER");
     private HttpRequestClient httpRequestClient;
     private String oapiDomain;
 
@@ -105,6 +107,11 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
         corpSuiteAuthVO.setPermanentCode(pCode);
         corpSuiteAuthVO.setCorpId(corpId);
         return corpSuiteAuthVO;
+    }
+
+    @Override
+    public SuiteTokenVO getSuiteToken(SuiteVO suite, SuiteTicketVO suiteTicket) {
+        return null;
     }
 
     @Override

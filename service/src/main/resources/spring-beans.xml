@@ -30,6 +30,7 @@
     <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
     <!--辅助service-->
     <bean id="corpLockService" class="com.rishiqing.dingtalk.biz.service.util.impl.CorpLockServiceImpl" />
+    <bean id="suiteService" class="com.rishiqing.dingtalk.biz.service.util.SuiteService" />
     <bean id="deptService" class="com.rishiqing.dingtalk.biz.service.util.DeptService" />
     <bean id="staffService" class="com.rishiqing.dingtalk.biz.service.util.StaffService" />
     <!--http工具-->
@@ -51,12 +52,12 @@
     </bean>
     <bean id="corpSuiteAuthEventListener" class="com.rishiqing.dingtalk.biz.event.CorpSuiteAuthEventListener" />
     <!--eventBus: corpOrgSync-->
-    <bean id="asyncCorpOrgSyncExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncCorpOrgSyncEventExecutorFactory" />
+    <bean id="asyncCorpOrgSyncExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncRsqSuiteAuthPushEventExecutorFactory" />
     <bean id="asyncCorpOrgSyncExecutor" factory-bean="asyncCorpOrgSyncExecutorFactory" factory-method="getExecutor" />
     <bean id="asyncCorpOrgSyncEventBus" class="com.google.common.eventbus.AsyncEventBus">
         <constructor-arg ref="asyncCorpOrgSyncExecutor"/>
     </bean>
-    <bean id="corpOrgSyncEventListener" class="com.rishiqing.dingtalk.biz.event.CorpOrgSyncEventListener"/>
+    <bean id="corpOrgSyncEventListener" class="com.rishiqing.dingtalk.biz.event.RsqSuiteAuthPushEventListener"/>
     <!--eventBus: 初始化-->
     <bean id="listenerInitService" class="com.rishiqing.dingtalk.biz.event.ListenerInitService" init-method="register">
         <property name="eventListenerMap">

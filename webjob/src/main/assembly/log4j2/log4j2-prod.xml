@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+按照只在顶层记录log的思路，系统中的log分为以下几类：
+
+controller logger：控制器层的log
+- suite callback：套件回调controller
+- staff popup：弹窗相关的controller
+- js config：js sdk相关
+- id map：id转换相关
+- message：消息相关
+
+listener logger：监听器的log
+- db check：轮训查询钉钉云推送的log，并进行处理的log
+- corp suite auth：开通授权监听器的log
+- rsq suite auth push：推送开通授权到日事清的监听器的log
+- rsq corp change push：推送组织架构的更新到日事清的log
+
+job logger：job任务的log
+- suite token job：获取套件token的任务的log
+- corp suite auth fail：企业授权失败补偿任务的log
+- rsq suite auth push fail：推送开通授权到日事清失败的补偿任务的log
+- rsq corp change push fail：推送组织架构的更新到日事清失败的补偿任务的log
+
+system logger：其他系统级别的重要的信息，要打印的log
+- corp lock：公司锁的log
+- open global lock：全局锁的log
+-->
+<Configuration status="WARN" monitorInterval="60">
+    <Properties>
+        <Property name="baseDir">$${sys:user.home}/dingtalk/logs/</Property>
+        <Property name="globalLevel">debug</Property>
+    </Properties>
+    <Appenders>
+        <!--调试debug信息直接输出到控制台-->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!--默认输出-->
+        <RollingFile name="ROOT_APPENDER" fileName="${baseDir}/root.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/root-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--套件回调controller-->
+        <RollingFile name="CON_SUITE_CALLBACK" fileName="${baseDir}/con_suite_callback.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_suite_callback-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--弹窗相关的controller-->
+        <RollingFile name="CON_STAFF_POPUP" fileName="${baseDir}/con_staff_popup.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_staff_popup-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--js sdk相关-->
+        <RollingFile name="CON_JS_CONFIG" fileName="${baseDir}/con_js_config.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_js_config-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--id转换相关-->
+        <RollingFile name="CON_ID_MAP" fileName="${baseDir}/con_id_map.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_id_map-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--消息相关-->
+        <RollingFile name="CON_MESSAGE" fileName="${baseDir}/con_message.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_message-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--//////////////////////////////////////////////////////////////////-->
+        <!--轮训查询钉钉云推送的log，并进行处理的log-->
+        <RollingFile name="LSN_DB_CHECK" fileName="${baseDir}/lsn_db_check.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_db_check-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--开通授权监听器的log-->
+        <RollingFile name="LSN_CORP_SUITE_AUTH" fileName="${baseDir}/lsn_corp_suite_auth.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_corp_suite_auth-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--推送开通授权到日事清的监听器的log-->
+        <RollingFile name="LSN_RSQ_SUITE_AUTH" fileName="${baseDir}/lsn_rsq_suite_auth.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_rsq_suite_auth-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--推送组织架构的更新到日事清的log-->
+        <RollingFile name="LSN_RSQ_CORP_CHANGE" fileName="${baseDir}/lsn_rsq_corp_change.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_rsq_corp_change-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--//////////////////////////////////////////////////////////////////-->
+        <!--获取套件token的任务的log-->
+        <RollingFile name="JOB_SUITE_TOKEN" fileName="${baseDir}/job_suite_token.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/job_suite_token-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--企业授权失败补偿任务的log-->
+        <RollingFile name="JOB_CORP_SUITE_AUTH_FAIL" fileName="${baseDir}/job_corp_suite_auth_fail.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/job_corp_suite_auth_fail-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--推送开通授权到日事清失败的补偿任务的log-->
+        <RollingFile name="JOB_RSQ_SUITE_AUTH_FAIL" fileName="${baseDir}/job_rsq_suite_auth_fail.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/job_rsq_suite_auth_fail-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--推送组织架构的更新到日事清失败的补偿任务的log-->
+        <RollingFile name="JOB_RSQ_CORP_CHANGE_FAIL" fileName="${baseDir}/job_rsq_corp_change_fail.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/job_rsq_corp_change_fail-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--//////////////////////////////////////////////////////////////////-->
+        <!--公司锁的log-->
+        <RollingFile name="SYS_CORP_LOCK" fileName="${baseDir}/sys_corp_lock.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/sys_corp_lock-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--全局锁的log-->
+        <RollingFile name="SYS_GLOBAL_LOCK" fileName="${baseDir}/sys_global_lock.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/sys_global_lock-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="ROOT_APPENDER"/>
+        </Root>
+        <!--普通开发日志直接打印到控制台-->
+        <Logger name="CON_SUITE_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_SUITE_CALLBACK"/>
+        </Logger>
+        <Logger name="CON_STAFF_POPUP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_STAFF_POPUP"/>
+        </Logger>
+        <Logger name="CON_JS_CONFIG_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_JS_CONFIG"/>
+        </Logger>
+        <Logger name="CON_ID_MAP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_ID_MAP"/>
+        </Logger>
+        <Logger name="CON_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_MESSAGE"/>
+        </Logger>
+        <Logger name="LSN_DB_CHECK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="LSN_DB_CHECK"/>
+        </Logger>
+        <Logger name="LSN_CORP_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="LSN_CORP_SUITE_AUTH"/>
+        </Logger>
+        <Logger name="LSN_RSQ_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="LSN_RSQ_SUITE_AUTH"/>
+        </Logger>
+        <Logger name="LSN_RSQ_CORP_CHANGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="LSN_RSQ_CORP_CHANGE"/>
+        </Logger>
+        <Logger name="JOB_SUITE_TOKEN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="JOB_SUITE_TOKEN"/>
+        </Logger>
+        <Logger name="JOB_CORP_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="JOB_CORP_SUITE_AUTH_FAIL"/>
+        </Logger>
+        <Logger name="JOB_RSQ_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="JOB_RSQ_SUITE_AUTH_FAIL"/>
+        </Logger>
+        <Logger name="JOB_RSQ_CORP_CHANGE_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="JOB_RSQ_CORP_CHANGE_FAIL"/>
+        </Logger>
+        <Logger name="SYS_CORP_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SYS_CORP_LOCK"/>
+        </Logger>
+        <Logger name="SYS_GLOBAL_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SYS_GLOBAL_LOCK"/>
+        </Logger>
+    </Loggers>
+</Configuration>

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 public class SuiteCallbackController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("SUITE_CALLBACK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger("CON_SUITE_CALLBACK_LOGGER");
 
     @Autowired
     private GlobalSuite globalSuite;

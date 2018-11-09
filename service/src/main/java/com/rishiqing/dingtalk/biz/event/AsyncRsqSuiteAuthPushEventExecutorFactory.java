@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
  * @author Wallace Mao
  * Date: 2018-11-03 20:36
  */
-public class AsyncCorpOrgSyncEventExecutorFactory {
+public class AsyncRsqSuiteAuthPushEventExecutorFactory {
     public Executor getExecutor(){
         //  建立默认10个线程的线程池
         return Executors.newFixedThreadPool(15);

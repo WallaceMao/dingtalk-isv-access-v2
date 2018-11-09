@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+    <!--引入jdbc-->
+    <import resource="classpath:spring-jdbc.xml" />
+
+    <task:annotation-driven />
+
+    <!--配置线程池-->
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!--线程池维护线程的最小数量-->
+        <property name="corePoolSize" value="5" />
+        <!--线程池维护线程所允许的空闲时间-->
+        <property name="keepAliveSeconds" value="30000" />
+        <!--线程池维护线程的最大数量-->
+        <property name="maxPoolSize" value="100" />
+        <!--线程池所使用的缓冲队列-->
+        <property name="queueCapacity" value="1000" />
+    </bean>
+
+    <!--只在job程序中配置计时任务-->
+    <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+        <property name="configLocation" value="WEB-INF/quartz.properties" />
+        <property name="triggers">
+            <list>
+                <ref bean="suiteTokenTrigger" />
+                <ref bean="corpSuiteAuthFailTrigger" />
+                <!--<ref bean="rsqSuiteAuthPushFailTrigger" />-->
+                <!--<ref bean="rsqCorpChangePushFailTrigger" />-->
+            </list>
+        </property>
+    </bean>
+
+    <!--定时更新Suite的token，每三十分钟执行一次-->
+    <bean id="suiteTokenJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass"  value="com.rishiqing.dingtalk.biz.schedule.SuiteTokenGenerateJob"/>
+        <property name="durability" value="true" />
+    </bean>
+    <bean id="suiteTokenTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="suiteTokenJobDetail" />
+        <property name="cronExpression" value="0 */30 * * * ?" />
+    </bean>
+
+    <!--如果有授权失败的公司，那么进行每分钟会进行重试-->
+    <bean id="corpSuiteAuthFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass"  value="com.rishiqing.dingtalk.biz.schedule.CorpSuiteAuthFailJob"/>
+        <property name="durability" value="true" />
+    </bean>
+    <bean id="corpSuiteAuthFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="corpSuiteAuthFailJobDetail" />
+        <property name="cronExpression" value="0 */1 * * * ?" />
+    </bean>
+
+    <!--TODO 如果公司同步到日事清发生了失败，那么会进行重试-->
+    <bean id="rsqSuiteAuthPushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass"  value="com.rishiqing.dingtalk.biz.schedule.RsqSuiteAuthPushFailJob"/>
+        <property name="durability" value="true" />
+    </bean>
+    <bean id="rsqSuiteAuthPushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="rsqSuiteAuthPushFailJobDetail" />
+        <property name="cronExpression" value="0 */1 * * * ?" />
+    </bean>
+
+    <!--TODO 如果公司的组织结构变化同步到日事清发生了失败，那么也会进行重试-->
+    <bean id="rsqCorpChangePushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass"  value="com.rishiqing.dingtalk.biz.schedule.RsqCorpChangePushFailJob"/>
+        <property name="durability" value="true" />
+    </bean>
+    <bean id="rsqCorpChangePushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="rsqCorpChangePushFailJobDetail" />
+        <property name="cronExpression" value="0 */1 * * * ?" />
+    </bean>
+</beans>

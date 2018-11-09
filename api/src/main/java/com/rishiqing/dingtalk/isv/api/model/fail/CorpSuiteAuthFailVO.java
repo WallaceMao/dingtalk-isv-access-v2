@@ -1,13 +1,12 @@
-package com.rishiqing.dingtalk.dao.model.suite;
+package com.rishiqing.dingtalk.isv.api.model.fail;
 
 import java.util.Date;
 
 /**
- * 企业开通套件失败的记录。当企业开通失败后，在这个表里记录；系统会定时查看这个表，对失败的记录进行重试。
  * @author Wallace Mao
- * Date: 2018-10-31 23:59
+ * Date: 2018-11-09 19:45
  */
-public class CorpSuiteAuthFailDO {
+public class CorpSuiteAuthFailVO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
@@ -89,15 +88,15 @@ public class CorpSuiteAuthFailDO {
 
     @Override
     public String toString() {
-        return "CorpSuiteAuthFailDO{" +
+        return "CorpSuiteAuthFailVO{" +
                 "id=" + id +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 ", corpId='" + corpId + '\'' +
                 ", suiteKey='" + suiteKey + '\'' +
-                ", authFailType=" + authFailType +
+                ", authFailType='" + authFailType + '\'' +
                 ", failInfo='" + failInfo + '\'' +
-                ", suitePushType=" + suitePushType +
+                ", suitePushType='" + suitePushType + '\'' +
                 '}';
     }
 }

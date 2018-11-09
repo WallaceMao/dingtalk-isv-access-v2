@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class CorpOrgSyncEvent implements Serializable {
     private String corpId;
     private String suiteKey;
+    private String info;
 
     public String getCorpId() {
         return corpId;
@@ -25,6 +26,15 @@ public class CorpOrgSyncEvent implements Serializable {
     public void setSuiteKey(String suiteKey) {
         this.suiteKey = suiteKey;
     }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     @Override
     public String toString() {
         return "CorpOrgSyncEvent{" +

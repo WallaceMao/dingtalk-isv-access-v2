@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-11-03 20:37
  */
 public class CorpSuiteAuthEventListener implements EventListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("EVENT_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_CORP_SUITE_AUTH_LOGGER");
 
     @Autowired
     private CorpBizService corpBizService;

@@ -3,15 +3,17 @@ package com.rishiqing.dingtalk.biz.http.impl;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiGetJsapiTicketRequest;
 import com.dingtalk.api.request.OapiServiceGetCorpTokenRequest;
+import com.dingtalk.api.request.OapiServiceGetSuiteTokenRequest;
 import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiServiceGetCorpTokenResponse;
+import com.dingtalk.api.response.OapiServiceGetSuiteTokenResponse;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.taobao.api.ApiException;
@@ -39,8 +41,27 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
         return null;
     }
 
-    public CorpAuthInfoVO getCorpAuthInfo(){
-        return null;
+    @Override
+    public SuiteTokenVO getSuiteToken(SuiteVO suite, SuiteTicketVO suiteTicket) {
+        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_suite_token");
+        OapiServiceGetSuiteTokenRequest req = new OapiServiceGetSuiteTokenRequest();
+        req.setHttpMethod("GET");
+        req.setSuiteKey(suite.getSuiteKey());
+        req.setSuiteSecret(suite.getSuiteSecret());
+        req.setSuiteTicket(suiteTicket.getSuiteTicket());
+        try {
+            OapiServiceGetSuiteTokenResponse resp = client.execute(req);
+            if(resp.getErrcode() != 0L){
+                throw new BizRuntimeException("getSuiteToken error: " + resp.getErrcode() + ", " + resp.getErrmsg());
+            }
+            SuiteTokenVO suiteTokenVO = new SuiteTokenVO();
+            suiteTokenVO.setSuiteKey(suite.getSuiteKey());
+            suiteTokenVO.setSuiteToken(resp.getSuiteAccessToken());
+            suiteTokenVO.setExpiredTime(new Date(resp.getExpiresIn()));
+            return suiteTokenVO;
+        } catch (ApiException e){
+            throw new BizRuntimeException(e);
+        }
     }
 
     @Override
@@ -57,6 +78,9 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
                     suite.getSuiteKey(),
                     suite.getSuiteSecret(),
                     suiteTicketVO.getSuiteTicket());
+            if(resp.getErrcode() != 0L){
+                throw new BizRuntimeException("getCorpToken error: " + resp.getErrcode() + ", " + resp.getErrmsg());
+            }
             CorpTokenVO corpTokenVO = new CorpTokenVO();
             corpTokenVO.setSuiteKey(suite.getSuiteKey());
             corpTokenVO.setCorpId(corpId);
@@ -81,6 +105,9 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
                     suite.getSuiteKey(),
                     suite.getSuiteSecret(),
                     suiteTicketVO.getSuiteTicket());
+            if(resp.getErrcode() != 0L){
+                throw new BizRuntimeException("getCorpJSAPITicket error: " + resp.getErrcode() + ", " + resp.getErrmsg());
+            }
             CorpJSAPITicketVO corpJSAPITicketVO = new CorpJSAPITicketVO();
             corpJSAPITicketVO.setSuiteKey(suite.getSuiteKey());
             corpJSAPITicketVO.setCorpId(corpToken.getCorpId());

@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 public class StaffPopupController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("STAFF_MANAGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger("CON_STAFF_POPUP_LOGGER");
 
     @Autowired
     private PopupBizService popupBizService;

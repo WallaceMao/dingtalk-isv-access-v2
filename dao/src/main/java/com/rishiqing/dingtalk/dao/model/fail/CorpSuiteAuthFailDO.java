@@ -1,25 +1,27 @@
-package com.rishiqing.dingtalk.dao.model.corp;
+package com.rishiqing.dingtalk.dao.model.fail;
 
 import java.util.Date;
 
 /**
- * 从钉钉中获取组织结构（部门和人员）信息失败的对象。如果发生失败会在该表中记录，系统定时查询该表进行重试
+ * 企业开通套件失败的记录。当企业开通失败后，在这个表里记录；系统会定时查看这个表，对失败的记录进行重试。
  * @author Wallace Mao
  * Date: 2018-10-31 23:59
  */
-public class CorpOrgSyncFailDO {
+public class CorpSuiteAuthFailDO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
 
-    //  suiteKey
-    private String suiteKey;
     //  企业corpId
     private String corpId;
-    //  失败的类型
-    private String corpFailType;
-    //  失败的信息
+    //  套件key
+    private String suiteKey;
+    //  失败类型
+    private String authFailType;
+    //  失败信息
     private String failInfo;
+    //  套件的推送类型
+    private String suitePushType;
 
     public Long getId() {
         return id;
@@ -61,12 +63,12 @@ public class CorpOrgSyncFailDO {
         this.suiteKey = suiteKey;
     }
 
-    public String getCorpFailType() {
-        return corpFailType;
+    public String getAuthFailType() {
+        return authFailType;
     }
 
-    public void setCorpFailType(String corpFailType) {
-        this.corpFailType = corpFailType;
+    public void setAuthFailType(String authFailType) {
+        this.authFailType = authFailType;
     }
 
     public String getFailInfo() {
@@ -77,16 +79,25 @@ public class CorpOrgSyncFailDO {
         this.failInfo = failInfo;
     }
 
+    public String getSuitePushType() {
+        return suitePushType;
+    }
+
+    public void setSuitePushType(String suitePushType) {
+        this.suitePushType = suitePushType;
+    }
+
     @Override
     public String toString() {
-        return "CorpOrgSyncFailDO{" +
+        return "CorpSuiteAuthFailDO{" +
                 "id=" + id +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
-                ", suiteKey='" + suiteKey + '\'' +
                 ", corpId='" + corpId + '\'' +
-                ", corpFailType=" + corpFailType +
+                ", suiteKey='" + suiteKey + '\'' +
+                ", authFailType=" + authFailType +
                 ", failInfo='" + failInfo + '\'' +
+                ", suitePushType=" + suitePushType +
                 '}';
     }
 }

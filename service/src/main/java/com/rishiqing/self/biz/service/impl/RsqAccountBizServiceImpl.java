@@ -38,8 +38,6 @@ import java.util.*;
  * Created by Wallace on 2016/11/29.
  */
 public class RsqAccountBizServiceImpl implements RsqAccountBizService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("RSQ_REQUEST_LOGGER");
-
     @Autowired
     private SuiteManageService suiteManageService;
     @Autowired
@@ -253,7 +251,6 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
         JSONArray rsqIdArray = convertRsqDepartment(corpId, staffVO.getDepartment());
         if(null == rsqIdArray){
-            bizLogger.error("系统异常:one of the staff department don't have rsqId:", corpId, userId);
             throw new BizRuntimeException("系统异常:one of the staff department don't have rsqId: " + corpId);
         }
         Map params = new HashMap<String, Object>();

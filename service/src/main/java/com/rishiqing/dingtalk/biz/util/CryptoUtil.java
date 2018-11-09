@@ -14,13 +14,29 @@ import java.util.Map;
  * Date: 2018-05-10 22:14
  */
 public class CryptoUtil {
-    @Autowired
-    private Map isvGlobal;
+    private String aesKey;
+    private String aesInitVector;
+
+    public String getAesKey() {
+        return aesKey;
+    }
+
+    public void setAesKey(String aesKey) {
+        this.aesKey = aesKey;
+    }
+
+    public String getAesInitVector() {
+        return aesInitVector;
+    }
+
+    public void setAesInitVector(String aesInitVector) {
+        this.aesInitVector = aesInitVector;
+    }
 
     public String encrypt(String value) {
         try {
-            final String KEY = (String)isvGlobal.get("rsqAesKey");
-            final String INIT_VECTOR = (String)isvGlobal.get("rsqAesInitVector");
+            final String KEY = this.aesKey;
+            final String INIT_VECTOR = this.aesInitVector;
             System.out.println("KEY: " + KEY);
             System.out.println("INIT_VECTOR: " + INIT_VECTOR);
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
@@ -43,8 +59,8 @@ public class CryptoUtil {
 
     public String decrypt(String encoded){
         try {
-            final String KEY = (String)isvGlobal.get("rsqAesKey");
-            final String INIT_VECTOR = (String)isvGlobal.get("rsqAesInitVector");
+            final String KEY = this.aesKey;
+            final String INIT_VECTOR = this.aesInitVector;
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
             SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
 

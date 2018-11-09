@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.rishiqing.dingtalk.biz.converter.fail.FailConverter;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpOrgSyncFailDao;
+import com.rishiqing.dingtalk.dao.mapper.fail.CorpOrgSyncFailDao;
 import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
 import com.rishiqing.dingtalk.isv.api.enumtype.CorpFailType;
@@ -11,7 +11,7 @@ import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpOrgSyncFailVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
-import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthFailDao;
+import com.rishiqing.dingtalk.dao.mapper.fail.CorpSuiteAuthFailDao;
 import com.rishiqing.dingtalk.dao.model.fail.CorpSuiteAuthFailDO;
 import org.springframework.beans.factory.annotation.Autowired;
 

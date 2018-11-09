@@ -14,18 +14,10 @@
     </bean>
 
     <!--钉钉提醒库-->
-    <bean id="dataSourceRemind" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${jdbc.remind.url}" />
-        <property name="username" value="${jdbc.remind.username}" />
-        <property name="password" value="${jdbc.remind.password}" />
-    </bean>
-
-    <!--钉钉云推送主库-->
-    <bean id="dataSourceDingPush" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${jdbc.dingpush.url}" />
-        <property name="username" value="${jdbc.dingpush.username}" />
-        <property name="password" value="${jdbc.dingpush.password}" />
-    </bean>
+    <!--<bean id="dataSourceRemind" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+        <!--<property name="url" value="${jdbc.remind.url}" />-->
+        <!--<property name="username" value="${jdbc.remind.username}" />-->
+        <!--<property name="password" value="${jdbc.remind.password}" />-->
+    <!--</bean>-->
 </beans>

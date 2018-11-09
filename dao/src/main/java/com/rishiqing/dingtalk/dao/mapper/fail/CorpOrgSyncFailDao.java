@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.dao.mapper.corp;
+package com.rishiqing.dingtalk.dao.mapper.fail;
 
 import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import org.apache.ibatis.annotations.Param;

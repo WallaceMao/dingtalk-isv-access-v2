@@ -146,6 +146,17 @@ system logger：其他系统级别的重要的信息，要打印的log
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--付费相关的log-->
+        <RollingFile name="LSN_ORDER_CHARGE" fileName="${baseDir}/lsn_order_charge.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_order_charge-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--//////////////////////////////////////////////////////////////////-->
         <!--获取套件token的任务的log-->
         <RollingFile name="JOB_SUITE_TOKEN" fileName="${baseDir}/job_suite_token.log"
@@ -246,6 +257,9 @@ system logger：其他系统级别的重要的信息，要打印的log
         </Logger>
         <Logger name="LSN_RSQ_CORP_CHANGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="LSN_RSQ_CORP_CHANGE"/>
+        </Logger>
+        <Logger name="LSN_ORDER_CHARGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="LSN_ORDER_CHARGE"/>
         </Logger>
         <Logger name="JOB_SUITE_TOKEN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="JOB_SUITE_TOKEN"/>

@@ -3,8 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--全局缓存的suite-->
-    <bean id="globalSuite" class="com.rishiqing.dingtalk.biz.model.GlobalSuite" init-method="init"/>
+    <import resource="classpath:spring-dao.xml" />
+    <import resource="classpath:spring-dao-ding-push.xml" />
+
     <!--基础service-->
     <bean id="suiteManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.SuiteManageServiceImpl" />
     <bean id="appManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.AppManageServiceImpl" />
@@ -58,12 +59,20 @@
         <constructor-arg ref="asyncCorpOrgSyncExecutor"/>
     </bean>
     <bean id="corpOrgSyncEventListener" class="com.rishiqing.dingtalk.biz.event.RsqSuiteAuthPushEventListener"/>
+    <!--eventBus: 充值eventBus-->
+    <bean id="asyncOrderChargeExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncOrderChargeEventExecutorFactory" />
+    <bean id="asyncOrderChargeExecutor" factory-bean="asyncOrderChargeExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncOrderChargeEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncOrderChargeExecutor"/>
+    </bean>
+    <bean id="orderChargeEventListener" class="com.rishiqing.dingtalk.biz.event.OrderChargeEventListener"/>
     <!--eventBus: 初始化-->
     <bean id="listenerInitService" class="com.rishiqing.dingtalk.biz.event.ListenerInitService" init-method="register">
         <property name="eventListenerMap">
             <map>
                 <entry key-ref="asyncCorpSuiteAuthEventBus" value-ref="corpSuiteAuthEventListener" />
                 <entry key-ref="asyncCorpOrgSyncEventBus" value-ref="corpOrgSyncEventListener" />
+                <entry key-ref="asyncOrderChargeEventBus" value-ref="orderChargeEventListener" />
             </map>
         </property>
     </bean>

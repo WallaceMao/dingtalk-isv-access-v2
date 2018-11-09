@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.dao.mapper.suite;
+package com.rishiqing.dingtalk.dao.mapper.fail;
 
 import com.rishiqing.dingtalk.dao.model.fail.CorpSuiteAuthFailDO;
 import org.apache.ibatis.annotations.Param;

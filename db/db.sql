@@ -61,17 +61,17 @@ CREATE TABLE `isv_corp_suite_auth` (
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='企业对套件的授权记录';
 
 
-CREATE TABLE `isv_corp_suite_auth_faile` (
+CREATE TABLE `isv_corp_suite_auth_fail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `suite_key` varchar(100) NOT NULL COMMENT '套件key',
   `corp_id` varchar(100) NOT NULL COMMENT '企业id',
-  `faile_info` varchar(256) DEFAULT NULL COMMENT '失败信息',
-  `auth_faile_type` varchar(128) NOT NULL COMMENT '授权失败类型',
+  `fail_info` varchar(256) DEFAULT NULL COMMENT '失败信息',
+  `auth_fail_type` varchar(128) NOT NULL COMMENT '授权失败类型',
   `suite_push_type` varchar(128) NOT NULL COMMENT '推送类型',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `u_c_s_f_p` (`suite_key`,`corp_id`,`auth_faile_type`,`suite_push_type`)
+  UNIQUE KEY `u_c_s_f_p` (`suite_key`,`corp_id`,`auth_fail_type`,`suite_push_type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COMMENT='企业对套件的授权失败记录';
 
 

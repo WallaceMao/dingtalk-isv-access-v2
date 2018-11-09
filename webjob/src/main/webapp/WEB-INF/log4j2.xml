@@ -146,6 +146,17 @@ system logger：其他系统级别的重要的信息，要打印的log
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--付费相关的log-->
+        <RollingFile name="LSN_ORDER_CHARGE" fileName="${baseDir}/lsn_order_charge.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/lsn_order_charge-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--//////////////////////////////////////////////////////////////////-->
         <!--获取套件token的任务的log-->
         <RollingFile name="JOB_SUITE_TOKEN" fileName="${baseDir}/job_suite_token.log"
@@ -217,56 +228,59 @@ system logger：其他系统级别的重要的信息，要打印的log
     </Appenders>
     <Loggers>
         <Root level="error">
-            <AppenderRef ref="ROOT_APPENDER"/>
+            <AppenderRef ref="CONSOLE"/>
         </Root>
         <Logger name="CONSOLE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <!--普通开发日志直接打印到控制台-->
         <Logger name="CON_SUITE_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="CON_STAFF_POPUP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="CON_JS_CONFIG_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="CON_ID_MAP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="CON_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="LSN_DB_CHECK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="LSN_CORP_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="LSN_RSQ_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="LSN_RSQ_CORP_CHANGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="LSN_ORDER_CHARGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="JOB_SUITE_TOKEN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="JOB_CORP_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="JOB_RSQ_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="JOB_RSQ_CORP_CHANGE_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="SYS_CORP_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="SYS_GLOBAL_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CONSOLE"/>
         </Logger>
     </Loggers>
 </Configuration>

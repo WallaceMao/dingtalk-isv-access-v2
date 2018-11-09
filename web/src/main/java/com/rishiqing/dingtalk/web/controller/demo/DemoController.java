@@ -1,6 +1,7 @@
 package com.rishiqing.dingtalk.web.controller.demo;
 
 import com.rishiqing.dingtalk.biz.model.GlobalSuite;
+import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ public class DemoController {
     private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
 
     @Autowired
-    private GlobalSuite globalSuite;
+    private SuiteManageService suiteManageService;
     @RequestMapping("/test")
     @ResponseBody
     public String demoLog(){
         try {
-            String suiteKey = globalSuite.getSuiteKey();
+            String suiteKey = suiteManageService.getSuite().getSuiteKey();
             consoleLogger.info("this is consoleLogger from demoLogController:" + suiteKey);
             return suiteKey;
         } catch (Exception e){

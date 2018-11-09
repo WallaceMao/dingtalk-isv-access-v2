@@ -5,6 +5,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
        default-autowire="byName">
 
+    <!--钉钉云推送主库-->
+    <bean id="dataSourceDingPush" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="${jdbc.dingpush.url}" />
+        <property name="username" value="${jdbc.dingpush.username}" />
+        <property name="password" value="${jdbc.dingpush.password}" />
+    </bean>
+
     <!-- 配置 Mapper -->
     <bean id="mapperScannerConfigurerEx" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactoryEx"/>
@@ -15,7 +23,7 @@
     <!-- 配置mybatis数据源支持 -->
     <bean id="mySqlSessionFactoryEx" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSourceDingPush"/>
-        <property name="mapperLocations" value="classpath*:/mybatisdingpush/*/*Mapper.xml"/>
+        <property name="mapperLocations" value="classpath*:/mybatis2/dingpush/*Mapper.xml"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
@@ -25,6 +33,5 @@
     </bean>
 
     <!--&lt;!&ndash; 事务注解驱动，标注@Transactional的类和方法将具有事务性 &ndash;&gt;-->
-    <!--<tx:annotation-driven transaction-manager="transactionManagerEx" />-->
-
+    <tx:annotation-driven transaction-manager="transactionManagerEx" />
 </beans>

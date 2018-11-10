@@ -50,4 +50,9 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
                 corpStaffDao.getCorpStaffListByCorpIdAndIsAdmin(corpId, isAdmin)
         );
     }
+
+    @Override
+    public void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId) {
+        corpStaffDao.deleteCorpStaffByCorpIdAndUserId(corpId, userId);
+    }
 }

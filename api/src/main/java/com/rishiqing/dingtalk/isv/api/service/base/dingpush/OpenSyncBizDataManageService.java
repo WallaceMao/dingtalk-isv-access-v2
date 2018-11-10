@@ -11,5 +11,9 @@ import java.util.List;
 public interface OpenSyncBizDataManageService {
     List<OpenSyncBizDataVO> getOpenSyncBizDataListByStatus(Long status);
 
+    List<OpenSyncBizDataVO> getOpenSyncBizDataMediumListByStatus(Long status);
+
     void updateStatus(OpenSyncBizDataVO data);
+
+    void updateMediumStatus(OpenSyncBizDataVO data);
 }

@@ -24,8 +24,22 @@ public class OpenSyncBizDataManageServiceImpl implements OpenSyncBizDataManageSe
     }
 
     @Override
+    public List<OpenSyncBizDataVO> getOpenSyncBizDataMediumListByStatus(Long status) {
+        return OpenSyncBizDataConverter.openSyncBizDataDOList2openSyncBizDataVOList(
+                openSyncBizDataDao.getOpenSyncBizDataMediumListByStatus(status)
+        );
+    }
+
+    @Override
     public void updateStatus(OpenSyncBizDataVO data) {
         openSyncBizDataDao.updateStatus(
+                OpenSyncBizDataConverter.openSyncBizDataVO2openSyncBizDataDO(data)
+        );
+    }
+
+    @Override
+    public void updateMediumStatus(OpenSyncBizDataVO data) {
+        openSyncBizDataDao.updateMediumStatus(
                 OpenSyncBizDataConverter.openSyncBizDataVO2openSyncBizDataDO(data)
         );
     }

@@ -37,6 +37,15 @@
         and biz_type=#{bizType}
     </update>
 
+    <update id="updateMediumStatus">
+        update open_sync_biz_data_medium
+        set `status`=#{status}
+        where subscribe_id=#{subscribeId}
+        and corp_id=#{corpId}
+        and biz_id=#{bizId}
+        and biz_type=#{bizType}
+    </update>
+
     <select id="getOpenSyncBizDataById" resultMap="openSyncBizDataMap">
         SELECT <include refid="select-all-fields"/>  FROM open_sync_biz_data
         <![CDATA[
@@ -46,6 +55,14 @@
 
     <select id="getOpenSyncBizDataListByStatus" resultMap="openSyncBizDataMap">
         SELECT <include refid="select-all-fields"/>  FROM open_sync_biz_data
+        <![CDATA[
+			WHERE `status`=#{status}
+		 ]]>
+        ORDER BY id
+    </select>
+
+    <select id="getOpenSyncBizDataMediumListByStatus" resultMap="openSyncBizDataMap">
+        SELECT <include refid="select-all-fields"/>  FROM open_sync_biz_data_medium
         <![CDATA[
 			WHERE `status`=#{status}
 		 ]]>

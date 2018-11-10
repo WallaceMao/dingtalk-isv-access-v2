@@ -20,6 +20,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     private static final Logger bizLogger = LoggerFactory.getLogger("LSN_DB_CHECK_LOGGER");
 
     private static final String DB_CHECK_LOCK_KEY = "auth_check";
+    private static final String DB_CHECK_MEDIUM_LOCK_KEY = "auth_medium_check";
     @Autowired
     private OpenGlobalLockService openGlobalLockService;
     @Autowired
@@ -50,6 +51,32 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             bizLogger.error("checkDingPushEvent error: ", e);
         }finally {
             openGlobalLockService.releaseOpenGlobalLock(DB_CHECK_LOCK_KEY);
+        }
+    }
+
+    @Override
+    public void checkDingMediumPushEvent() {
+        OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_MEDIUM_LOCK_KEY);
+        System.out.println(">>>>>>>>>>>>>>>>>" + lock);
+        if(lock == null){
+            return;
+        }
+        try{
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
+            for(OpenSyncBizDataVO data : syncList){
+                try {
+                    syncActionManager.handleSyncData(data);
+                    data.setStatus(1L);
+                } catch (Exception e){
+                    bizLogger.error("checkDingMediumPushEvent error: ", e);
+                    data.setStatus(-1L);
+                }
+                openSyncBizDataManageService.updateMediumStatus(data);
+            }
+        }catch (Exception e){
+            bizLogger.error("checkDingMediumPushEvent error: ", e);
+        }finally {
+            openGlobalLockService.releaseOpenGlobalLock(DB_CHECK_MEDIUM_LOCK_KEY);
         }
     }
 }

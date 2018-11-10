@@ -18,4 +18,6 @@ public interface CorpStaffManageService {
     List<CorpStaffVO> getCorpStaffListByCorpId(String corpId);
 
     List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdmin(String corpId, Boolean isAdmin);
+
+    void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId);
 }

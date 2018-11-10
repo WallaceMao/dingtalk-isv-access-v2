@@ -6,4 +6,6 @@ package com.rishiqing.dingtalk.isv.api.service.biz;
  */
 public interface SuiteDbCheckBizService {
     void checkDingPushEvent();
+
+    void checkDingMediumPushEvent();
 }

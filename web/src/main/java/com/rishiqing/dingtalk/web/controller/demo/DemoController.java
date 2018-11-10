@@ -38,11 +38,9 @@ public class DemoController {
     @Autowired
     private RsqAccountBizService rsqAccountBizService;
 
-    @RequestMapping("/dbCheck")
+    @RequestMapping("/syncAuth")
     @ResponseBody
-    public String demoLog(
-            @RequestParam("corpId") String corpId
-    ){
+    public String syncAuth(){
         try {
             List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
@@ -50,7 +48,7 @@ public class DemoController {
                     syncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
-                    consoleLogger.error("handleSyncData error: ", e);
+                    consoleLogger.error("syncAuth error: ", e);
                     data.setStatus(-1L);
                 }
                 openSyncBizDataManageService.updateStatus(data);
@@ -73,6 +71,29 @@ public class DemoController {
             return "success";
         } catch (Exception e){
             consoleLogger.error("error in rsqCorpPush", e);
+            return "error";
+        }
+    }
+
+    @RequestMapping("/syncMediumAuth")
+    @ResponseBody
+    public String syncMediumAuth(){
+        try {
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
+            for(OpenSyncBizDataVO data : syncList){
+                try {
+                    syncActionManager.handleSyncData(data);
+                    data.setStatus(1L);
+                } catch (Exception e){
+                    consoleLogger.error("syncMediumAuth error: ", e);
+                    data.setStatus(-1L);
+                }
+                openSyncBizDataManageService.updateMediumStatus(data);
+            }
+            consoleLogger.info("this is consoleLogger from syncMediumAuth=====:");
+            return "success";
+        } catch (Exception e){
+            consoleLogger.error("error in demo test", e);
             return "error";
         }
     }

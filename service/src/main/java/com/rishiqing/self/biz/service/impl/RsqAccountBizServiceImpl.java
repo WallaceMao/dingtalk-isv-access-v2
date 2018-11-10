@@ -88,6 +88,154 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     /**
+     * 创建部门，分为以下几步：
+     * 1  根据corpId和deptId查询是否有记录，是否department的rsqId存在，则直接返回department
+     * 2  如果记录不存在或者rsqId不存在，则发送到日事清服务器请求创建
+     * 3  保存返回结果
+     * @param departmentVO  部门的数据库对象
+     * @return
+     */
+    @Override
+    public void createRsqDepartment(CorpDepartmentVO departmentVO){
+        String corpId = departmentVO.getCorpId();
+        //  如果departmentVO的rsqId存在，则不重新创建部门
+        if(null != departmentVO.getRsqId()){
+            return;
+        }
+
+        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
+
+        //  如果corpVO的rsqId不存在，那么返回失败
+        if(null == corpVO.getRsqId()){
+            throw new BizRuntimeException("department corp rsqId not exist: " + departmentVO);
+        }
+
+        CorpDepartmentVO parentDept = departmentVO.getParentId() == null ? null :
+                corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, departmentVO.getParentId());
+
+        //  如果corpVO的rsqId不存在，那么就请求日事清服务器创建，创建成功后更新corpVO
+        SuiteVO suiteVO = suiteManageService.getSuite();
+
+        RsqDepartment rsqDept = rsqRequestHelper.createDepartment(suiteVO, corpVO, departmentVO, parentDept);
+        departmentVO.setRsqId(String.valueOf(rsqDept.getId()));
+        corpDepartmentManageService.updateRsqInfo(departmentVO);
+    }
+
+    @Override
+    public void updateRsqDepartment(CorpDepartmentVO departmentVO){
+        if(departmentVO.getRsqId() == null){
+            return;
+        }
+        String corpId = departmentVO.getCorpId();
+        Long parentId = departmentVO.getParentId();
+
+        //  suiteKey
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        CorpDepartmentVO parentDepartmentVO = null;
+        if(null != parentId) {
+            parentDepartmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, parentId);
+            if (null == parentDepartmentVO.getRsqId()) {
+                throw new BizRuntimeException("parent department corp rsqId not exist: " + departmentVO);
+            }
+        }
+        //  提交更新
+        rsqRequestHelper.updateDepartment(suiteVO, departmentVO, parentDepartmentVO);
+    }
+
+    @Override
+    public void deleteRsqDepartment(CorpDepartmentVO departmentVO){
+        if(null == departmentVO.getRsqId()){
+            return;
+        }
+        //  suiteKey
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        //  提交更新
+        rsqRequestHelper.deleteDepartment(suiteVO, departmentVO);
+    }
+
+    /**
+     * 创建公司员工
+     * @param staffVO
+     * @return
+     */
+    @Override
+    public void createRsqTeamStaff(CorpStaffVO staffVO) {
+        //  如果staffVO的rsqUserId存在，则不重新发送请求创建
+        if(null != staffVO.getRsqUserId()){
+            return;
+        }
+
+        String userId = staffVO.getUserId();
+        String corpId = staffVO.getCorpId();
+        //  生成用户信息
+
+        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
+        if(null == corpVO || null == corpVO.getRsqId()){
+            throw new BizRuntimeException("rsqId not found in corpVO: " + corpVO);
+        }
+
+        SuiteVO suiteVO = suiteManageService.getSuite();
+
+        //  保存用户信息到日事清系统
+        String username = generateRsqUsername(suiteVO.getRsqAppName());  //自动生成用户名
+        String password = generateRsqPassword();  //自动生成明文密码
+        staffVO.setRsqUsername(username);
+        staffVO.setRsqPassword(password);
+
+        JSONArray rsqIdArray = convertRsqDepartment(corpId, staffVO.getDepartment());
+        if(null == rsqIdArray){
+            throw new BizRuntimeException("系统异常:one of the staff department don't have rsqId: " + corpId);
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("rsqDepartment", rsqIdArray);
+
+        RsqUser user = rsqRequestHelper.createUser(suiteVO, staffVO, corpVO, params);
+
+        staffVO.setRsqUserId(String.valueOf(user.getId()));
+        // 为控制并发，保证username和password与日事清系统一致，使用返回值作为rsqUsername和rsqPassword
+        staffVO.setRsqUsername(user.getUsername());
+        staffVO.setRsqPassword(generateRsqPassword());
+
+        corpStaffManageService.updateRsqInfo(staffVO);
+    }
+
+    @Override
+    public void updateRsqTeamStaff(CorpStaffVO corpStaffVO){
+        //  suiteKey
+        SuiteVO suiteVO = suiteManageService.getSuite();
+
+        //  将员工的部门的deptId转换成rsqId
+        JSONArray rsqIdArray = convertRsqDepartment(corpStaffVO.getCorpId(), corpStaffVO.getDepartment());
+        if(null == rsqIdArray){
+            return;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("rsqDepartment", rsqIdArray);
+
+        //  提交更新
+        rsqRequestHelper.updateUser(suiteVO, corpStaffVO, params);
+    }
+
+    @Override
+    public void removeRsqTeamStaff(CorpStaffVO corpStaffVO){
+        if(null == corpStaffVO.getRsqUserId()){
+            return;
+        }
+        //  suiteKey
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        //  提交更新
+        rsqRequestHelper.removeUser(suiteVO, corpStaffVO);
+    }
+
+    @Override
+    public void updateRsqTeamStaffSetAdmin(CorpStaffVO corpStaffVO){
+        //  suiteKey
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        //  提交更新
+        rsqRequestHelper.setUserAdmin(suiteVO, corpStaffVO);
+    }
+
+    /**
      * 创建公司，分为以下几步：
      * 1  根据corpId查询是否有记录，是否rsqId存在，如果rsqId存在，则直接返回rsqId
      * 2  如果记录不存在或者rsqId不存在，则发送到日事清服务器请求创建
@@ -189,84 +337,6 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     /**
-     * 创建部门，分为以下几步：
-     * 1  根据corpId和deptId查询是否有记录，是否department的rsqId存在，则直接返回department
-     * 2  如果记录不存在或者rsqId不存在，则发送到日事清服务器请求创建
-     * 3  保存返回结果
-     * @param departmentVO  部门的数据库对象
-     * @return
-     */
-    private void createRsqDepartment(CorpDepartmentVO departmentVO){
-        String corpId = departmentVO.getCorpId();
-        //  如果departmentVO的rsqId存在，则不重新创建部门
-        if(null != departmentVO.getRsqId()){
-            return;
-        }
-
-        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-
-        //  如果corpVO的rsqId不存在，那么返回失败
-        if(null == corpVO.getRsqId()){
-            throw new BizRuntimeException("department corp rsqId not exist: " + departmentVO);
-        }
-
-        CorpDepartmentVO parentDept = departmentVO.getParentId() == null ? null :
-                corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, departmentVO.getParentId());
-
-        //  如果corpVO的rsqId不存在，那么就请求日事清服务器创建，创建成功后更新corpVO
-        SuiteVO suiteVO = suiteManageService.getSuite();
-
-        RsqDepartment rsqDept = rsqRequestHelper.createDepartment(suiteVO, corpVO, departmentVO, parentDept);
-        departmentVO.setRsqId(String.valueOf(rsqDept.getId()));
-        corpDepartmentManageService.updateRsqInfo(departmentVO);
-    }
-
-    /**
-     * 创建公司员工
-     * @param staffVO
-     * @return
-     */
-    private void createRsqTeamStaff(CorpStaffVO staffVO) {
-        //  如果staffVO的rsqUserId存在，则不重新发送请求创建
-        if(null != staffVO.getRsqUserId()){
-            return;
-        }
-
-        String userId = staffVO.getUserId();
-        String corpId = staffVO.getCorpId();
-        //  生成用户信息
-
-        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        if(null == corpVO || null == corpVO.getRsqId()){
-            throw new BizRuntimeException("rsqId not found in corpVO: " + corpVO);
-        }
-
-        SuiteVO suiteVO = suiteManageService.getSuite();
-
-        //  保存用户信息到日事清系统
-        String username = generateRsqUsername(suiteVO.getRsqAppName());  //自动生成用户名
-        String password = generateRsqPassword();  //自动生成明文密码
-        staffVO.setRsqUsername(username);
-        staffVO.setRsqPassword(password);
-
-        JSONArray rsqIdArray = convertRsqDepartment(corpId, staffVO.getDepartment());
-        if(null == rsqIdArray){
-            throw new BizRuntimeException("系统异常:one of the staff department don't have rsqId: " + corpId);
-        }
-        Map params = new HashMap<String, Object>();
-        params.put("rsqDepartment", rsqIdArray);
-
-        RsqUser user = rsqRequestHelper.createUser(suiteVO, staffVO, corpVO, params);
-
-        staffVO.setRsqUserId(String.valueOf(user.getId()));
-        // 为控制并发，保证username和password与日事清系统一致，使用返回值作为rsqUsername和rsqPassword
-        staffVO.setRsqUsername(user.getUsername());
-        staffVO.setRsqPassword(generateRsqPassword());
-
-        corpStaffManageService.updateRsqInfo(staffVO);
-    }
-
-    /**
      * 设置staffVO是否是管理员
      * @param staffVO
      * @return
@@ -294,10 +364,9 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     private JSONArray convertRsqDepartment(String corpId, String dingDepartment){
         JSONArray orgArray = JSON.parseArray(dingDepartment);
         JSONArray rsqArray = new JSONArray();
-        Iterator it = orgArray.iterator();
 
-        while (it.hasNext()){
-            Long orgId = new Long((Integer)it.next());
+        for(int i = 0; i < orgArray.size(); i++){
+            Long orgId = orgArray.getLong(i);
             CorpDepartmentVO departmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, orgId);
             String rsqId = departmentVO.getRsqId();
             if(null == rsqId){

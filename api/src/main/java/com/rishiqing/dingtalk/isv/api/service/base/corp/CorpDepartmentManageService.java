@@ -20,4 +20,6 @@ public interface CorpDepartmentManageService {
     List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentId(String corpId, Long deptId);
 
     CorpDepartmentVO getTopCorpDepartment(String corpId);
+
+    void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
 }

@@ -9,10 +9,14 @@ import java.util.List;
 @Repository("openSyncBizDataDao")
 public interface OpenSyncBizDataDao {
 
-	public void updateStatus(OpenSyncBizDataDO data);
-
 	public OpenSyncBizDataDO getOpenSyncBizDataById(@Param("id") Long id);
 
 	public List<OpenSyncBizDataDO> getOpenSyncBizDataListByStatus(@Param("status") Long status);
+
+	public void updateStatus(OpenSyncBizDataDO data);
+
+	List<OpenSyncBizDataDO> getOpenSyncBizDataMediumListByStatus(Long status);
+
+	void updateMediumStatus(OpenSyncBizDataDO openSyncBizDataDO);
 }
 

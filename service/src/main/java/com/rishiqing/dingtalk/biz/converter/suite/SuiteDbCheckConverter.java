@@ -1,14 +1,16 @@
 package com.rishiqing.dingtalk.biz.converter.suite;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.rishiqing.dingtalk.isv.api.enumtype.SyncActionType;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -176,6 +178,130 @@ public class SuiteDbCheckConverter {
 
         return corpAuthInfo;
     }
+
+    /**
+     {
+     "errcode": 0,
+     "corpid": "ding9f50b15bccd16741",
+     "auth_level": 1,
+     "syncAction": "org_update",
+     "errmsg": "ok",
+     "industry": "信息技术咨询",
+     "is_authenticated": true,
+     "corp_name": "XX企业",
+     "corp_logo_url": "http://static.dingtalk.com/media/lALPBY0V4xtagzFgYA_96_96.png"
+     }
+     * @param json
+     * @return
+     */
+    public static CorpVO json2Corp(JSONObject json) {
+        if(json == null){
+            return null;
+        }
+        CorpVO vo = new CorpVO();
+        vo.setCorpId(json.getString("corpid"));
+        vo.setIndustry(json.getString("industry"));
+        vo.setCorpName(json.getString("corp_name"));
+        vo.setCorpLogoUrl(json.getString("corp_logo_url"));
+
+        return vo;
+    }
+
+    /**
+     {
+     "errcode": 0,
+     "unionid": "xBn6BMczsQkOWSIN1rumiPQiEiE",
+     "syncAction": "user_add_org",
+     "userid": "2169122037831712",
+     "isLeaderInDepts": "{1:false,87007171:false}",
+     "isBoss": false,
+     "isSenior": false,
+     "department": [
+     1,
+     87007171
+     ],
+     "orderInDepts": "{1:176375771451309512,87007171:176375771451309512}",
+     "dingId": "$:LWCP_v1:$ISOwl2lZvnM2C7sspD1/awEuX2GJWQyp",
+     "errmsg": "ok",
+     "active": true,
+     "avatar": "",
+     "isAdmin": false,
+     "isHide": false,
+     "name": "文文",
+     "position": ""
+     }
+     * @param json
+     * @return
+     */
+    public static CorpStaffVO json2CorpStaff(JSONObject json){
+        if(json == null){
+            return null;
+        }
+        CorpStaffVO vo = new CorpStaffVO();
+        vo.setUserId(json.getString("userid"));
+        vo.setName(json.getString("name"));
+        vo.setPosition(json.getString("position"));
+        vo.setBoss(json.getBoolean("isBoss"));
+        vo.setDingId(json.getString("dingId"));
+        vo.setActive(json.getBoolean("active"));
+        vo.setAvatar(json.getString("avatar"));
+        vo.setAdmin(json.getBoolean("isAdmin"));
+        vo.setHide(json.getBoolean("isHide"));
+        vo.setOrderInDepts(JSON.parseObject(json.getString("orderInDepts"), new TypeReference<Map<Long, Long>>(){}));
+        vo.setIsLeaderInDepts(JSON.parseObject(json.getString("isLeaderInDepts"), new TypeReference<Map<Long, Boolean>>(){}));
+        vo.setDepartment(JSON.parseObject(json.getString("department"), new TypeReference<List<Long>>(){}));
+        vo.setUnionId(json.getString("unionid"));
+
+        return vo;
+    }
+
+    /**
+     {
+     "errcode": 0,
+     "userPermits": "",
+     "userPerimits": "",
+     "syncAction": "org_dept_create",
+     "outerDept": false,
+     "errmsg": "ok",
+     "deptManagerUseridList": "",
+     "parentid": 1,
+     "groupContainSubDept": false,
+     "outerPermitUsers": "",
+     "outerPermitDepts": "",
+     "deptPerimits": "",
+     "createDeptGroup": true,
+     "name": "销售部",
+     "id": 87564668,
+     "autoAddUser": true,
+     "deptHiding": false,
+     "deptPermits": "",
+     "order": 87564668
+     }
+     * @param json
+     * @return
+     */
+    public static CorpDepartmentVO json2CorpDepartment(JSONObject json){
+        if(json == null){
+            return null;
+        }
+        CorpDepartmentVO vo = new CorpDepartmentVO();
+        vo.setDeptId(json.getLong("id"));
+        vo.setName(json.getString("name"));
+        vo.setAutoAddUser(json.getBoolean("autoAddUser"));
+        vo.setDeptHiding(json.getBoolean("deptHiding"));
+        vo.setParentId(json.getLong("parentid"));
+        vo.setOrder(json.getLong("order"));
+        vo.setDeptPerimits(json.getString("deptPermits"));
+        vo.setUserPerimits(json.getString("userPerimits"));
+        vo.setOuterDept(json.getBoolean("outerDept"));
+        vo.setOuterPermitUsers(json.getString("outerPermitUsers"));
+        vo.setOuterPermitDepts(json.getString("outerPermitDepts"));
+        vo.setCreateDeptGroup(json.getBoolean("createDeptGroup"));
+        vo.setDeptManagerUseridList(json.getString("deptManagerUseridList"));
+
+        return vo;
+    }
+
 
     public static void main(String[] args) {
         String jsonString = "{\"syncAction\":\"org_suite_auth\",\"auth_corp_info\":{\"auth_channel\":\"\",\"auth_channel_type\":\"\",\"auth_level\":1,\"corp_logo_url\":\"http://url.com\",\"corp_name\":\"浩倡测试企业申请认证\",\"corpid\":\"dingxxxxxxxxxxxxxx\",\"industry\":\"信息技术咨询\",\"invite_code\":\"000000\",\"invite_url\":\"http://url.com\",\"is_authenticated\":true,\"license_code\":\"xxx\"},\"auth_info\":{\"agent\":[{\"admin_list\":[\"aaaa\",\"bbbb\"],\"agent_name\":\"Demo\",\"agentid\":16000,\"appid\":1234,\"logo_url\":\"http://url.png\"}]},\"auth_user_info\":{\"userId\":\"xxxx\"},\"auth_scope\":{\"errcode\":0,\"condition_field\":[],\"auth_user_field\":[\"dingId\",\"position\",\"jobnumber\",\"avatar\",\"deviceId\"],\"auth_org_scopes\":{\"authed_user\":[],\"authed_dept\":[1]},\"errmsg\":\"ok\"},\"permanent_code\":\"xxxxxxxxxxxxx\",\"ch_permanent_code\":\"xxxxxxxxxxxxxx\"}";

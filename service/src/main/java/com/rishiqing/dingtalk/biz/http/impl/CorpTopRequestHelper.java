@@ -1,6 +1,7 @@
 package com.rishiqing.dingtalk.biz.http.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
@@ -115,17 +116,18 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             corpStaff.setMobile(resp.getMobile());
             corpStaff.setEmail(resp.getEmail());
             corpStaff.setActive(resp.getActive());
-            corpStaff.setOrderInDepts((Map<Long, Long>)JSON.parse(resp.getOrderInDepts()));
+            corpStaff.setOrderInDepts(JSON.parseObject(resp.getOrderInDepts(), new TypeReference<Map<Long, Long>>(){}));
             corpStaff.setBoss(resp.getIsBoss());
             corpStaff.setAdmin(resp.getIsAdmin());
             corpStaff.setDingId(resp.getDingId());
-            corpStaff.setIsLeaderInDepts((Map<Long, Boolean>)JSON.parse(resp.getIsLeaderInDepts()));
+            corpStaff.setIsLeaderInDepts(JSON.parseObject(resp.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>(){}));
             corpStaff.setHide(resp.getIsHide());
             corpStaff.setDepartment(resp.getDepartment());
             corpStaff.setPosition(resp.getPosition());
             corpStaff.setAvatar(resp.getAvatar());
             corpStaff.setJobnumber(resp.getJobnumber());
-            corpStaff.setExtattr((Map<String, String>)JSON.parse(resp.getExtattr()));
+            corpStaff.setExtattr(JSON.parseObject(resp.getExtattr(), new TypeReference<Map<String, String>>(){}));
+            corpStaff.setUnionId(resp.getUnionid());
 
             return corpStaff;
         } catch (ApiException e) {

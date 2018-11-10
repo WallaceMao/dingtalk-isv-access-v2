@@ -83,4 +83,9 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
         }
         return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(currentDept);
     }
+
+    @Override
+    public void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId) {
+        corpDepartmentDao.deleteCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
+    }
 }

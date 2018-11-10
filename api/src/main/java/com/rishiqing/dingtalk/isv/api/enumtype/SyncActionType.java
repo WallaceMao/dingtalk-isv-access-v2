@@ -6,7 +6,7 @@ package com.rishiqing.dingtalk.isv.api.enumtype;
  * @author Wallace Mao
  * Date: 2018-11-07 0:10
  */
-public enum SuiteSyncActionType {
+public enum SyncActionType {
     //  套件票据的最新状态
     SUITE_TICKET("suite_ticket"),
     ORG_SUITE_AUTH("org_suite_auth"),
@@ -36,7 +36,7 @@ public enum SuiteSyncActionType {
 
     private final String key;
 
-    SuiteSyncActionType(String key){
+    SyncActionType(String key){
         this.key = key;
     }
 
@@ -44,9 +44,9 @@ public enum SuiteSyncActionType {
         return key;
     }
 
-    public static SuiteSyncActionType getSuiteSyncActionType(String key){
-        SuiteSyncActionType[] suiteDbPushTypeArr = SuiteSyncActionType.values();
-        for (SuiteSyncActionType o : suiteDbPushTypeArr) {
+    public static SyncActionType getSuiteSyncActionType(String key){
+        SyncActionType[] suiteDbPushTypeArr = SyncActionType.values();
+        for (SyncActionType o : suiteDbPushTypeArr) {
             if (o.getKey().equalsIgnoreCase(key)) {
                 return o;
             }

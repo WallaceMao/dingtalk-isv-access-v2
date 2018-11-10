@@ -8,6 +8,7 @@ import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiServiceGetCorpTokenResponse;
 import com.dingtalk.api.response.OapiServiceGetSuiteTokenResponse;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
+import com.rishiqing.dingtalk.biz.util.DateUtil;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
@@ -45,7 +46,6 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
     public SuiteTokenVO getSuiteToken(SuiteVO suite, SuiteTicketVO suiteTicket) {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_suite_token");
         OapiServiceGetSuiteTokenRequest req = new OapiServiceGetSuiteTokenRequest();
-        req.setHttpMethod("GET");
         req.setSuiteKey(suite.getSuiteKey());
         req.setSuiteSecret(suite.getSuiteSecret());
         req.setSuiteTicket(suiteTicket.getSuiteTicket());
@@ -57,7 +57,7 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
             SuiteTokenVO suiteTokenVO = new SuiteTokenVO();
             suiteTokenVO.setSuiteKey(suite.getSuiteKey());
             suiteTokenVO.setSuiteToken(resp.getSuiteAccessToken());
-            suiteTokenVO.setExpiredTime(new Date(resp.getExpiresIn()));
+            suiteTokenVO.setExpiredTime(DateUtil.addSeconds(resp.getExpiresIn()));
             return suiteTokenVO;
         } catch (ApiException e){
             throw new BizRuntimeException(e);
@@ -69,7 +69,6 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_corp_token");
         OapiServiceGetCorpTokenRequest req = new OapiServiceGetCorpTokenRequest();
         req.setAuthCorpid(corpId);
-        req.setHttpMethod("GET");
         try {
             SuiteVO suite = suiteManageService.getSuite();
             SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
@@ -85,7 +84,7 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
             corpTokenVO.setSuiteKey(suite.getSuiteKey());
             corpTokenVO.setCorpId(corpId);
             corpTokenVO.setCorpToken(resp.getAccessToken());
-            corpTokenVO.setExpiredTime(new Date(resp.getExpiresIn()));
+            corpTokenVO.setExpiredTime(DateUtil.addSeconds(resp.getExpiresIn()));
             return corpTokenVO;
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
@@ -112,7 +111,7 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
             corpJSAPITicketVO.setSuiteKey(suite.getSuiteKey());
             corpJSAPITicketVO.setCorpId(corpToken.getCorpId());
             corpJSAPITicketVO.setCorpJSAPITicket(resp.getTicket());
-            corpJSAPITicketVO.setExpiredTime(new Date(resp.getExpiresIn()));
+            corpJSAPITicketVO.setExpiredTime(DateUtil.addSeconds(resp.getExpiresIn()));
             return corpJSAPITicketVO;
         } catch (ApiException e) {
             throw new BizRuntimeException(e);

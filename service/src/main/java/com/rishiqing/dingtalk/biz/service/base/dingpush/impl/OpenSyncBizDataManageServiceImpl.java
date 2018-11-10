@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.biz.service.base.dingpush.impl;
 
 import com.rishiqing.dingtalk.biz.converter.dingpush.OpenSyncBizDataConverter;
-import com.rishiqing.dingtalk.dao.mapper.dingpush.OpenSyncBizDataDao;
+import com.rishiqing.dingtalk.dao.mapper2.dingpush.OpenSyncBizDataDao;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import java.util.List;
 public class OpenSyncBizDataManageServiceImpl implements OpenSyncBizDataManageService {
     @Autowired
     private OpenSyncBizDataDao openSyncBizDataDao;
-
 
     @Override
     public List<OpenSyncBizDataVO> getOpenSyncBizDataListByStatus(Long status) {

@@ -148,6 +148,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             List<CorpStaffVO> staffList = new ArrayList<>(list.size());
             for(OapiUserListResponse.Userlist user : list){
                 CorpStaffVO corpStaff = new CorpStaffVO();
+                corpStaff.setCorpId(corpId);
                 Map<Long, Long> orderMap = new HashMap<>();
                 Map<Long, Boolean> isLeaderMap = new HashMap<>();
                 orderMap.put(deptId, user.getOrder());

@@ -4,7 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:spring-dao.xml" />
-    <import resource="classpath:spring-dao-ding-push.xml" />
 
     <!--基础service-->
     <bean id="suiteManageService" class="com.rishiqing.dingtalk.biz.service.base.suite.impl.SuiteManageServiceImpl" />
@@ -17,8 +16,6 @@
     <bean id="orderManageService" class="com.rishiqing.dingtalk.biz.service.base.order.impl.OrderManageServiceImpl" />
     <bean id="idMapStaffManageService" class="com.rishiqing.dingtalk.biz.service.base.front.impl.IdMapStaffManageServiceImpl" />
     <bean id="popupManageService" class="com.rishiqing.dingtalk.biz.service.base.front.impl.PopupManageServiceImpl" />
-    <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
-    <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
     <!--业务相关的service-->
     <bean id="suiteCallbackBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteCallbackBizServiceImpl" />
     <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
@@ -27,8 +24,6 @@
     <bean id="popupBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.PopupBizServiceImpl" />
     <bean id="messageBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.MessageBizServiceImpl" />
     <bean id="rsqAccountBizService" class="com.rishiqing.self.biz.service.impl.RsqAccountBizServiceImpl" />
-    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl" />
-    <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
     <!--辅助service-->
     <bean id="corpLockService" class="com.rishiqing.dingtalk.biz.service.util.impl.CorpLockServiceImpl" />
     <bean id="suiteService" class="com.rishiqing.dingtalk.biz.service.util.SuiteService" />
@@ -40,25 +35,26 @@
     <bean id="messageRequestHelper" class="com.rishiqing.dingtalk.biz.http.impl.MessageTopRequestHelper" />
     <bean id="httpRequestClient" class="com.rishiqing.dingtalk.biz.http.HttpRequestClient" />
     <bean id="rsqRequestHelper" class="com.rishiqing.self.biz.http.impl.RsqApiRequestHelper">
-        <property name="rsqDomain" value="${rsqapi.environment}" />
+        <property name="rsqDomain" value="${rsqapi.url.root}" />
         <property name="httpRequestClient" ref="httpRequestClient"/>
     </bean>
 
     <!--eventBus-->
-    <!--eventBus: corpSuite-->
+    <!--eventBus: corpSuite：企业授权开通的事件，只在传统回调的方式下使用，钉钉云环境下不使用该事件-->
     <bean id="asyncCorpSuiteAuthExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncCorpSuiteAuthEventExecutorFactory" />
     <bean id="asyncCorpSuiteAuthExecutor" factory-bean="asyncCorpSuiteAuthExecutorFactory" factory-method="getExecutor" />
     <bean id="asyncCorpSuiteAuthEventBus" class="com.google.common.eventbus.AsyncEventBus">
         <constructor-arg ref="asyncCorpSuiteAuthExecutor"/>
     </bean>
     <bean id="corpSuiteAuthEventListener" class="com.rishiqing.dingtalk.biz.event.CorpSuiteAuthEventListener" />
-    <!--eventBus: corpOrgSync-->
+    <!--eventBus: 同步到日事清的corpOrgSync-->
     <bean id="asyncCorpOrgSyncExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncRsqSuiteAuthPushEventExecutorFactory" />
     <bean id="asyncCorpOrgSyncExecutor" factory-bean="asyncCorpOrgSyncExecutorFactory" factory-method="getExecutor" />
     <bean id="asyncCorpOrgSyncEventBus" class="com.google.common.eventbus.AsyncEventBus">
         <constructor-arg ref="asyncCorpOrgSyncExecutor"/>
     </bean>
     <bean id="corpOrgSyncEventListener" class="com.rishiqing.dingtalk.biz.event.RsqSuiteAuthPushEventListener"/>
+    <!--TODO eventBus: 将组织结构的变更同步到日事清rsqCorpChangePush-->
     <!--eventBus: 充值eventBus-->
     <bean id="asyncOrderChargeExecutorFactory" class="com.rishiqing.dingtalk.biz.event.AsyncOrderChargeEventExecutorFactory" />
     <bean id="asyncOrderChargeExecutor" factory-bean="asyncOrderChargeExecutorFactory" factory-method="getExecutor" />

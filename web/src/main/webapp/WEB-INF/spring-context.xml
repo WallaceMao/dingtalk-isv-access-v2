@@ -25,6 +25,9 @@
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
     <import resource="classpath:spring-queue.xml" />
+    <import resource="classpath:spring-dingpush.xml" />
 
     <!--web层需要用到的service-->
+    <!--启动钉钉云推送的监听-->
+    <!--<bean id="suiteDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.listener.SuiteDbCheckApplicationListener" />-->
 </beans>

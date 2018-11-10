@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Wallace Mao
@@ -84,7 +85,8 @@ public class StaffService {
     private CorpStaffVO mergeDepartmentProperties(CorpStaffVO dbStaff, CorpStaffVO targetStaff) {
         Map<Long, Long> dbOrderInDept = dbStaff.getOrderInDepts();
         Map<Long, Long> newOrderInDept = targetStaff.getOrderInDepts();
-        for(Long deptId : dbOrderInDept.keySet()){
+        Set<Long> deptSet = dbOrderInDept.keySet();
+        for(Long deptId : deptSet){
             newOrderInDept.put(deptId, dbOrderInDept.get(deptId));
         }
 

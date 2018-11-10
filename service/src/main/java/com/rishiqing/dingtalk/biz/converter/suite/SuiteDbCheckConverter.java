@@ -2,7 +2,7 @@ package com.rishiqing.dingtalk.biz.converter.suite;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.rishiqing.dingtalk.isv.api.enumtype.SuiteSyncActionType;
+import com.rishiqing.dingtalk.isv.api.enumtype.SyncActionType;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
@@ -15,8 +15,12 @@ import java.util.List;
  * Date: 2018-11-07 0:08
  */
 public class SuiteDbCheckConverter {
-    public static SuiteSyncActionType json2SuiteSyncActionType(JSONObject json){
-        return SuiteSyncActionType.getSuiteSyncActionType(json.getString("syncAction"));
+    @Deprecated
+    public static SyncActionType json2SuiteSyncActionType(JSONObject json){
+        return SyncActionType.getSuiteSyncActionType(json.getString("syncAction"));
+    }
+    public static String json2SyncActionString(JSONObject json){
+        return json.getString("syncAction");
     }
 
     public static SuiteTicketVO json2SuiteTicket(JSONObject json){

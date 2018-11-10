@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.dao.mapper.dingpush;
+package com.rishiqing.dingtalk.dao.mapper2.dingpush;
 
 import com.rishiqing.dingtalk.dao.model.dingpush.OpenGlobalLockDO;
 import org.apache.ibatis.annotations.Param;

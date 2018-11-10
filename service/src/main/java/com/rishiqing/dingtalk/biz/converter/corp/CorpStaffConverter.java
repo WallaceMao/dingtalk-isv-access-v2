@@ -1,12 +1,13 @@
 package com.rishiqing.dingtalk.biz.converter.corp;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Wallace Mao
@@ -68,17 +69,17 @@ public class CorpStaffConverter {
         staffVO.setMobile(staffDO.getMobile());
         staffVO.setEmail(staffDO.getEmail());
         staffVO.setActive(staffDO.getActive());
-        staffVO.setOrderInDepts((Map<Long, Long>)JSON.parse(staffDO.getOrderInDepts()));
+        staffVO.setOrderInDepts(JSON.parseObject(staffDO.getOrderInDepts(), new TypeReference<Map<Long, Long>>(){}));
         staffVO.setAdmin(staffDO.getAdmin());
         staffVO.setBoss(staffDO.getBoss());
         staffVO.setDingId(staffDO.getDingId());
-        staffVO.setIsLeaderInDepts((Map<Long, Boolean>)JSON.parse(staffDO.getIsLeaderInDepts()));
+        staffVO.setIsLeaderInDepts(JSON.parseObject(staffDO.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>(){}));
         staffVO.setHide(staffDO.getHide());
-        staffVO.setDepartment((List<Long>)JSON.parse(staffDO.getDepartment()));
+        staffVO.setDepartment(JSON.parseObject(staffDO.getDepartment(), new TypeReference<List<Long>>(){}));
         staffVO.setPosition(staffDO.getPosition());
         staffVO.setAvatar(staffDO.getAvatar());
         staffVO.setJobnumber(staffDO.getJobnumber());
-        staffVO.setExtattr((Map<String, String>)JSON.parse(staffDO.getExtattr()));
+        staffVO.setExtattr(JSON.parseObject(staffDO.getExtattr(), new TypeReference<Map<String, String>>(){}));
         staffVO.setSys(staffDO.getSys());
         staffVO.setSysLevel(staffDO.getSysLevel());
 

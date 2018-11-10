@@ -20,7 +20,7 @@
     <!--配置dao-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory" />
-        <property name="basePackage" value="com.rishiqing.dingtalk.dao" />
+        <property name="basePackage" value="com.rishiqing.dingtalk.dao.mapper" />
         <property name="annotationClass" value="org.springframework.stereotype.Repository" />
     </bean>
 

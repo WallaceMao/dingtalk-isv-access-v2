@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://activemq.apache.org/schema/core
+       http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+    <import resource="classpath:spring-dao-ding-push.xml" />
+
+    <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
+    <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
+
+    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl" />
+    <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
+
+    <!--相关的用来处理钉钉推送过来的消息的处理器-->
+    <bean id="suiteTicketSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.SuiteTicketSyncActionHandler" />
+    <bean id="orgSuiteAuthSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteAuthSyncActionHandler" />
+
+    <bean id="syncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.SyncActionManager">
+        <property name="syncActionMap">
+            <map>
+                <entry key="suite_ticket" value-ref="suiteTicketSyncActionHandler" />
+                <entry key="org_suite_auth" value-ref="orgSuiteAuthSyncActionHandler" />
+            </map>
+        </property>
+    </bean>
+</beans>

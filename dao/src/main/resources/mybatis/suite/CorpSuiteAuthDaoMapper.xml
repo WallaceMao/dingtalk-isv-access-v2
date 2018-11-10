@@ -24,7 +24,7 @@
         auth_user_id
     </sql>
 
-    <insert id="addOrUpdateCorpSuiteAuth" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveOrUpdateCorpSuiteAuth" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_corp_suite_auth (
         gmt_create,
         gmt_modified,

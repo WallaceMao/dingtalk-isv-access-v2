@@ -14,6 +14,9 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
  */
 public class OrderConverter {
     public static OrderEventVO orderEventDO2OrderEventVO(OrderEventDO orderEventDO) {
+        if(orderEventDO == null){
+            return null;
+        }
         OrderEventVO orderEventVO = new OrderEventVO();
         orderEventVO.setId(orderEventDO.getId());
         orderEventVO.setGmtCreate(orderEventDO.getGmtCreate());
@@ -41,6 +44,9 @@ public class OrderConverter {
     }
 
     public static OrderStatusVO orderStatusDO2OrderStatusVO(OrderStatusDO orderStatusDO) {
+        if(orderStatusDO == null){
+            return null;
+        }
         OrderStatusVO orderStatusVO = new OrderStatusVO();
         orderStatusVO.setId(orderStatusDO.getId());
         orderStatusVO.setGmtCreate(orderStatusDO.getGmtCreate());

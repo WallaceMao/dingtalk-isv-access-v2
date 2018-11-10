@@ -16,14 +16,14 @@
     <!-- 配置 Mapper -->
     <bean id="mapperScannerConfigurerEx" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactoryEx"/>
-        <property name="basePackage" value="com.dingtalk.isv.access.bizex"/>
+        <property name="basePackage" value="com.rishiqing.dingtalk.dao.mapper2"/>
         <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
     </bean>
 
     <!-- 配置mybatis数据源支持 -->
     <bean id="mySqlSessionFactoryEx" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSourceDingPush"/>
-        <property name="mapperLocations" value="classpath*:/mybatis2/dingpush/*Mapper.xml"/>
+        <property name="mapperLocations" value="classpath*:/mybatis2/**/*Mapper.xml"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 

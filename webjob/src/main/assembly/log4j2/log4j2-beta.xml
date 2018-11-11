@@ -27,7 +27,7 @@ system logger：其他系统级别的重要的信息，要打印的log
 -->
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
-        <Property name="baseDir">$${sys:user.home}/dingtalk/logs/</Property>
+        <Property name="baseDir">$${sys:user.home}/</Property>
         <Property name="globalLevel">debug</Property>
     </Properties>
     <Appenders>

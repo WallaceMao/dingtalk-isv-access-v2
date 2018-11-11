@@ -1,7 +1,5 @@
 package com.rishiqing.dingtalk.biz.service.base.corp.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.dingtalk.api.DefaultDingTalkClient;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpChargeStatusConverter;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpJSAPITicketConverter;
@@ -20,9 +18,7 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpChargeStatusVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;

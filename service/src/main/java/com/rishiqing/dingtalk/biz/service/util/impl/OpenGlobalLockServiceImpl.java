@@ -42,7 +42,7 @@ public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
         }
 
         if(!LOCK_STATUS_OPEN.equals(lock.getStatus())){
-            bizLogger.warn("global lock锁被占用……", lockKey);
+            bizLogger.warn("global lock锁被占用……" + lockKey);
             return null;
         }
         lock.setStatus(LOCK_STATUS_LOCKED);

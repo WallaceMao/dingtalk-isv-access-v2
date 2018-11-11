@@ -42,7 +42,7 @@ public class StaffPopupController {
             @RequestParam("corpId") String corpId,
             @RequestParam("userId") String userId
     ) {
-        bizLogger.info("corpId", corpId, "userId", userId);
+        bizLogger.info("corpId: " + corpId + ", userId: " + userId);
         try{
             PopupInfoVO popupInfo = popupBizService.getPopupInfo(corpId, userId);
             return HttpResult.getSuccess(convertPopoupInfo(popupInfo));
@@ -65,13 +65,13 @@ public class StaffPopupController {
             @RequestParam("userId") String userId,
             @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpId", corpId, "userId", userId, "json", json);
+        bizLogger.info("corpId: " + corpId + ", userId: " + userId + ", json: " + json);
         try{
             String type = json.getString("popupType");
             popupBizService.logStaffPopup(corpId, userId, type);
             return HttpResult.getSuccess(null);
         }catch(Exception e){
-            bizLogger.error("fetchCorpChargeInfo系统错误: " + "corpId: " + corpId + ", userId: " + ", json: ", json, e);
+            bizLogger.error("fetchCorpChargeInfo系统错误: " + "corpId: " + corpId + ", userId: " + ", json: " + json, e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

@@ -52,7 +52,7 @@ public class MessageController {
                                                     @RequestParam("appid") Long appId,
                                                     @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpid", corpId, "appid", appId, "json", json);
+        bizLogger.info("corpid: " + corpId + ", appid: " + appId + ", json: " + json);
         try{
             CorpAppVO corpApp = corpAppManageService.getCorpAppByCorpIdAndAppId(corpId, appId);
             MessageVO messageVO = MessageConverter.json2MessageVO(corpId, corpApp.getAgentId(), json);
@@ -63,7 +63,7 @@ public class MessageController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("sendAsyncCorpMessage系统错误: " + "json" + json + "appid" + appId + "corpId" + corpId,e);
+            bizLogger.error("sendAsyncCorpMessage系统错误: " + ", json: " + json + ", appid: " + appId + ", corpId: " + corpId,e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }
@@ -90,7 +90,7 @@ public class MessageController {
                                                 @RequestParam("corpid") String corpId,
                                                 @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpid", corpId, "json", json);
+        bizLogger.info("corpid: " + corpId + "json: ", json);
 
         try{
             JSONObject content = json.getJSONObject("textcard");
@@ -116,8 +116,7 @@ public class MessageController {
             return HttpResult.getSuccess(map);
 
         }catch(Exception e){
-            bizLogger.error("sendNotification系统错误: " + "json" + json + "corpId" + corpId,e);
-
+            bizLogger.error("sendNotification系统错误: json: " + json + ", corpId: " + corpId, e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

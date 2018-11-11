@@ -13,6 +13,7 @@ import java.util.List;
  * Date: 2018-11-08 15:17
  */
 public class MessageBizServiceImpl implements MessageBizService {
+    private static final long BATCH_SEND_SIZE = 20L;
     @Autowired
     private MessageRequestHelper messageRequestHelper;
 
@@ -22,6 +23,7 @@ public class MessageBizServiceImpl implements MessageBizService {
      */
     @Override
     public void sendCorpMessageAsync(MessageVO message) {
-        //TODO 分批次发送
+        //TODO 要修改为分批次发送
+        messageRequestHelper.sendCorpConversationAsync(message);
     }
 }

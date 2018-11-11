@@ -56,7 +56,7 @@ public class CorpLockServiceImpl implements CorpLockService {
             if(corpLock.getExpire().compareTo(new Date()) <= 0){
                 corpLock.setExpire(date);
             }else{
-                bizLogger.warn("请求锁被占用", corpId, lockType);
+                bizLogger.warn("请求锁被占用: " + corpId + ", lockType: " + lockType);
                 //  如果lock的期限未到，说明锁已被占用，则返回null，表示请求锁失败
                 return null;
             }
@@ -80,7 +80,7 @@ public class CorpLockServiceImpl implements CorpLockService {
         corpLock = corpLockDao.getCorpLockByLockKey(lockKey);
         //  如果不存在，则直接保存
         if(null == corpLock){
-            bizLogger.error("释放锁异常：锁不存在", corpId, lockType);
+            bizLogger.error("释放锁异常：锁不存在: " + corpId + ", lockType: " + lockType);
         } else {
             corpLock.setExpire(new Date());
         }

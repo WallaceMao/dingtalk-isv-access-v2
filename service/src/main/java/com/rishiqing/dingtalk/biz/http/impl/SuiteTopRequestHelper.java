@@ -101,9 +101,7 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
             SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
             OapiGetJsapiTicketResponse resp = client.execute(
                     req,
-                    suite.getSuiteKey(),
-                    suite.getSuiteSecret(),
-                    suiteTicketVO.getSuiteTicket());
+                    corpToken.getCorpToken());
             if(resp.getErrcode() != 0L){
                 throw new BizRuntimeException("getCorpJSAPITicket error: " + resp.getErrcode() + ", " + resp.getErrmsg());
             }

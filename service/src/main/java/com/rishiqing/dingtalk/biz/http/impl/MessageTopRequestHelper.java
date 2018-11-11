@@ -48,7 +48,7 @@ public class MessageTopRequestHelper implements MessageRequestHelper {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(message.getCorpId());
 
         try {
-            OapiMessageCorpconversationAsyncsendV2Response resp = client.execute(req, corpTokenVO.getCorpId());
+            OapiMessageCorpconversationAsyncsendV2Response resp = client.execute(req, corpTokenVO.getCorpToken());
             MessageResultVO result = new MessageResultVO();
             result.setTaskId(resp.getTaskId());
             return result;

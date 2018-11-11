@@ -1,12 +1,8 @@
 package com.rishiqing.dingtalk.biz.service.util;
 
-import com.alibaba.fastjson.JSON;
-import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.rishiqing.dingtalk.biz.http.CorpRequestHelper;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

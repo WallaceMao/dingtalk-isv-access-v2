@@ -31,7 +31,7 @@ public class IdMapController {
             @RequestParam("corpid") String corpId,
             @RequestBody JSONArray json
     ) {
-        bizLogger.info("userId2RsqId", "corpId: " + corpId, "json: " + json);
+        bizLogger.info("userId2RsqId corpId: " + corpId, ", json: " + json);
         try{
             List<IdMapStaffVO> list = idMapStaffManageService.getRsqIdFromUserId(corpId, json.toArray(new String[]{}));
             Map<String, Object> map = new HashMap<String, Object>();
@@ -50,7 +50,7 @@ public class IdMapController {
             @RequestParam("corpid") String corpId,
             @RequestBody JSONArray json
     ) {
-        bizLogger.info("rsqId2UserId", "corpId: " + corpId, "json: " + json);
+        bizLogger.info("rsqId2UserId corpId: " + corpId + ", json: " + json);
         try{
             Object[] objArray = json.toArray();
             String[] idArray = new String[objArray.length];
@@ -63,7 +63,7 @@ public class IdMapController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("系统错误: " + ", corpId: " + corpId + ", json: " + json, e);
+            bizLogger.error("系统错误: corpId: " + corpId + ", json: " + json, e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

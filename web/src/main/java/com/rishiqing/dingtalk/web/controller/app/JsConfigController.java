@@ -50,7 +50,7 @@ public class JsConfigController {
                                            @RequestParam(value = "appid", required = false) Long appId
 
     ) {
-        bizLogger.info("url: " + url, "corpId: "+ corpId, "appId: " + appId);
+        bizLogger.info("url: " + url + ", corpId: " + corpId + ", appId: " + appId);
         try{
             //  检查url合法性
             url = check(url);

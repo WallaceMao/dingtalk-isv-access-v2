@@ -32,7 +32,7 @@ public class CorpSuiteAuthEventListener implements EventListener {
     @AllowConcurrentEvents //  event并行执行
     public void listenCorpSuiteAuthEvent(CorpSuiteAuthEvent corpSuiteAuthEvent) {
         try{
-            bizLogger.info("corpAuthSuiteEvent: ", JSON.toJSONString(corpSuiteAuthEvent));
+            bizLogger.info("corpAuthSuiteEvent: " + JSON.toJSONString(corpSuiteAuthEvent));
             String corpId = corpSuiteAuthEvent.getCorpId();
             CorpAuthInfoVO corpAuthInfo = new CorpAuthInfoVO();
             CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();

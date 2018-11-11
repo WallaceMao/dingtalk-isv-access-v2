@@ -30,7 +30,7 @@ public class CorpSuiteAuthFailJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try{
-            bizLogger.info("授权失败的公司检查开始", "nextFireTime", jobExecutionContext.getNextFireTime());
+            bizLogger.info("授权失败的公司检查开始 nextFireTime" + jobExecutionContext.getNextFireTime());
             XmlWebApplicationContext xmlWebApplicationContext = (XmlWebApplicationContext) jobExecutionContext.getScheduler().getContext().get("applicationContextKey");
             FailBizService failBizService = (FailBizService) xmlWebApplicationContext.getBean("failBizService");
             CorpBizService corpBizService = (CorpBizService) xmlWebApplicationContext.getBean("corpBizService");

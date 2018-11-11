@@ -86,6 +86,7 @@ public class MessageConverter {
         JSONObject json = jsonOrg.getJSONObject("textcard");
 
         MessageBody.OABody oaBody = new MessageBody.OABody();
+        oaBody.setMessageType(messageType);
         String url = json.getString("url");
         String title = json.getString("title");
         String desc = json.getString("description");

@@ -48,7 +48,7 @@ public class SuiteCallbackController {
                                                @RequestParam(value = "nonce", required = false) String nonce,
                                                @RequestBody(required = false) JSONObject json
     ) {
-        bizLogger.info("/suite/callback/{suiteKey}: ", passSuiteKey, signature, timestamp, nonce, JSON.toJSONString(json));
+        bizLogger.info("/suite/callback/{suiteKey}: " + passSuiteKey + ", " + signature + ", " + timestamp + "," + nonce + "," + JSON.toJSONString(json));
         String successString = "success";
         SuiteVO globalSuite = suiteManageService.getSuite();
         String suiteKey = globalSuite.getSuiteKey();
@@ -60,12 +60,12 @@ public class SuiteCallbackController {
                     globalSuite.getSuiteKey());
             String encryptMsg = json.getString("encrypt");
             String plainText = dingTalkEncryptor.getDecryptMsg(signature,timestamp,nonce,encryptMsg);
-            bizLogger.info("解密之后明文消息: ", suiteKey, signature, timestamp, nonce, json, plainText);
+            bizLogger.info("解密之后明文消息: " + suiteKey + "," + signature + "," + timestamp + "," + nonce + "," + json + "," + plainText);
 
             //  处理解密后的信息
             isvCallbackEvent(plainText) ;
             Map<String, String> encryptedMap = dingTalkEncryptor.getEncryptedMap(successString, System.currentTimeMillis(), Utils.getRandomStr(8));
-            bizLogger.info("返回值：", suiteKey, signature, timestamp, nonce, json, encryptedMap);
+            bizLogger.info("返回值："+ "," + suiteKey+ "," + signature+ "," + timestamp+ "," + nonce+ "," + json+ "," + encryptedMap);
             return encryptedMap;
         } catch (Exception e){
             bizLogger.error("/suite/callback/{suiteKey} error: ", e);
@@ -111,7 +111,7 @@ public class SuiteCallbackController {
             );
         }else{
             //当开放平台更新了新的推送类型,为了避免不认识,需要报警出来
-            bizLogger.error("suite callback, event type can not handled: ", callbackMsg);
+            bizLogger.error("suite callback, event type can not handled: "+ callbackMsg);
         }
     }
 }

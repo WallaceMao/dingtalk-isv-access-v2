@@ -21,7 +21,7 @@ public class SuiteTokenGenerateJob  extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try{
-            bizLogger.info("套件TOKEN生成任务执行开始", "nextFireTime", jobExecutionContext.getNextFireTime());
+            bizLogger.info("套件TOKEN生成任务执行开始 nextFireTime: " + jobExecutionContext.getNextFireTime());
             XmlWebApplicationContext xmlWebApplicationContext = (XmlWebApplicationContext) jobExecutionContext.getScheduler().getContext().get("applicationContextKey");
             SuiteService suiteService = (SuiteService)xmlWebApplicationContext.getBean("suiteService");
             suiteService.fetchAndSaveSuiteToken();

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.rishiqing.dingtalk.biz.model.GlobalSuite;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
 import com.rishiqing.dingtalk.isv.api.enumtype.SyncActionType;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
@@ -14,11 +15,13 @@ import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,5 +99,15 @@ public class DemoController {
             consoleLogger.error("error in demo test", e);
             return "error";
         }
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public Map<String, Object> test(){
+        Map<String, Object> result = new HashMap<>();
+        result.put("aaaa", "bbbb");
+        System.out.println("------->>>>");
+
+        return result;
     }
 }

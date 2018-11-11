@@ -23,13 +23,13 @@
         </fileSet>
         <fileSet>
             <!--直接放到lib目录下的jar包-->
-            <directory>lib</directory>
+            <directory>${project.parent.basedir}/service/lib</directory>
             <outputDirectory>./WEB-INF/lib</outputDirectory>
         </fileSet>
     </fileSets>
     <files>
         <file>
-            <source>src/main/webapp/WEB-INF/log4j2-${env}.xml</source>
+            <source>src/main/assembly/log4j2/log4j2-${env}.xml</source>
             <outputDirectory>./WEB-INF</outputDirectory>
             <destName>log4j2.xml</destName>
         </file>

@@ -23,7 +23,7 @@
         </fileSet>
         <fileSet>
             <!--直接放到lib目录下的jar包-->
-            <directory>lib</directory>
+            <directory>${project.parent.basedir}/service/lib</directory>
             <outputDirectory>./WEB-INF/lib</outputDirectory>
         </fileSet>
     </fileSets>

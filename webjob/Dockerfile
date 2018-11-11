@@ -12,6 +12,6 @@ RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /
 ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
-ADD web/target/ding-isv-access-job-*.war webapps/backauth.war
+ADD webjob/target/ding-isv-access-job-*.war webapps/backauth.war
 
 CMD ["catalina.sh", "run"]

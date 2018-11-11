@@ -6,6 +6,7 @@ import com.rishiqing.dingtalk.biz.http.HttpResultCode;
 import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
+import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,24 @@ public class CorpStaffLoginController {
     private static final Logger bizLogger = LoggerFactory.getLogger("CON_CORP_STAFF_LOGIN_LOGGER");
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private CorpStaffManageService corpStaffManageService;
 
+    /**
+     * 根据authCode获取用户信息
+     * @param appId
+     * @param corpId
+     * @param code
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/staff/authCode", method = {RequestMethod.GET})
-    public Map<String, Object> sendAsyncCorpMessage(
+    public Map<String, Object> getStaffByAuthCode(
             @RequestParam("appid") Long appId,
             @RequestParam("corpid") String corpId,
             @RequestParam("code") String code
     ) {
-        bizLogger.info("corpid: " + corpId + ", appid: " + appId + ", code: " + code);
+        bizLogger.info("getStaffByAuthCode corpid: " + corpId + ", appid: " + appId + ", code: " + code);
         try{
 
             //  请求钉钉服务器获取当前登录的staff信息
@@ -49,7 +59,39 @@ public class CorpStaffLoginController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("sendAsyncCorpMessage系统错误: " + ", json: " + code + ", appid: " + appId + ", corpId: " + corpId,e);
+            bizLogger.error("getStaffByAuthCode系统错误: " + ", code: " + code + ", appid: " + appId + ", corpId: " + corpId,e);
+            return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
+        }
+    }
+
+    /**
+     * 根据userId获取用户信息
+     * TODO 注意以后需要做安全验证
+     * @param appId
+     * @param corpId
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/staff/userId", method = {RequestMethod.GET})
+    public Map<String, Object> getStaffByUserId(
+            @RequestParam("appid") Long appId,
+            @RequestParam("corpid") String corpId,
+            @RequestParam("userid") String userId
+    ) {
+        bizLogger.info("getStaffByUserId corpid: " + corpId + ", appid: " + appId + ", code: " + userId);
+        try{
+
+            //  直接读取数据库获取用户信息
+            CorpStaffVO staffVO = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+
+            //  返回用户，只保留必要信息即可
+            Map<String,Object> map = new HashMap<>();
+            map.put("user", CorpStaffConverter.corpStaffVO2CorpStaffResultVO(staffVO));
+
+            return HttpResult.getSuccess(map);
+        }catch(Exception e){
+            bizLogger.error("getStaffByUserId系统错误: " + ", userId: " + userId + ", appid: " + appId + ", corpId: " + corpId,e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

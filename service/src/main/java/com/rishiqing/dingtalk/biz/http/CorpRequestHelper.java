@@ -18,4 +18,6 @@ public interface CorpRequestHelper {
     CorpStaffVO getCorpStaff(String corpId, String userId);
 
     Map<String, Object> getCorpDepartmentStaffByPage(String corpId, Long deptId, Long offset, Long size);
+
+    CorpStaffVO getCorpStaffByAuthCode(String corpId, String authCode);
 }

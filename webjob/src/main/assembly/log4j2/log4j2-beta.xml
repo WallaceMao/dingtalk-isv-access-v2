@@ -101,6 +101,17 @@ system logger：其他系统级别的重要的信息，要打印的log
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--用户免登-->
+        <RollingFile name="CON_CORP_STAFF_LOGIN" fileName="${baseDir}/con_corp_staff_login.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_corp_staff_login-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--//////////////////////////////////////////////////////////////////-->
         <!--轮训查询钉钉云推送的log，并进行处理的log-->
         <RollingFile name="LSN_DB_CHECK" fileName="${baseDir}/lsn_db_check.log"
@@ -245,6 +256,9 @@ system logger：其他系统级别的重要的信息，要打印的log
         </Logger>
         <Logger name="CON_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="CON_MESSAGE"/>
+        </Logger>
+        <Logger name="CON_CORP_STAFF_LOGIN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CON_CORP_STAFF_LOGIN"/>
         </Logger>
         <Logger name="LSN_DB_CHECK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="LSN_DB_CHECK"/>

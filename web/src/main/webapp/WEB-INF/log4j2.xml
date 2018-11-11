@@ -8,6 +8,7 @@ controller logger：控制器层的log
 - js config：js sdk相关
 - id map：id转换相关
 - message：消息相关
+- corp staff login：免登
 
 listener logger：监听器的log
 - db check：轮训查询钉钉云推送的log，并进行处理的log
@@ -93,6 +94,17 @@ system logger：其他系统级别的重要的信息，要打印的log
         <!--消息相关-->
         <RollingFile name="CON_MESSAGE" fileName="${baseDir}/con_message.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/con_message-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--用户免登-->
+        <RollingFile name="CON_CORP_STAFF_LOGIN" fileName="${baseDir}/con_corp_staff_login.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/con_corp_staff_login-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
@@ -247,6 +259,9 @@ system logger：其他系统级别的重要的信息，要打印的log
             <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="CON_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="CON_CORP_STAFF_LOGIN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
         <Logger name="LSN_DB_CHECK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">

@@ -51,6 +51,16 @@ public class StaffService {
         }
     }
 
+    /**
+     * 根据authCode，去后台取，然后在本地查找
+     * @param authCode
+     * @return
+     */
+    public CorpStaffVO fetchCorpStaffByAuthCode(String corpId, String authCode){
+        CorpStaffVO staff = corpRequestHelper.getCorpStaffByAuthCode(corpId, authCode);
+        return corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, staff.getUserId());
+    }
+
     private void fetchAndSaveCorpStaff(String corpId, String userId){
         CorpStaffVO staff = corpRequestHelper.getCorpStaff(corpId, userId);
         corpStaffManageService.saveOrUpdateCorpStaff(staff);

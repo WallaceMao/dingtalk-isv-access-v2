@@ -3,6 +3,7 @@ package com.rishiqing.dingtalk.biz.http.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.rishiqing.dingtalk.biz.http.CorpRequestHelper;
@@ -183,6 +184,24 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             result.put("hasMore", resp.getHasMore());
             result.put("list", staffList);
             return result;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public CorpStaffVO getCorpStaffByAuthCode(String corpId, String authCode){
+        CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
+        OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
+        request.setCode(authCode);
+        request.setHttpMethod("GET");
+        try {
+            OapiUserGetuserinfoResponse resp = client.execute(request, corpTokenVO.getCorpToken());
+            CorpStaffVO staffVO = new CorpStaffVO();
+            staffVO.setCorpId(corpId);
+            staffVO.setUserId(resp.getUserid());
+            return staffVO;
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
         }

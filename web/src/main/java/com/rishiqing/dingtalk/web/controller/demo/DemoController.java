@@ -3,10 +3,14 @@ package com.rishiqing.dingtalk.web.controller.demo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.rishiqing.dingtalk.biz.model.GlobalSuite;
+import com.rishiqing.dingtalk.dao.mapper.corp.CorpDepartmentDao;
+import com.rishiqing.dingtalk.dao.model.corp.CorpDepartmentDO;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
 import com.rishiqing.dingtalk.isv.api.enumtype.SyncActionType;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
+import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
@@ -101,13 +105,16 @@ public class DemoController {
         }
     }
 
+    @Autowired
+    private CorpDepartmentManageService corpDepartmentManageService;
     @RequestMapping("/test")
     @ResponseBody
-    public Map<String, Object> test(){
+    public Map<String, Object> test(
+            @RequestParam("corpId") String corpId
+    ){
+        CorpDepartmentVO corpDepartmentVO = corpDepartmentManageService.getTopCorpDepartment(corpId);
         Map<String, Object> result = new HashMap<>();
-        result.put("aaaa", "bbbb");
-        System.out.println("------->>>>");
-
+        result.put("listdd", corpDepartmentVO);
         return result;
     }
 }

@@ -74,8 +74,20 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
         CorpDepartmentDO currentDept = deptDOList.get(0);
         final int LOOP_LIMIT = 50;  //  对循环做限制
         int i = 0;
-        while (currentDept.getParentId() != null){
-            currentDept = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptId(corpId, currentDept.getParentId());
+        //  什么情况下currentDept就是topDepartment呢？
+        //  1  currentDept.getParentId()为null。
+        //  2  currentDept的parentId存在，但是获取不到值
+        while (true){
+            //  如果parentId为空，那么跳出循环，currentDept就是topDept
+            if(currentDept.getParentId() == null){
+                break;
+            }
+            CorpDepartmentDO parentDept  = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptId(corpId, currentDept.getParentId());
+            //  如果parentDept为空，那么跳出循环，currentDpet就是topDept
+            if(parentDept == null){
+                break;
+            }
+            currentDept = parentDept;
             //  如果达到循环上限，那么抛出异常
             if(i++ >= LOOP_LIMIT){
                 throw new BizRuntimeException("getTopCorpDepartment reach max loop limit, corpId: " + corpId + ", loop times: " + i);

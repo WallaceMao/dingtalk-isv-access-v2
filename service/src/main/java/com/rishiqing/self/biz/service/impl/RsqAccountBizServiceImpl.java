@@ -386,22 +386,16 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         return rsqArray;
     }
 
-    private JSONArray convertRsqDepartment(String corpId, List departmentList){
+    private JSONArray convertRsqDepartment(String corpId, List<Long> departmentIdList){
         JSONArray rsqArray = new JSONArray();
-        Iterator it = departmentList.iterator();
-
-        while (it.hasNext()){
-            Long orgId;
-            Object num = it.next();
-            if(num instanceof Integer){
-                orgId = new Long((Integer)num);
-            }else{
-                orgId = (Long)num;
+        for(Long deptId : departmentIdList){
+            CorpDepartmentVO departmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
+            if(departmentVO == null){
+                continue;
             }
-            CorpDepartmentVO departmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, orgId);
             String rsqId = departmentVO.getRsqId();
             if(null == rsqId){
-                return null;
+                continue;
             }
             rsqArray.add(rsqId);
         }

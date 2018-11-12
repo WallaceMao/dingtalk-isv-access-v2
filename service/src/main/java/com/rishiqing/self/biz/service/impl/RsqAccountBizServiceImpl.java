@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.eventbus.AsyncEventBus;
 import com.rishiqing.dingtalk.biz.constant.SystemConstant;
+import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
@@ -52,6 +53,8 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     private OrderManageService orderManageService;
     @Autowired
     private RsqRequestHelper rsqRequestHelper;
+    @Autowired
+    private QueueService queueService;
 
     @Autowired
     private AsyncEventBus asyncOrderChargeEventBus;
@@ -84,7 +87,13 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         this.updateAllCorpAdmin(corpId);
 
         //  5  当全部都同步成功后，发到corpAuthSuiteQueue队列中，由第三方异步处理
-//        jmsTemplate.send(rsqSyncCallBackQueue,new RsqSyncMessage(corpId));
+        //  发送生成全公司解决方案的消息
+        queueService.sendToGenerateTeamSolution(corpId, null);
+        //  公司中的人逐个发送
+        List<CorpStaffVO> staffList = corpStaffManageService.getCorpStaffListByCorpId(corpId);
+        for(CorpStaffVO staffVO : staffList){
+            queueService.sendToGenerateStaffSolution(corpId, staffVO.getUserId());
+        }
     }
 
     /**

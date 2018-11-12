@@ -29,5 +29,6 @@
     <import resource="classpath:spring-queue.xml" />
     <import resource="classpath:spring-dingpush.xml" />
 
-    <!--web层需要用到的service-->
+    <!--加载功倍api-->
+    <import resource="classpath:workbei/wb-spring-beans.xml" />
 </beans>

@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
+import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -18,6 +19,8 @@ public class UserAddOrgSyncActionHandler implements SyncActionHandler {
     private CorpStaffManageService corpStaffManageService;
     @Autowired
     private RsqAccountBizService rsqAccountBizService;
+    @Autowired
+    private QueueService queueService;
     /**
      * @link https://open-doc.dingtalk.com/microapp/ln6dmh/troq7i
      subscribe_id  ： 套件suiteid加下划线0
@@ -41,5 +44,8 @@ public class UserAddOrgSyncActionHandler implements SyncActionHandler {
 
         //  然后推送到日事清
         rsqAccountBizService.createRsqTeamStaff(corpStaffVO);
+
+        //  生成解决方法
+        queueService.sendToGenerateStaffSolution(corpId, corpStaffVO.getUserId());
     }
 }

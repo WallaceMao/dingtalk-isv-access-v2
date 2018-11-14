@@ -85,7 +85,10 @@ public interface CorpStaffDao {
      */
     public void saveCorpStaffDeleted(CorpStaffDO corpStaffDO);
 
-    public List<CorpStaffDO> getPageCorpStaffListByCorpId(String corpId, Long limit, Long offset);
+    public List<CorpStaffDO> getPageCorpStaffListByCorpId(
+            @Param("corpId") String corpId,
+            @Param("limit") Long limit,
+            @Param("offset") Long offset);
 
 //    /**
 //     * 根据staff的rsqId获取到userId

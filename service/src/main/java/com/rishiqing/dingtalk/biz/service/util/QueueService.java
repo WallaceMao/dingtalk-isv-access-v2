@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.biz.service.util;
 
+import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
@@ -35,12 +36,16 @@ public class QueueService {
      * @param corpId
      */
     public void sendToGenerateTeamSolution(String corpId, String userId){
-        if(userId == null){
-            CorpSuiteAuthVO corpSuiteAuthVO = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
-            userId = corpSuiteAuthVO.getAuthUserId();
-        }
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        CorpStaffVO staff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        CorpStaffVO staff;
+        if(userId == null){
+            staff = corpManageService.findATeamCreator(corpId);
+        }else{
+            staff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        }
+        if(staff == null){
+            throw new BizRuntimeException("no team solution creator found: " + corpId + ", userId: " + userId);
+        }
         final String rsqCorpId = corpVO.getRsqId();
         final String rsqUserId = staff.getRsqUserId();
 

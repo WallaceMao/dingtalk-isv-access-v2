@@ -191,6 +191,13 @@
 			WHERE corp_id=#{corpId}
 		 ]]>
     </select>
+    <select id="getPageCorpStaffListByCorpId" resultMap="corpStaffMap">
+        SELECT <include refid="select-all-fields"/> FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId}
+		 ]]>
+        ORDER BY id LIMIT #{limit} OFFSET #{offset}
+    </select>
 
     <select id="getCorpStaffListByCorpIdAndIsAdmin" resultMap="corpStaffMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff

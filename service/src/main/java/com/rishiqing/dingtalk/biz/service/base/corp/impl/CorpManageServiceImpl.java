@@ -1,28 +1,24 @@
 package com.rishiqing.dingtalk.biz.service.base.corp.impl;
 
-import com.rishiqing.dingtalk.biz.converter.corp.CorpChargeStatusConverter;
-import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
-import com.rishiqing.dingtalk.biz.converter.corp.CorpJSAPITicketConverter;
-import com.rishiqing.dingtalk.biz.converter.corp.CorpTokenConverter;
+import com.rishiqing.dingtalk.biz.converter.corp.*;
 import com.rishiqing.dingtalk.biz.enmutype.CorpLockType;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.biz.service.util.CorpLockService;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpChargeStatusDao;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpDao;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpJSAPITicketDao;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpTokenDao;
+import com.rishiqing.dingtalk.dao.mapper.corp.*;
+import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthDao;
 import com.rishiqing.dingtalk.dao.model.corp.CorpJSAPITicketDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
+import com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpTokenDO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpChargeStatusVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
+import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDO;
+import com.rishiqing.dingtalk.isv.api.model.corp.*;
+import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -31,6 +27,10 @@ import java.util.Date;
 public class CorpManageServiceImpl implements CorpManageService {
     @Autowired
     private CorpDao corpDao;
+    @Autowired
+    private CorpSuiteAuthDao corpSuiteAuthDao;
+    @Autowired
+    private CorpStaffDao corpStaffDao;
     @Autowired
     private CorpTokenDao corpTokenDao;
     @Autowired
@@ -120,5 +120,33 @@ public class CorpManageServiceImpl implements CorpManageService {
         return CorpChargeStatusConverter.corpChargeStatusDO2CorpChargeStatusVO(
                 corpChargeStatusDao.getCorpChargeStatusByCorpId(corpId)
         );
+    }
+
+    /**
+     * 找到一个用户作为团队创建者，按照如下逻辑查找：
+     * 1. 理想情况下：首先查找corp的corpSuiteAuth表中的authUserId字段，如果该字段不为空，且可以根据userId查找到该用户，那么就使用这个用户
+     * 2. 如果1不满足，那么查找数据库中corp中的一个管理员，作为团队创建者
+     * 3. 如果2仍然找不到，那么就找id最小的一个用户作为创建者
+     * @param corpId
+     * @return
+     */
+    @Override
+    public CorpStaffVO findATeamCreator(String corpId){
+        CorpSuiteAuthDO corpSuiteAuthDO = corpSuiteAuthDao.getCorpSuiteAuthByCorpId(corpId);
+        if(corpSuiteAuthDO.getAuthUserId() != null){
+            CorpStaffDO corpStaffDO = corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, corpSuiteAuthDO.getAuthUserId());
+            if(null != corpStaffDO){
+                return CorpStaffConverter.corpStaffDO2CorpStaffVO(corpStaffDO);
+            }
+        }
+        List<CorpStaffDO> adminList = corpStaffDao.getCorpStaffListByCorpIdAndIsAdmin(corpId, true);
+        if(adminList != null && adminList.size() > 0){
+            return CorpStaffConverter.corpStaffDO2CorpStaffVO(adminList.get(0));
+        }
+        List<CorpStaffDO> firstCommonUser = corpStaffDao.getPageCorpStaffListByCorpId(corpId, 1L, 0L);
+        if(firstCommonUser != null && firstCommonUser.size() > 0){
+            return CorpStaffConverter.corpStaffDO2CorpStaffVO(firstCommonUser.get(0));
+        }
+        return null;
     }
 }

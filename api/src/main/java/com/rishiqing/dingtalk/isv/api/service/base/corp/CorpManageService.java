@@ -1,9 +1,6 @@
 package com.rishiqing.dingtalk.isv.api.service.base.corp;
 
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpChargeStatusVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.*;
 
 /**
  * @author Wallace Mao
@@ -23,4 +20,6 @@ public interface CorpManageService {
     CorpJSAPITicketVO getCorpJSAPITicketByCorpId(String corpId);
 
     CorpChargeStatusVO getCorpChargeStatusByCorpId(String corpId);
+
+    CorpStaffVO findATeamCreator(String corpId);
 }

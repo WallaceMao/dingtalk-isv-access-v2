@@ -263,16 +263,21 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  如果corpVO的rsqId不存在，那么就请求日事清服务器创建，创建成功后更新corpVO
         SuiteVO suiteVO = suiteManageService.getSuite();
         //  找到开通微应用的管理员，作为创建者传给接口
-        CorpSuiteAuthVO corpSuiteAuth = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
-        CorpStaffVO creator = null;
-        if(corpSuiteAuth != null && corpSuiteAuth.getAuthUserId() != null){
-            //  读取出该用户作为创建者
-            creator = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, corpSuiteAuth.getAuthUserId());
-            if(creator != null && creator.getRsqUserId() == null){
-                creator.setRsqUsername(generateRsqUsername(suiteVO.getRsqAppName()));
-                creator.setRsqPassword(generateRsqPassword());
-            }
+        CorpStaffVO creator = corpManageService.findATeamCreator(corpId);
+        if(creator != null && creator.getRsqUserId() == null){
+            creator.setRsqUsername(generateRsqUsername(suiteVO.getRsqAppName()));
+            creator.setRsqPassword(generateRsqPassword());
         }
+//        CorpSuiteAuthVO corpSuiteAuth = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
+//        CorpStaffVO creator = null;
+//        if(corpSuiteAuth != null && corpSuiteAuth.getAuthUserId() != null){
+//            //  读取出该用户作为创建者
+//            creator = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, corpSuiteAuth.getAuthUserId());
+//            if(creator != null && creator.getRsqUserId() == null){
+//                creator.setRsqUsername(generateRsqUsername(suiteVO.getRsqAppName()));
+//                creator.setRsqPassword(generateRsqPassword());
+//            }
+//        }
         RsqCorp rsqCorp = rsqRequestHelper.createCorp(suiteVO, corpVO, creator);
 
         corpVO.setRsqId(String.valueOf(rsqCorp.getId()));

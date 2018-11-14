@@ -121,12 +121,6 @@ public class CorpBizServiceImpl implements CorpBizService {
         }
         corpSuite.setAuthUserId(authUserInfo.getUserId());
         corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuite);
-        //  注意，由于公司的管理员可能不在可见范围（包括可见部门和可见成员）内，如果出现这种情况，需要单独获取开通应用的管理员。
-        if(null == corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, authUserInfo.getUserId())){
-            List<String> adminList = new ArrayList<>();
-            adminList.add(authUserInfo.getUserId());
-            staffService.fetchAndSaveCorpStaffList(corpId, adminList);
-        }
 
         //  8.  异步，更新钉钉的组织机构以及用户信息到本地，然后与ISV更新组织机构和人员信息
         CorpOrgSyncEvent corpOrgSyncEvent = new CorpOrgSyncEvent();

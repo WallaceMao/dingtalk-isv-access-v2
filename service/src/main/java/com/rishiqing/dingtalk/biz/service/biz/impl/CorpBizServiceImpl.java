@@ -17,6 +17,7 @@ import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
+import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
@@ -25,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +47,8 @@ public class CorpBizServiceImpl implements CorpBizService {
     private DeptService deptService;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private CorpStaffManageService corpStaffManageService;
     @Autowired
     private EventBus asyncCorpOrgSyncEventBus;
 
@@ -107,7 +111,7 @@ public class CorpBizServiceImpl implements CorpBizService {
         staffService.fetchAndSaveCorpStaffList(corpId, scopes.getAuthedUser());
 
 
-        //  7.  处理授权方管理员，谁开通的日事清，就以谁作为创建者
+        //  7.  处理授权方管理员，谁开通的日事清，就以谁作为创建者。
         CorpAuthInfoVO.AuthUserInfo authUserInfo = corpAuthInfo.getAuthUserInfo();
         CorpSuiteAuthVO corpSuite = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
         if(corpSuite == null){
@@ -117,7 +121,12 @@ public class CorpBizServiceImpl implements CorpBizService {
         }
         corpSuite.setAuthUserId(authUserInfo.getUserId());
         corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuite);
-
+        //  注意，由于公司的管理员可能不在可见范围（包括可见部门和可见成员）内，如果出现这种情况，需要单独获取开通应用的管理员。
+        if(null == corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, authUserInfo.getUserId())){
+            List<String> adminList = new ArrayList<>();
+            adminList.add(authUserInfo.getUserId());
+            staffService.fetchAndSaveCorpStaffList(corpId, adminList);
+        }
 
         //  8.  异步，更新钉钉的组织机构以及用户信息到本地，然后与ISV更新组织机构和人员信息
         CorpOrgSyncEvent corpOrgSyncEvent = new CorpOrgSyncEvent();

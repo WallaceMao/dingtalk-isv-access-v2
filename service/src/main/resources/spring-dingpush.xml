@@ -18,6 +18,11 @@
     <!--相关的用来处理钉钉推送过来的消息的处理器-->
     <bean id="suiteTicketSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.SuiteTicketSyncActionHandler" />
     <bean id="orgSuiteAuthSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteAuthSyncActionHandler" />
+    <bean id="orgSuiteChangeSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteChangeSyncActionHandler" />
+    <bean id="orgSuiteRelieveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteRelieveSyncActionHandler" />
+    <bean id="orgMicroAppRestoreSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppRestoreSyncActionHandler" />
+    <bean id="orgMicroAppStopSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppStopSyncActionHandler" />
+    <bean id="orgMicroAppRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppRemoveSyncActionHandler" />
     <bean id="userAddOrgSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.UserAddOrgSyncActionHandler" />
     <bean id="userModifyOrgSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.UserModifyOrgSyncActionHandler" />
     <bean id="userDeptChangeSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.UserDeptChangeSyncActionHandler" />
@@ -27,12 +32,18 @@
     <bean id="orgDeptRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptRemoveSyncActionHandler" />
     <bean id="orgUpdateSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgUpdateSyncActionHandler" />
     <bean id="orgRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgRemoveSyncActionHandler" />
+    <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.DefaultSyncActionHandler" />
 
     <bean id="syncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.SyncActionManager">
         <property name="syncActionMap">
             <map>
                 <entry key="suite_ticket" value-ref="suiteTicketSyncActionHandler" />
                 <entry key="org_suite_auth" value-ref="orgSuiteAuthSyncActionHandler" />
+                <entry key="org_suite_change" value-ref="orgSuiteChangeSyncActionHandler" />
+                <entry key="org_suite_relieve" value-ref="orgSuiteRelieveSyncActionHandler" />
+                <entry key="org_micro_app_restore" value-ref="orgMicroAppRestoreSyncActionHandler" />
+                <entry key="org_micro_app_stop" value-ref="orgMicroAppStopSyncActionHandler" />
+                <entry key="org_micro_app_remove" value-ref="orgMicroAppStopSyncActionHandler" />
                 <entry key="user_add_org" value-ref="userAddOrgSyncActionHandler" />
                 <entry key="user_modify_org" value-ref="userModifyOrgSyncActionHandler" />
                 <entry key="user_dept_change" value-ref="userDeptChangeSyncActionHandler" />
@@ -44,6 +55,14 @@
                 <entry key="org_dept_remove" value-ref="orgDeptRemoveSyncActionHandler" />
                 <entry key="org_update" value-ref="orgUpdateSyncActionHandler" />
                 <entry key="org_remove" value-ref="orgRemoveSyncActionHandler" />
+                <entry key="org_role_add" value-ref="defaultSyncActionHandler" />
+                <entry key="org_role_modify" value-ref="defaultSyncActionHandler" />
+                <entry key="market_order" value-ref="defaultSyncActionHandler" />
+                <entry key="market_order_cancel" value-ref="defaultSyncActionHandler" />
+                <entry key="contact_add_org" value-ref="defaultSyncActionHandler" />
+                <entry key="contact_modify_org" value-ref="defaultSyncActionHandler" />
+                <entry key="contact_leave_org" value-ref="defaultSyncActionHandler" />
+                <entry key="isv_bpms_cancel" value-ref="defaultSyncActionHandler" />
             </map>
         </property>
     </bean>

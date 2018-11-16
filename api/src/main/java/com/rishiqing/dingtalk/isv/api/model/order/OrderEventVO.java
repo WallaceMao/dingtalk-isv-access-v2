@@ -15,6 +15,7 @@ public class OrderEventVO {
     private String eventType;
     //  用户购买套件的SuiteKey
     private String suiteKey;
+    private String suiteId;
     //  购买该套件企业的corpid
     private String buyCorpId;
     //  购买的商品码
@@ -49,6 +50,10 @@ public class OrderEventVO {
     private String distributorCorpId;
     //  钉钉分销系统提单的代理商的企业名称
     private String distributorCorpName;
+    //  内购订单中，应用商品码
+    private String mainArticleCode;
+    //  内购订单中，应用商品名称
+    private String mainArticleName;
 
     public Long getId() {
         return id;
@@ -88,6 +93,14 @@ public class OrderEventVO {
 
     public void setSuiteKey(String suiteKey) {
         this.suiteKey = suiteKey;
+    }
+
+    public String getSuiteId() {
+        return suiteId;
+    }
+
+    public void setSuiteId(String suiteId) {
+        this.suiteId = suiteId;
     }
 
     public String getBuyCorpId() {
@@ -226,6 +239,22 @@ public class OrderEventVO {
         this.distributorCorpName = distributorCorpName;
     }
 
+    public String getMainArticleCode() {
+        return mainArticleCode;
+    }
+
+    public void setMainArticleCode(String mainArticleCode) {
+        this.mainArticleCode = mainArticleCode;
+    }
+
+    public String getMainArticleName() {
+        return mainArticleName;
+    }
+
+    public void setMainArticleName(String mainArticleName) {
+        this.mainArticleName = mainArticleName;
+    }
+
     @Override
     public String toString() {
         return "OrderEventVO{" +
@@ -234,6 +263,7 @@ public class OrderEventVO {
                 ", gmtModified=" + gmtModified +
                 ", eventType='" + eventType + '\'' +
                 ", suiteKey='" + suiteKey + '\'' +
+                ", suiteId=" + suiteId +
                 ", buyCorpId='" + buyCorpId + '\'' +
                 ", goodsCode='" + goodsCode + '\'' +
                 ", itemCode='" + itemCode + '\'' +

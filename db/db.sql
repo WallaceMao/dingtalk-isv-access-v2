@@ -680,4 +680,14 @@ ALTER TABLE `isv_app`
 ALTER TABLE `isv_corp_suite_auth`
   ADD COLUMN `auth_user_id`  varchar(128) NULL COMMENT '开通套件的管理员的userId';
 
+#add 2018-11-16 新增钉钉云推送相关字段
+ALTER TABLE `isv_order_event`
+  ADD COLUMN `suite_id`  varchar(64) NULL COMMENT 'suite_id',
+  ADD COLUMN `main_article_code`  varchar(32) NULL COMMENT '内购订单中，应用商品码',
+  ADD COLUMN `main_article_name`  varchar(32) NULL COMMENT '内购订单中，应用商品名称';
+ALTER TABLE `isv_order_status`
+  ADD COLUMN `suite_id`  varchar(64) NULL COMMENT 'suite_id',
+  ADD COLUMN `main_article_code`  varchar(32) NULL COMMENT '内购订单中，应用商品码',
+  ADD COLUMN `main_article_name`  varchar(32) NULL COMMENT '内购订单中，应用商品名称';
+
 

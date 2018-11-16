@@ -32,6 +32,8 @@
     <bean id="orgDeptRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptRemoveSyncActionHandler" />
     <bean id="orgUpdateSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgUpdateSyncActionHandler" />
     <bean id="orgRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgRemoveSyncActionHandler" />
+    <bean id="marketOrderSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderSyncActionHandler" />
+    <bean id="marketOrderCancelSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderCancelSyncActionHandler" />
     <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.DefaultSyncActionHandler" />
 
     <bean id="syncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.SyncActionManager">
@@ -57,8 +59,8 @@
                 <entry key="org_remove" value-ref="orgRemoveSyncActionHandler" />
                 <entry key="org_role_add" value-ref="defaultSyncActionHandler" />
                 <entry key="org_role_modify" value-ref="defaultSyncActionHandler" />
-                <entry key="market_order" value-ref="defaultSyncActionHandler" />
-                <entry key="market_order_cancel" value-ref="defaultSyncActionHandler" />
+                <entry key="market_order" value-ref="marketOrderSyncActionHandler" />
+                <entry key="market_order_cancel" value-ref="marketOrderCancelSyncActionHandler" />
                 <entry key="contact_add_org" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_modify_org" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_leave_org" value-ref="defaultSyncActionHandler" />

@@ -1,11 +1,14 @@
 package com.rishiqing.dingtalk.biz.service.base.order.impl;
 
 import com.rishiqing.dingtalk.biz.converter.order.OrderConverter;
+import com.rishiqing.dingtalk.dao.mapper.corp.CorpChargeStatusDao;
 import com.rishiqing.dingtalk.dao.mapper.order.OrderEventDao;
 import com.rishiqing.dingtalk.dao.mapper.order.OrderRsqPushEventDao;
 import com.rishiqing.dingtalk.dao.mapper.order.OrderSpecItemDao;
 import com.rishiqing.dingtalk.dao.mapper.order.OrderStatusDao;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpChargeStatusVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderRsqPushEventVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderSpecItemVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 import com.rishiqing.dingtalk.isv.api.service.base.order.OrderManageService;
@@ -24,6 +27,8 @@ public class OrderManageServiceImpl implements OrderManageService {
     private OrderStatusDao orderStatusDao;
     @Autowired
     private OrderSpecItemDao orderSpecItemDao;
+    @Autowired
+    private CorpChargeStatusDao corpChargeStatusDao;
 
 
     @Override
@@ -44,6 +49,27 @@ public class OrderManageServiceImpl implements OrderManageService {
     public OrderSpecItemVO getOrderSpecItemByGoodsCodeAndItemCode(String goodsCode, String itemCode){
         return OrderConverter.orderSpecItemDo2OrderSpecItemVO(
                 orderSpecItemDao.getOrderSpecItemByGoodsCodeAndItemCode(goodsCode, itemCode)
+        );
+    }
+
+    @Override
+    public void saveOrUpdateOrderStatus(OrderStatusVO orderStatus) {
+        orderStatusDao.saveOrUpdateOrderStatus(
+                OrderConverter.orderStatusVO2OrderStatusDO(orderStatus)
+        );
+    }
+
+    @Override
+    public void saveOrUpdateCorpChargeStatus(CorpChargeStatusVO corpChargeStatusDO) {
+        corpChargeStatusDao.saveOrUpdateCorpChargeStatus(
+                OrderConverter.corpChargeStatusVO2CorpChargeStatusDO(corpChargeStatusDO)
+        );
+    }
+
+    @Override
+    public void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventVO rsqPushEvent) {
+        orderRsqPushEventDao.saveOrUpdateOrderRsqPushEvent(
+                OrderConverter.orderRsqPushEventVO2OrderRsqPushEventDO(rsqPushEvent)
         );
     }
 }

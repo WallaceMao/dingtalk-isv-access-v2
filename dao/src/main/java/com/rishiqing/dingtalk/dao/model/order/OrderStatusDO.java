@@ -16,6 +16,7 @@ public class OrderStatusDO {
     private Long orderId;
     //  用户购买套件的SuiteKey
     private String suiteKey;
+    private String suiteId;
     //  购买该套件企业的corpid
     private String buyCorpId;
     //  购买的商品码
@@ -48,6 +49,10 @@ public class OrderStatusDO {
     private String distributorCorpId;
     //  钉钉分销系统提单的代理商的企业名称
     private String distributorCorpName;
+    //  内购订单中，应用商品码
+    private String mainArticleCode;
+    //  内购订单中，应用商品名称
+    private String mainArticleName;
     //  订单的实际状态，状态值为SystemConstant.ORDER_STATUS_PAID或者SystemConstant.ORDER_STATUS_RSQ_SYNC
     private String status;
 
@@ -89,6 +94,14 @@ public class OrderStatusDO {
 
     public void setSuiteKey(String suiteKey) {
         this.suiteKey = suiteKey;
+    }
+
+    public String getSuiteId() {
+        return suiteId;
+    }
+
+    public void setSuiteId(String suiteId) {
+        this.suiteId = suiteId;
     }
 
     public String getBuyCorpId() {
@@ -227,6 +240,22 @@ public class OrderStatusDO {
         this.status = status;
     }
 
+    public String getMainArticleCode() {
+        return mainArticleCode;
+    }
+
+    public void setMainArticleCode(String mainArticleCode) {
+        this.mainArticleCode = mainArticleCode;
+    }
+
+    public String getMainArticleName() {
+        return mainArticleName;
+    }
+
+    public void setMainArticleName(String mainArticleName) {
+        this.mainArticleName = mainArticleName;
+    }
+
     @Override
     public String toString() {
         return "OrderStatusDO{" +
@@ -235,6 +264,7 @@ public class OrderStatusDO {
                 ", gmtModified=" + gmtModified +
                 ", orderId=" + orderId +
                 ", suiteKey='" + suiteKey + '\'' +
+                ", suiteId='" + suiteId + '\'' +
                 ", buyCorpId='" + buyCorpId + '\'' +
                 ", goodsCode='" + goodsCode + '\'' +
                 ", itemCode='" + itemCode + '\'' +
@@ -251,6 +281,8 @@ public class OrderStatusDO {
                 ", discount=" + discount +
                 ", distributorCorpId='" + distributorCorpId + '\'' +
                 ", distributorCorpName='" + distributorCorpName + '\'' +
+                ", mainArticleCode='" + mainArticleCode + '\'' +
+                ", mainArticleName='" + mainArticleName + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

@@ -28,6 +28,8 @@ system logger：其他系统级别的重要的信息，要打印的log
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
         <Property name="baseDir">$${sys:user.home}/</Property>
+        <Property name="aliAccessKey">$${env:ALI_ACCESS_KEY}</Property>
+        <Property name="aliAccessSecret">$${env:ALI_ACCESS_SECRET}</Property>
         <Property name="globalLevel">debug</Property>
     </Properties>
     <Appenders>
@@ -236,62 +238,80 @@ system logger：其他系统级别的重要的信息，要打印的log
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <Loghub name="SYS_ALIYUN_LOGHUB"
+                projectName="workbei-dingtalk-auth"
+                logstore="workbei-dingtalk-authjob-store"
+                endpoint="cn-hangzhou.log.aliyuncs.com"
+                accessKeyId="${aliAccessKey}"
+                accessKey="${aliAccessSecret}"
+                packageTimeoutInMS="3000"
+                logsCountPerPackage="4096"
+                logsBytesPerPackage="3145728"
+                memPoolSizeInByte="104857600"
+                retryTimes="3"
+                maxIOThreadSizeInPool="8"
+                topic="dingtalk-auth"
+                timeFormat="yyyy-MM-dd'T'HH:mmZ"
+                timeZone="UTC"
+                ignoreExceptions="true">
+            <PatternLayout pattern="%d %-5level [%thread] %logger{0}: %msg"/>
+        </Loghub>
     </Appenders>
     <Loggers>
         <Root level="error">
-            <AppenderRef ref="ROOT_APPENDER"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Root>
         <!--普通开发日志直接打印到控制台-->
         <Logger name="CON_SUITE_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_SUITE_CALLBACK"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="CON_STAFF_POPUP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_STAFF_POPUP"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="CON_JS_CONFIG_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_JS_CONFIG"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="CON_ID_MAP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_ID_MAP"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="CON_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_MESSAGE"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="CON_CORP_STAFF_LOGIN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="CON_CORP_STAFF_LOGIN"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="LSN_DB_CHECK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="LSN_DB_CHECK"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="LSN_CORP_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="LSN_CORP_SUITE_AUTH"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="LSN_RSQ_SUITE_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="LSN_RSQ_SUITE_AUTH"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="LSN_RSQ_CORP_CHANGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="LSN_RSQ_CORP_CHANGE"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="LSN_ORDER_CHARGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="LSN_ORDER_CHARGE"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="JOB_SUITE_TOKEN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="JOB_SUITE_TOKEN"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="JOB_CORP_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="JOB_CORP_SUITE_AUTH_FAIL"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="JOB_RSQ_SUITE_AUTH_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="JOB_RSQ_SUITE_AUTH_FAIL"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="JOB_RSQ_CORP_CHANGE_FAIL_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="JOB_RSQ_CORP_CHANGE_FAIL"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="SYS_CORP_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SYS_CORP_LOCK"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
         <Logger name="SYS_GLOBAL_LOCK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SYS_GLOBAL_LOCK"/>
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
         </Logger>
     </Loggers>
 </Configuration>

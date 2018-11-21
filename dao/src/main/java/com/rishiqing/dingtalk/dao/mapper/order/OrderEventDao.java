@@ -10,20 +10,20 @@ public interface OrderEventDao {
 	 * 保存orderEvent
 	 * @param orderEventDO
 	 */
-	public void saveOrUpdateOrderEvent(OrderEventDO orderEventDO);
+	void saveOrUpdateOrderEvent(OrderEventDO orderEventDO);
 
 	/**
 	 * 根据id查询event
 	 * @param id
 	 * @return
 	 */
-	public OrderEventDO getOrderEventById(@Param("id") Long id);
+	OrderEventDO getOrderEventById(@Param("id") Long id);
 
 	/**
 	 * 获取一个公司最近一条orderEvent记录
 	 * @param corpId
 	 * @return
 	 */
-	public OrderEventDO getLatestOrderEventByCorpId(@Param("corpId") String corpId);
+	OrderEventDO getLatestOrderEventByCorpId(@Param("corpId") String corpId);
 }
 

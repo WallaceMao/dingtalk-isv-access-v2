@@ -19,7 +19,7 @@ public class CorpAuthInfoVO {
     public static class AuthCorpInfo {
         private String authChannel;
         private String authChannelType;
-        private Integer authLevel;
+        private Long authLevel;
         private String corpLogoUrl;
         private String corpName;
         private String corpId;
@@ -45,11 +45,11 @@ public class CorpAuthInfoVO {
             this.authChannelType = authChannelType;
         }
 
-        public Integer getAuthLevel() {
+        public Long getAuthLevel() {
             return authLevel;
         }
 
-        public void setAuthLevel(Integer authLevel) {
+        public void setAuthLevel(Long authLevel) {
             this.authLevel = authLevel;
         }
 

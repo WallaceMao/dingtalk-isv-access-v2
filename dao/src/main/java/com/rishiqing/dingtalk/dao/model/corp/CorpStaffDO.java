@@ -69,6 +69,8 @@ public class CorpStaffDO {
     private String rsqPassword;
     //  存储了日事清中用户的标识
     private String rsqLoginToken;
+    //  用来存储可见范围版本的字段，每次用户修改可见范围都会更新该字段为修改时的时间戳
+    private Long scopeVersion;
 
     public Long getId() {
         return id;
@@ -310,10 +312,21 @@ public class CorpStaffDO {
         this.rsqLoginToken = rsqLoginToken;
     }
 
+    public Long getScopeVersion() {
+        return scopeVersion;
+    }
+
+    public void setScopeVersion(Long scopeVersion) {
+        this.scopeVersion = scopeVersion;
+    }
+
     @Override
     public String toString() {
         return "CorpStaffDO{" +
-                "corpId='" + corpId + '\'' +
+                "id=" + id +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", corpId='" + corpId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", tel='" + tel + '\'' +
@@ -322,21 +335,25 @@ public class CorpStaffDO {
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
                 ", active=" + active +
-                ", orderInDepts=" + orderInDepts +
+                ", orderInDepts='" + orderInDepts + '\'' +
                 ", isAdmin=" + isAdmin +
                 ", isBoss=" + isBoss +
                 ", dingId='" + dingId + '\'' +
-                ", isLeaderInDepts=" + isLeaderInDepts +
+                ", isLeaderInDepts='" + isLeaderInDepts + '\'' +
                 ", isHide=" + isHide +
-                ", department=" + department +
+                ", department='" + department + '\'' +
                 ", position='" + position + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", jobnumber='" + jobnumber + '\'' +
-                ", extattr=" + extattr +
-                ", unionId=" + unionId +
-                ", rsqUserId=" + rsqUserId +
-                ", rsqUsername=" + rsqUsername +
-                ", rsqLoginToken=" + rsqLoginToken +
+                ", extattr='" + extattr + '\'' +
+                ", isSys=" + isSys +
+                ", sysLevel=" + sysLevel +
+                ", unionId='" + unionId + '\'' +
+                ", rsqUserId='" + rsqUserId + '\'' +
+                ", rsqUsername='" + rsqUsername + '\'' +
+                ", rsqPassword='" + rsqPassword + '\'' +
+                ", rsqLoginToken='" + rsqLoginToken + '\'' +
+                ", scopeVersion=" + scopeVersion +
                 '}';
     }
 }

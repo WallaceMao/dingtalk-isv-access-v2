@@ -9,13 +9,13 @@ import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
  * Date: 2018-11-03 17:42
  */
 public interface CorpBizService {
-    void activateCorpApp(CorpAuthInfoVO corpAuthInfo);
+    void activateCorpApp(CorpAuthInfoVO corpAuthInfo, Long timestamp);
 
-    void changeCorpApp(String corpId);
+    void changeCorpApp(CorpAuthInfoVO corpAuthInfo, Long timestamp);
 
     void relieveCorpApp(String corpId);
 
     void prepareChargeCorpApp(OrderEventVO orderEvent);
 
-    void chargeCorpApp(Long orderId);
+    void chargeCorpApp(OrderEventVO orderEvent);
 }

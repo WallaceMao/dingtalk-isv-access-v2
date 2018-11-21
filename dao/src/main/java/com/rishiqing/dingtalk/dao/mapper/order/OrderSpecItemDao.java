@@ -11,7 +11,7 @@ public interface OrderSpecItemDao {
 	 * 保存orderSpecItemDO
 	 * @param orderSpecItemDO
 	 */
-	public void saveOrUpdateOrderSpecItem(OrderSpecItemDO orderSpecItemDO);
+	void saveOrUpdateOrderSpecItem(OrderSpecItemDO orderSpecItemDO);
 
 	/**
 	 * 根据goodsCode和itemCode获取规格
@@ -19,6 +19,6 @@ public interface OrderSpecItemDao {
 	 * @param itemCode
 	 * @return
 	 */
-	public OrderSpecItemDO getOrderSpecItemByGoodsCodeAndItemCode(@Param("goodsCode") String goodsCode, @Param("itemCode") String itemCode);
+	OrderSpecItemDO getOrderSpecItemByGoodsCodeAndItemCode(@Param("goodsCode") String goodsCode, @Param("itemCode") String itemCode);
 }
 

@@ -9,17 +9,32 @@ import java.util.List;
  * Date: 2018-11-03 15:23
  */
 public interface CorpDepartmentManageService {
-    CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
-
-    List<CorpDepartmentVO> getCorpDepartmentListByCorpId(String corpId);
 
     void saveOrUpdateCorpDepartment(CorpDepartmentVO dept);
 
     void updateRsqInfo(CorpDepartmentVO departmentVO);
 
+    void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
+
+    void deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(String corpId, Long scopeVersion);
+
+    CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpId(String corpId);
+
     List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentId(String corpId, Long deptId);
 
-    CorpDepartmentVO getTopCorpDepartment(String corpId);
+    CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion);
 
-    void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersion(
+            String corpId, Long scopeVersion);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersionLessThan(
+            String corpId, Long scopeVersion);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion);
+
+    CorpDepartmentVO getTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion);
 }

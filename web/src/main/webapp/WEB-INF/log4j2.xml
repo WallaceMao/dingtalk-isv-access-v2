@@ -237,8 +237,29 @@ system logger：其他系统级别的重要的信息，要打印的log
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <Loghub name="SYS_ALIYUN_LOGHUB"
+                projectName="workbei-dingtalk-auth"
+                logstore="workbei-dingtalk-auth-store"
+                endpoint="cn-hangzhou.log.aliyuncs.com"
+                accessKeyId="LTAIZ659FvhkRYiN"
+                accessKey="RnD3qTNapP58bud9208mmcsjEzPTHw"
+                packageTimeoutInMS="3000"
+                logsCountPerPackage="4096"
+                logsBytesPerPackage="3145728"
+                memPoolSizeInByte="104857600"
+                retryTimes="3"
+                maxIOThreadSizeInPool="8"
+                topic="dingtalk-auth"
+                timeFormat="yyyy-MM-dd'T'HH:mmZ"
+                timeZone="UTC"
+                ignoreExceptions="true">
+            <PatternLayout pattern="%d %-5level [%thread] %logger{0}: %msg"/>
+        </Loghub>
     </Appenders>
     <Loggers>
+        <Logger name="ALIYUN_LOGHUB_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SYS_ALIYUN_LOGHUB"/>
+        </Logger>
         <Root level="error">
             <AppenderRef ref="CONSOLE"/>
         </Root>

@@ -15,13 +15,13 @@ public interface CorpChargeStatusDao {
      * 保存corpChargeStatusDO
      * @param corpChargeStatusDO
      */
-    public void saveOrUpdateCorpChargeStatus(CorpChargeStatusDO corpChargeStatusDO);
+    void saveOrUpdateCorpChargeStatus(CorpChargeStatusDO corpChargeStatusDO);
 
     /**
      * 根据suiteKey和corpId获取唯一的CorpChargeStatus
      * @param corpId
      * @return
      */
-    public CorpChargeStatusDO getCorpChargeStatusByCorpId(@Param("corpId") String corpId);
+    CorpChargeStatusDO getCorpChargeStatusByCorpId(@Param("corpId") String corpId);
 
 }

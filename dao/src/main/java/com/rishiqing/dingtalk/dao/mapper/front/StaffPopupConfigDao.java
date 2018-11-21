@@ -16,11 +16,11 @@ public interface StaffPopupConfigDao {
      * 保存staffPopupConfigDO
      * @param staffPopupConfigDO
      */
-    public void saveOrUpdateStaffPopupConfig(StaffPopupConfigDO staffPopupConfigDO);
+    void saveOrUpdateStaffPopupConfig(StaffPopupConfigDO staffPopupConfigDO);
 
     /**
      * 获取指定suiteKey下的所有popupConfig
      * @return
      */
-    public List<StaffPopupConfigDO> getStaffPopupConfigListByIsDisabled(@Param("isDisabled") Boolean isDisabled);
+    List<StaffPopupConfigDO> getStaffPopupConfigListByIsDisabled(@Param("isDisabled") Boolean isDisabled);
 }

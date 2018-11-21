@@ -5,6 +5,7 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,13 +27,13 @@ public class DeptService {
      * @param corpId
      * @param deptIdList
      */
-    public void fetchAndSaveCorpDepartmentList(String corpId, List<Long> deptIdList){
+    public void fetchAndSaveCorpDepartmentList(String corpId, List<Long> deptIdList, Long scopeVersion){
         if(deptIdList == null){
             return;
         }
         for(Long deptId : deptIdList){
             //  递归读取所有子部门
-            this.fetchAndSaveCorpDepartmentRecursive(corpId, deptId);
+            this.fetchAndSaveCorpDepartmentRecursive(corpId, deptId, scopeVersion);
 //            if(deptId.equals(DEFAULT_ROOT_DEPT_ID)){
 //                this.fetchAndSaveCorpDepartmentRecursive(corpId, deptId);
 //            }else{
@@ -41,8 +42,11 @@ public class DeptService {
         }
     }
 
-    private void fetchAndSaveCorpDepartment(String corpId, Long deptId) {
+    private void fetchAndSaveCorpDepartment(String corpId, Long deptId, Long scopeVersion) {
         CorpDepartmentVO dept = corpRequestHelper.getCorpDepartment(corpId, deptId);
+        if(scopeVersion != null){
+            dept.setScopeVersion(scopeVersion);
+        }
         corpDepartmentManageService.saveOrUpdateCorpDepartment(dept);
     }
 
@@ -52,9 +56,9 @@ public class DeptService {
      * @param corpId
      * @return
      */
-    private void fetchAndSaveCorpDepartmentRecursive(String corpId, Long parentId){
+    private void fetchAndSaveCorpDepartmentRecursive(String corpId, Long parentId, Long scopeVersion){
         //  先保存根部门
-        this.fetchAndSaveCorpDepartment(corpId, parentId);
+        this.fetchAndSaveCorpDepartment(corpId, parentId, scopeVersion);
         List<CorpDepartmentVO> deptList = corpRequestHelper.getChildCorpDepartment(corpId, parentId);
 
         //  如果无子部门，那么就返回
@@ -64,7 +68,7 @@ public class DeptService {
 
         //  递归保存子部门
         for(CorpDepartmentVO dept : deptList){
-            this.fetchAndSaveCorpDepartmentRecursive(corpId, dept.getDeptId());
+            this.fetchAndSaveCorpDepartmentRecursive(corpId, dept.getDeptId(), scopeVersion);
         }
     }
 }

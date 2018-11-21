@@ -1,13 +1,19 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
+import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Wallace Mao
  * Date: 2018-11-10 14:33
  */
 public class OrgSuiteChangeSyncActionHandler implements SyncActionHandler {
+    @Autowired
+    private CorpBizService corpBizService;
     /**
      subscribe_id  ： 套件suiteid加下划线0
      copp_id : 开通套件微应用的企业corpid
@@ -20,6 +26,14 @@ public class OrgSuiteChangeSyncActionHandler implements SyncActionHandler {
      */
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
-        //  删除团队后，暂时不会做任何处理
+        JSONObject json = JSONObject.parseObject(data.getBizData());
+        Long timestamp = null;
+        if(data.getGmtModified() != null){
+            timestamp = data.getGmtModified().getTime();
+        }
+        corpBizService.changeCorpApp(
+                SuiteDbCheckConverter.json2CorpSuiteAuthInfo(json),
+                timestamp
+        );
     }
 }

@@ -14,19 +14,19 @@ public interface CorpAppDao {
      * 创建一个企业使用微应用记录
      * @param corpAppDO
      */
-    public void saveOrUpdateCorpApp(CorpAppDO corpAppDO);
+    void saveOrUpdateCorpApp(CorpAppDO corpAppDO);
 
     /**
      * 删除一个企业使用微应用记录
      * @param corpId
      * @param appId
      */
-    public void deleteCorpAppByCorpIdAndAppId(@Param("corpId")String corpId,@Param("appId")Long appId);
+    void deleteCorpAppByCorpIdAndAppId(@Param("corpId")String corpId,@Param("appId")Long appId);
 
     /**
      * 获取一个企业使用微应用记录
      * @param corpId
      * @param appId
      */
-    public CorpAppDO getCorpAppByCorpIdAndAppId(@Param("corpId")String corpId, @Param("appId")Long appId);
+    CorpAppDO getCorpAppByCorpIdAndAppId(@Param("corpId")String corpId, @Param("appId")Long appId);
 }

@@ -11,13 +11,27 @@ import java.util.List;
 public interface CorpStaffManageService {
     void saveOrUpdateCorpStaff(CorpStaffVO staff);
 
-    CorpStaffVO getCorpStaffByCorpIdAndUserId(String corpId, String userId);
-
     void updateRsqInfo(CorpStaffVO staffVO);
+
+    void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId);
+
+    void deleteCorpStaffByCorpIdAndScopeVersionLessThan(String corpId, Long lessThanScopeVersion);
+
+    CorpStaffVO getCorpStaffByCorpIdAndUserId(String corpId, String userId);
 
     List<CorpStaffVO> getCorpStaffListByCorpId(String corpId);
 
     List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdmin(String corpId, Boolean isAdmin);
 
-    void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId);
+    CorpStaffVO getCorpStaffByCorpIdAndUserIdAndScopeVersion(
+            String corpId, String userId, Long scopeVersion);
+
+    List<CorpStaffVO> getCorpStaffListByCorpIdAndScopeVersion(
+            String corpId, Long scopeVersion);
+
+    List<CorpStaffVO> getCorpStaffListByCorpIdAndScopeVersionLessThan(
+            String corpId, Long scopeVersion);
+
+    List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
+            String corpId, Boolean isAdmin, Long scopeVersion);
 }

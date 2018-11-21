@@ -14,17 +14,17 @@ public interface CorpJSAPITicketDao {
      * 创建或更新一个企业的corpJSTicketDO
      * @param corpJSTicketDO
      */
-    public void saveOrUpdateCorpJSAPITicket(CorpJSAPITicketDO corpJSTicketDO);
+    void saveOrUpdateCorpJSAPITicket(CorpJSAPITicketDO corpJSTicketDO);
 
     /**
      * 删除企业JSTicket
      * @param corpId
      */
-    public void deleteCorpJSAPITicketByCorpId(@Param("corpId") String corpId);
+    void deleteCorpJSAPITicketByCorpId(@Param("corpId") String corpId);
 
     /**
      * 获取企业的JSTicket
      * @return
      */
-    public CorpJSAPITicketDO getCorpJSAPITicketByCorpId(@Param("corpId") String corpId);
+    CorpJSAPITicketDO getCorpJSAPITicketByCorpId(@Param("corpId") String corpId);
 }

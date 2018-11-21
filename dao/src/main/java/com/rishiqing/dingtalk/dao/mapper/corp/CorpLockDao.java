@@ -14,12 +14,12 @@ public interface CorpLockDao {
      * 创建或更新一个lock
      * @param corpLockDO
      */
-    public void saveOrUpdateCorpLock(CorpLockDO corpLockDO);
+    void saveOrUpdateCorpLock(CorpLockDO corpLockDO);
 
     /**
      * 根据lock_key查询lock
      * @param lockKey
      * @return
      */
-    public CorpLockDO getCorpLockByLockKey(@Param("lockKey") String lockKey);
+    CorpLockDO getCorpLockByLockKey(@Param("lockKey") String lockKey);
 }

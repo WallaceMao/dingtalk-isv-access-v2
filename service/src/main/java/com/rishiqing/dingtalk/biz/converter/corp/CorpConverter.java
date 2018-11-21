@@ -4,12 +4,14 @@ import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 
+import java.util.Date;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-07 1:45
  */
 public class CorpConverter {
-    public static CorpVO corpAuthInfoVO2CorpVO(CorpAuthInfoVO corpAuthInfo){
+    public static CorpVO corpAuthInfoVO2CorpVO(CorpAuthInfoVO corpAuthInfo, Long scopeVersion){
         if(corpAuthInfo == null || corpAuthInfo.getAuthCorpInfo() == null){
             return null;
         }
@@ -39,6 +41,7 @@ public class CorpConverter {
         corpVO.setCorpId(corpDO.getCorpId());
         corpVO.setCorpLogoUrl(corpDO.getCorpLogoUrl());
         corpVO.setRsqId(corpDO.getRsqId());
+        corpVO.setScopeVersion(corpDO.getScopeVersion());
         return corpVO;
     }
 
@@ -57,6 +60,7 @@ public class CorpConverter {
         corpDO.setCorpId(corpVO.getCorpId());
         corpDO.setCorpLogoUrl(corpVO.getCorpLogoUrl());
         corpDO.setRsqId(corpVO.getRsqId());
+        corpDO.setScopeVersion(corpVO.getScopeVersion());
         return corpDO;
     }
 }

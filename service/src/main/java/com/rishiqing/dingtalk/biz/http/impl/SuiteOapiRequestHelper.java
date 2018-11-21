@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.http.HttpRequestClient;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
@@ -107,6 +109,16 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
         corpSuiteAuthVO.setPermanentCode(pCode);
         corpSuiteAuthVO.setCorpId(corpId);
         return corpSuiteAuthVO;
+    }
+
+    @Override
+    public CorpAuthInfoVO getCorpAuthInfo(SuiteVO suite, SuiteTicketVO suiteTicketVO, String corpId) {
+        return null;
+    }
+
+    @Override
+    public CorpAuthScopeInfoVO getCorpAuthScopeInfo(SuiteVO suiteVO, SuiteTokenVO suiteTokenVO) {
+        return null;
     }
 
     @Override

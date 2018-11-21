@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 @Repository("openGlobalLockDao")
 public interface OpenGlobalLockDao {
 
-	public void saveOrUpdateOpenGlobalLock(OpenGlobalLockDO lock);
+	void saveOrUpdateOpenGlobalLock(OpenGlobalLockDO lock);
 
-	public OpenGlobalLockDO getOpenGlobalLockByLockKey(@Param("lockKey") String lockKey);
+	OpenGlobalLockDO getOpenGlobalLockByLockKey(@Param("lockKey") String lockKey);
 
-	public void updateStatus(OpenGlobalLockDO lock);
+	void updateStatus(OpenGlobalLockDO lock);
 
 }
 

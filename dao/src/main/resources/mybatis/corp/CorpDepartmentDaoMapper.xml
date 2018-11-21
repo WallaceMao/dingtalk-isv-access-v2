@@ -22,6 +22,7 @@
         <result property="orgDeptOwner" column="org_dept_owner" />
         <result property="deptManagerUseridList" column="dept_manager_userid_list" />
         <result property="rsqId" column="rsq_id" />
+        <result property="scopeVersion" column="scope_version" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -43,7 +44,8 @@
         outer_permit_users,
         org_dept_owner,
         dept_manager_userid_list,
-        rsq_id
+        rsq_id,
+        scope_version
     </sql>
 
     <insert id="saveOrUpdateCorpDepartment" useGeneratedKeys="true" keyProperty="id">
@@ -65,7 +67,8 @@
         outer_permit_users,
         org_dept_owner,
         dept_manager_userid_list,
-        rsq_id
+        rsq_id,
+        scope_version
         )VALUES(
         now(),
         now(),
@@ -84,7 +87,8 @@
         #{outerPermitUsers},
         #{orgDeptOwner},
         #{deptManagerUseridList},
-        #{rsqId}
+        #{rsqId},
+        #{scopeVersion}
         )ON DUPLICATE KEY UPDATE
         gmt_modified=now(),
         `name`=#{name},
@@ -99,7 +103,8 @@
         outer_permit_depts=#{outerPermitDepts},
         outer_permit_users=#{outerPermitUsers},
         org_dept_owner=#{orgDeptOwner},
-        dept_manager_userid_list=#{deptManagerUseridList}
+        dept_manager_userid_list=#{deptManagerUseridList},
+        scope_version=#{scopeVersion}
     </insert>
 
     <update id="updateCorpDepartmentRsqInfo">
@@ -110,6 +115,13 @@
         DELETE FROM isv_corp_dept
         <![CDATA[
 			WHERE corp_id=#{corpId} AND dept_id=#{deptId}
+		 ]]>
+    </delete>
+
+    <delete id="deleteCorpDepartmentByCorpIdAndScopeVersionLessThan">
+        DELETE FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version<#{scopeVersion}
 		 ]]>
     </delete>
 
@@ -138,6 +150,41 @@
         SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
         <![CDATA[
 			WHERE corp_id=#{corpId} AND parent_id=#{parentId}
+		 ]]>
+    </select>
+
+    <select id="getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND dept_id=#{deptId} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpDepartmentListByCorpIdAndScopeVersion" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpDepartmentListByCorpIdAndScopeVersionLessThan" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version<#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpDepartmentListByCorpIdAndScopeVersionLimit" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version=#{scopeVersion}
+		 ]]> LIMIT #{limit}
+    </select>
+
+    <select id="getCorpDepartmentListByParentIdAndScopeVersion" resultMap="corpDepartmentMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND parent_id=#{parentId} AND scope_version=#{scopeVersion}
 		 ]]>
     </select>
 </mapper>

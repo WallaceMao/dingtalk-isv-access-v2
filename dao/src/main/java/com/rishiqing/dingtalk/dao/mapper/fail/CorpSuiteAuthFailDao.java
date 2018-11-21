@@ -16,13 +16,13 @@ public interface CorpSuiteAuthFailDao {
      * 创建一个授权失败的对象
      * @param corpSuiteAuthFailDO
      */
-    public void saveOrUpdateCorpSuiteAuthFail(CorpSuiteAuthFailDO corpSuiteAuthFailDO);
+    void saveOrUpdateCorpSuiteAuthFail(CorpSuiteAuthFailDO corpSuiteAuthFailDO);
 
     /**
      * 根据id删除
      * @param id
      */
-    public void deleteCorpSuiteAuthFailById(@Param("id")Long id);
+    void deleteCorpSuiteAuthFailById(@Param("id")Long id);
 
     /**
      * 分页获取CorpSuiteAuth
@@ -30,5 +30,5 @@ public interface CorpSuiteAuthFailDao {
      * @param limit
      * @return
      */
-    public List<CorpSuiteAuthFailDO> getCorpSuiteAuthFailList(@Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<CorpSuiteAuthFailDO> getCorpSuiteAuthFailList(@Param("offset")Integer offset, @Param("limit")Integer limit);
 }

@@ -33,6 +33,7 @@
         <result property="rsqUsername" column="rsq_username" />
         <result property="rsqPassword" column="rsq_password" />
         <result property="rsqLoginToken" column="rsq_login_token" />
+        <result property="scopeVersion" column="scope_version" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -65,7 +66,8 @@
         rsq_user_id,
         rsq_username,
         rsq_password,
-        rsq_login_token
+        rsq_login_token,
+        scope_version
     </sql>
 
     <insert id="saveOrUpdateCorpStaff" useGeneratedKeys="true" keyProperty="id">
@@ -98,7 +100,8 @@
         rsq_user_id,
         rsq_username,
         rsq_password,
-        rsq_login_token
+        rsq_login_token,
+        scope_version
         )VALUES(
         now(),
         now(),
@@ -128,7 +131,8 @@
         #{rsqUserId},
         #{rsqUsername},
         #{rsqPassword},
-        #{rsqLoginToken}
+        #{rsqLoginToken},
+        #{scopeVersion}
         )ON DUPLICATE KEY UPDATE
         gmt_modified=now(),
         `name`=#{name},
@@ -150,7 +154,8 @@
         extattr=#{extattr},
         is_sys=#{isSys},
         sys_level=#{sysLevel},
-        union_id=#{unionId}
+        union_id=#{unionId},
+        scope_version=#{scopeVersion}
     </insert>
 
     <update id="updateCorpStaffRsqInfo">
@@ -174,7 +179,14 @@
     <delete id="deleteCorpStaffByCorpIdAndUserId">
         DELETE FROM isv_corp_staff
         <![CDATA[
-			WHERE corp_id=#{corpId} and user_id=#{userId}
+			WHERE corp_id=#{corpId} AND user_id=#{userId}
+		 ]]>
+    </delete>
+
+    <delete id="deleteCorpStaffByCorpIdAndScopeVersionLessThan">
+        DELETE FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND user_id=#{userId} AND scope_version < #{lessThanScopeVersion}
 		 ]]>
     </delete>
 
@@ -191,6 +203,7 @@
 			WHERE corp_id=#{corpId}
 		 ]]>
     </select>
+
     <select id="getPageCorpStaffListByCorpId" resultMap="corpStaffMap">
         SELECT <include refid="select-all-fields"/> FROM isv_corp_staff
         <![CDATA[
@@ -209,6 +222,32 @@
         <![CDATA[
 			WHERE corp_id=#{corpId}
 		 ]]>
+    </select>
+
+    <select id="getCorpStaffByCorpIdAndUserIdAndScopeVersion" resultMap="corpStaffMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND user_id=#{userId} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpStaffListByCorpIdAndScopeVersion" resultMap="corpStaffMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpStaffListByCorpIdAndScopeVersionLessThan" resultMap="corpStaffMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version<#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpStaffListByCorpIdAndIsAdminAndScopeVersion" resultMap="corpStaffMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        WHERE corp_id=#{corpId} AND is_admin=#{isAdmin} AND scope_version=#{scopeVersion}
     </select>
 
     <insert id="saveCorpStaffDeleted" useGeneratedKeys="true" keyProperty="id">

@@ -16,20 +16,20 @@ public interface AppDao {
      * 创建一个套件
      * @param appDO
      */
-    public void saveOrUpdateApp(AppDO appDO);
+    void saveOrUpdateApp(AppDO appDO);
 
     /**
      * 根据suiteKey查询为应用
      * @return
      */
-    public List<AppDO> getAppList();
+    List<AppDO> getAppList();
 
     /**
      * 根据appId查询为应用
      * @param appId
      * @return
      */
-    public AppDO getAppByAppId(@Param("appId") Long appId);
+    AppDO getAppByAppId(@Param("appId") Long appId);
 
-    public AppDO getAppListLimit(@Param("limit") Long limit);
+    AppDO getAppListLimit(@Param("limit") Long limit);
 }

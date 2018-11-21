@@ -16,13 +16,13 @@ public interface CorpOrgSyncFailDao {
      * 创建一个企业组织机构信息获取失败的对象
      * @param corpOrgSyncFailDO
      */
-    public void saveOrUpdateCorpOrgSyncFail(CorpOrgSyncFailDO corpOrgSyncFailDO);
+    void saveOrUpdateCorpOrgSyncFail(CorpOrgSyncFailDO corpOrgSyncFailDO);
 
     /**
      * 根据id删除
      * @param id
      */
-    public void deleteCorpOrgSyncFailById(@Param("id") Long id);
+    void deleteCorpOrgSyncFailById(@Param("id") Long id);
 
     /**
      * 分页获取失败时间的记录列表
@@ -30,5 +30,5 @@ public interface CorpOrgSyncFailDao {
      * @param limit
      * @return
      */
-    public List<CorpOrgSyncFailDO> getCorpOrgSyncFailList(@Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<CorpOrgSyncFailDO> getCorpOrgSyncFailList(@Param("offset") Integer offset, @Param("limit") Integer limit);
 }

@@ -690,4 +690,12 @@ ALTER TABLE `isv_order_status`
   ADD COLUMN `main_article_code`  varchar(32) NULL COMMENT '内购订单中，应用商品码',
   ADD COLUMN `main_article_name`  varchar(32) NULL COMMENT '内购订单中，应用商品名称';
 
+#add 2018-11-19 新增可见范围变更的版本字段
+ALTER TABLE `isv_corp`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+ALTER TABLE `isv_corp_dept`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+ALTER TABLE `isv_corp_staff`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+
 

@@ -6,7 +6,8 @@ import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
 import com.rishiqing.dingtalk.isv.api.enumtype.CorpFailType;
 import com.rishiqing.dingtalk.isv.api.enumtype.SuitePushType;
-import com.rishiqing.dingtalk.isv.api.event.CorpOrgSyncEvent;
+import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
+import com.rishiqing.dingtalk.isv.api.event.CorpOrgCreatedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpOrgSyncFailVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
@@ -43,16 +44,30 @@ public class FailBizServiceImpl implements FailBizService {
     }
 
     /**
-     * 将组织结构同步的事件记录到数据库中
-     * @param corpOrgSyncEvent
+     * 保存将组织结构同步的事件记录到数据库中的失败事件
+     * @param corpOrgCreatedEvent
      */
     @Override
-    public void saveCorpOrgSyncFail(CorpOrgSyncEvent corpOrgSyncEvent){
+    public void saveCorpOrgSyncFail(CorpOrgCreatedEvent corpOrgCreatedEvent){
         CorpOrgSyncFailDO corpOrgSyncFailDO = new CorpOrgSyncFailDO();
-        corpOrgSyncFailDO.setSuiteKey(corpOrgSyncEvent.getSuiteKey());
-        corpOrgSyncFailDO.setCorpId(corpOrgSyncEvent.getCorpId());
+        corpOrgSyncFailDO.setSuiteKey(corpOrgCreatedEvent.getSuiteKey());
+        corpOrgSyncFailDO.setCorpId(corpOrgCreatedEvent.getCorpId());
         corpOrgSyncFailDO.setCorpFailType(CorpFailType.PUT_ISV_CORP.getKey());
-        corpOrgSyncFailDO.setFailInfo(corpOrgSyncEvent.getInfo());
+        corpOrgSyncFailDO.setFailInfo(corpOrgCreatedEvent.getInfo());
+        corpOrgSyncFailDao.saveOrUpdateCorpOrgSyncFail(corpOrgSyncFailDO);
+    }
+
+    /**
+     * 保存将组织结构同步的事件记录到数据库中的失败时间
+     * @param corpOrgChangedEvent
+     */
+    @Override
+    public void saveCorpOrgSyncFail(CorpOrgChangedEvent corpOrgChangedEvent){
+        CorpOrgSyncFailDO corpOrgSyncFailDO = new CorpOrgSyncFailDO();
+        corpOrgSyncFailDO.setSuiteKey(corpOrgChangedEvent.getSuiteKey());
+        corpOrgSyncFailDO.setCorpId(corpOrgChangedEvent.getCorpId());
+        corpOrgSyncFailDO.setCorpFailType(CorpFailType.PUT_CHANGE_ISV_CORP.getKey());
+        corpOrgSyncFailDO.setFailInfo(String.valueOf(corpOrgChangedEvent.getScopeVersion()));
         corpOrgSyncFailDao.saveOrUpdateCorpOrgSyncFail(corpOrgSyncFailDO);
     }
 

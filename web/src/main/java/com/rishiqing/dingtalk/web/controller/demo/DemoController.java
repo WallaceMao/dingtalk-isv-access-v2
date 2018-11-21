@@ -1,30 +1,20 @@
 package com.rishiqing.dingtalk.web.controller.demo;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.rishiqing.dingtalk.biz.model.GlobalSuite;
-import com.rishiqing.dingtalk.dao.mapper.corp.CorpDepartmentDao;
-import com.rishiqing.dingtalk.dao.model.corp.CorpDepartmentDO;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
-import com.rishiqing.dingtalk.isv.api.enumtype.SyncActionType;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
-import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
 import com.rishiqing.self.api.service.RsqAccountBizService;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/manual")
 public class DemoController {
     private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
+    private static final Logger aliyunLogger = LoggerFactory.getLogger("ALIYUN_LOGHUB_LOGGER");
 
     @Autowired
     private OpenSyncBizDataManageService openSyncBizDataManageService;
@@ -74,7 +65,7 @@ public class DemoController {
             @RequestParam("corpId") String corpId
     ){
         try {
-            rsqAccountBizService.pushCreateAll(corpId);
+            rsqAccountBizService.syncAllCreated(corpId);
             return "success";
         } catch (Exception e){
             consoleLogger.error("error in rsqCorpPush", e);
@@ -112,9 +103,9 @@ public class DemoController {
     public Map<String, Object> test(
             @RequestParam("corpId") String corpId
     ){
-        CorpDepartmentVO corpDepartmentVO = corpDepartmentManageService.getTopCorpDepartment(corpId);
+        aliyunLogger.warn("----------corpId is: " + corpId);
         Map<String, Object> result = new HashMap<>();
-        result.put("listdd", corpDepartmentVO);
+        result.put("errcode", 0);
         return result;
     }
 }

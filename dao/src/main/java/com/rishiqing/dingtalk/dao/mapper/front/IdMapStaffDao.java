@@ -17,7 +17,7 @@ public interface IdMapStaffDao {
      * @param rsqIds
      * @return
      */
-    public List<IdMapStaffDO> getUserIdFromRsqId(
+    List<IdMapStaffDO> getUserIdFromRsqId(
             @Param("corpId") String corpId,
             @Param("rsqIds") String[] rsqIds);
     /**
@@ -25,7 +25,7 @@ public interface IdMapStaffDao {
      * @param userIds
      * @return
      */
-    public List<IdMapStaffDO> getRsqIdFromUserId(
+    List<IdMapStaffDO> getRsqIdFromUserId(
             @Param("corpId") String corpId,
             @Param("userIds") String[] userIds);
 }

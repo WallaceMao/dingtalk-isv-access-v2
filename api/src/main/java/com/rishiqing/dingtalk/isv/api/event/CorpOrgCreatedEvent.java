@@ -3,12 +3,14 @@ package com.rishiqing.dingtalk.isv.api.event;
 import java.io.Serializable;
 
 /**
+ * 当用户组织结构创建成功时，抛出的事件
  * @author Wallace Mao
  * Date: 2018-11-03 20:33
  */
-public class CorpOrgSyncEvent implements Serializable {
+public class CorpOrgCreatedEvent implements Serializable {
     private String corpId;
     private String suiteKey;
+    private Long scopeVersion;
     private String info;
 
     public String getCorpId() {
@@ -27,6 +29,14 @@ public class CorpOrgSyncEvent implements Serializable {
         this.suiteKey = suiteKey;
     }
 
+    public Long getScopeVersion() {
+        return scopeVersion;
+    }
+
+    public void setScopeVersion(Long scopeVersion) {
+        this.scopeVersion = scopeVersion;
+    }
+
     public String getInfo() {
         return info;
     }
@@ -37,9 +47,11 @@ public class CorpOrgSyncEvent implements Serializable {
 
     @Override
     public String toString() {
-        return "CorpOrgSyncEvent{" +
-                ", corpId='" + corpId + '\'' +
+        return "CorpOrgCreatedEvent{" +
+                "corpId='" + corpId + '\'' +
                 ", suiteKey='" + suiteKey + '\'' +
+                ", scopeVersion=" + scopeVersion +
+                ", info='" + info + '\'' +
                 '}';
     }
 }

@@ -13,6 +13,7 @@
         <result property="inviteUrl" column="invite_url" />
         <result property="corpLogoUrl" column="corp_logo_url" />
         <result property="rsqId" column="rsq_id" />
+        <result property="scopeVersion" column="scope_version" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -25,7 +26,8 @@
         corp_name,
         invite_url,
         corp_logo_url,
-        rsq_id
+        rsq_id,
+        scope_version
     </sql>
 
     <insert id="saveOrUpdateCorp" useGeneratedKeys="true" keyProperty="id">
@@ -37,7 +39,8 @@
         industry,
         corp_name,
         invite_url,
-        corp_logo_url
+        corp_logo_url,
+        scope_version
         )VALUES(
         now(),
         now(),
@@ -46,8 +49,16 @@
         #{industry},
         #{corpName},
         #{inviteUrl},
-        #{corpLogoUrl}
-        )ON DUPLICATE KEY UPDATE gmt_modified=now(),invite_code=#{inviteCode},industry=#{industry},corp_name=#{corpName},invite_url=#{inviteUrl},corp_logo_url=#{corpLogoUrl}
+        #{corpLogoUrl},
+        #{scopeVersion}
+        )ON DUPLICATE KEY UPDATE
+            gmt_modified=now(),
+            invite_code=#{inviteCode},
+            industry=#{industry},
+            corp_name=#{corpName},
+            invite_url=#{inviteUrl},
+            corp_logo_url=#{corpLogoUrl},
+            scope_version=#{scopeVersion}
     </insert>
 
     <update id="updateCorpRsqInfo">

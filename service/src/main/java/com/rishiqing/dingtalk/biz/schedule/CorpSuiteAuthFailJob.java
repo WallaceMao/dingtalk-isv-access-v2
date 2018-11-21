@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -55,7 +56,7 @@ public class CorpSuiteAuthFailJob extends QuartzJobBean {
                                 JSONObject.parseObject(fail.getFailInfo())
                         );
                     }
-                    corpBizService.activateCorpApp(corpSuiteAuthVO);
+                    corpBizService.activateCorpApp(corpSuiteAuthVO, new Date().getTime());
                 }
             }
         }catch (Exception e){

@@ -9,7 +9,9 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
  * Date: 2018-11-07 21:10
  */
 public interface RsqAccountBizService {
-    void pushCreateAll(String corpId);
+    void syncAllCreated(String corpId);
+
+    void syncAllChanged(String corpId);
 
     void updateRsqDepartment(CorpDepartmentVO departmentVO);
 

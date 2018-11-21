@@ -10,6 +10,6 @@ public interface OrderRsqPushEventDao {
 	 * 保存orderRsqPushEventDO
 	 * @param orderRsqPushEventDO
 	 */
-	public void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventDO orderRsqPushEventDO);
+	void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventDO orderRsqPushEventDO);
 }
 

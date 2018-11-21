@@ -14,18 +14,18 @@ public interface CorpTokenDao {
      * 创建或更新一个企业的corpTokenDO
      * @param corpTokenDO
      */
-    public void saveOrUpdateCorpToken(CorpTokenDO corpTokenDO);
+    void saveOrUpdateCorpToken(CorpTokenDO corpTokenDO);
 
     /**
      * 删除企业token
      * @param corpId
      */
-    public void deleteCorpTokenByCorpId(@Param("corpId") String corpId);
+    void deleteCorpTokenByCorpId(@Param("corpId") String corpId);
 
     /**
      * 根据corpId获取CorpToken
      * @param corpId
      * @return
      */
-    public CorpTokenDO getCorpTokenByCorpId(@Param("corpId") String corpId);
+    CorpTokenDO getCorpTokenByCorpId(@Param("corpId") String corpId);
 }

@@ -14,7 +14,7 @@ public interface StaffPopupLogDao {
      * 保存staffPopupLogDO
      * @param staffPopupLogDO
      */
-    public void saveOrUpdateStaffPopupLog(StaffPopupLogDO staffPopupLogDO);
+    void saveOrUpdateStaffPopupLog(StaffPopupLogDO staffPopupLogDO);
 
     /**
      * 获取staffPopupLog
@@ -23,7 +23,7 @@ public interface StaffPopupLogDao {
      * @param popupType
      * @return
      */
-    public StaffPopupLogDO getStaffPopupLogByCorpIdAndUserIdAndPopupType(
+    StaffPopupLogDO getStaffPopupLogByCorpIdAndUserIdAndPopupType(
             @Param("corpId") String corpId,
             @Param("userId") String userId,
             @Param("popupType") String popupType

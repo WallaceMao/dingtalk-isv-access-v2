@@ -17,21 +17,21 @@ public interface CorpSuiteAuthDao {
      *
      * @param corpSuiteAuthDO
      */
-    public void saveOrUpdateCorpSuiteAuth(CorpSuiteAuthDO corpSuiteAuthDO);
+    void saveOrUpdateCorpSuiteAuth(CorpSuiteAuthDO corpSuiteAuthDO);
 
     /**
      * 根据corpId解除企业对套件的授权
      * @param corpId
      * @return
      */
-    public void deleteCorpSuiteAuthByCorpId(@Param("corpId") String corpId);
+    void deleteCorpSuiteAuthByCorpId(@Param("corpId") String corpId);
 
     /**
      * 根据corpId查询授权信息
      * @param corpId
      * @return
      */
-    public CorpSuiteAuthDO getCorpSuiteAuthByCorpId(@Param("corpId") String corpId);
+    CorpSuiteAuthDO getCorpSuiteAuthByCorpId(@Param("corpId") String corpId);
 
 //    /**
 //     * 分页查询被授权的企业

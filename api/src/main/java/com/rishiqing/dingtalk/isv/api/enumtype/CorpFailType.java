@@ -10,7 +10,9 @@ public enum CorpFailType {
     //  获取钉钉的企业信息失败，包括获取公司失败，获取部门失败，获取部门成员失败等
     GET_CORP_INFO("get_corp_info"),
     //  推送到第三方服务器失败
-    PUT_ISV_CORP("put_isv_corp");
+    PUT_ISV_CORP("put_isv_corp"),
+    //  可见范围变更推送到第三方服务器
+    PUT_CHANGE_ISV_CORP("put_isv_corp");
 
     private final String key;
 

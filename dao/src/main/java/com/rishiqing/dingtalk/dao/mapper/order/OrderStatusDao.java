@@ -11,13 +11,13 @@ public interface OrderStatusDao {
 	 * 保存orderStatusDO
 	 * @param orderStatusDO
 	 */
-	public void saveOrUpdateOrderStatus(OrderStatusDO orderStatusDO);
+	void saveOrUpdateOrderStatus(OrderStatusDO orderStatusDO);
 
 	/**
 	 * 根据orderId获取orderStatus
 	 * @param orderId
 	 * @return
 	 */
-	public OrderStatusDO getOrderStatusByOrderId(@Param("orderId") Long orderId);
+	OrderStatusDO getOrderStatusByOrderId(@Param("orderId") Long orderId);
 }
 

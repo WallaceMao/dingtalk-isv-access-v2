@@ -11,7 +11,7 @@
     <bean id="solutionService" class="com.workbei.service.SolutionService" />
 
     <!--active mq-->
-    <bean id="solutionListener" class="com.workbei.listener.SolutionListener" />
+    <bean id="solutionListener" class="com.workbei.listener.impl.SolutionListenerActivemqImpl" />
     <bean id="solutionJmsContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />

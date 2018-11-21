@@ -3,6 +3,7 @@ package com.rishiqing.dingtalk.web.controller.demo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.rishiqing.dingtalk.biz.model.GlobalSuite;
+import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.dao.mapper.corp.CorpDepartmentDao;
 import com.rishiqing.dingtalk.dao.model.corp.CorpDepartmentDO;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import java.util.Map;
 @RequestMapping("/manual")
 public class DemoController {
     private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
+    private static final Logger aliLogger = LoggerFactory.getLogger("ALIYUN_LOGHUB_LOGGER");
 
     @Autowired
     private OpenSyncBizDataManageService openSyncBizDataManageService;
@@ -116,5 +119,29 @@ public class DemoController {
         Map<String, Object> result = new HashMap<>();
         result.put("listdd", corpDepartmentVO);
         return result;
+    }
+
+    @Autowired
+    private QueueService queueService;
+    @RequestMapping("/test2")
+    @ResponseBody
+    public String test2(
+            @RequestParam("corpId") String corpId,
+            @RequestParam("userId") String userId,
+            @RequestParam("type") String type
+    ){
+        if("team".equals(type)){
+            queueService.sendToGenerateTeamSolution(corpId, userId);
+        }else{
+            queueService.sendToGenerateStaffSolution(corpId, userId);
+        }
+        return "success";
+    }
+
+    @RequestMapping("/test3")
+    @ResponseBody
+    public String test3(){
+        aliLogger.warn("--------------" + new Date());
+        return "success";
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--==========================alimq相关==============================-->
+    <bean id="queueService" class="com.rishiqing.dingtalk.biz.service.util.impl.QueueServiceAlimqImpl" />
+
+    <util:map id="alimqSolutionConfig" key-type="java.lang.String" value-type="java.lang.String">
+        <entry key="accessKey" value="${alimq.accessKey}" />
+        <entry key="accessSecret" value="${alimq.accessSecret}" />
+        <entry key="topic" value="${alimq.solution.topic}" />
+        <entry key="tag" value="${alimq.solution.tag}" />
+        <entry key="producerId" value="${alimq.solution.producerId}" />
+        <entry key="consumerId" value="${alimq.solution.consumerId}" />
+    </util:map>
+
+    <bean id="alimqSolutionProducer" class="com.aliyun.openservices.ons.api.bean.ProducerBean" init-method="start" destroy-method="shutdown">
+        <!--生产者配置信息-->
+        <property name="properties" >
+            <props>
+                <prop key="AccessKey">${alimq.accessKey}</prop>
+                <prop key="SecretKey">${alimq.accessSecret}</prop>
+                <prop key="ProducerId">${alimq.solution.producerId}</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

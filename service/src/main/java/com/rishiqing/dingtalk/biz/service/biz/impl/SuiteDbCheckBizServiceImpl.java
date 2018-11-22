@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -42,13 +43,20 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
                     syncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
-                    bizLogger.error("handleSyncData error: ", e);
+                    bizLogger.error(LogFormatter.format(
+                            LogFormatter.LogEvent.EXCEPTION,
+                            "handleSyncData处理钉钉云重要推送消息失败",
+                            new LogFormatter.KeyValue("data", data)
+                    ), e);
                     data.setStatus(-1L);
                 }
                 openSyncBizDataManageService.updateStatus(data);
             }
         }catch (Exception e){
-            bizLogger.error("checkDingPushEvent error: ", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "checkDingPushEvent error"
+            ), e);
         }finally {
             openGlobalLockService.releaseOpenGlobalLock(DB_CHECK_LOCK_KEY);
         }
@@ -68,13 +76,20 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
                     syncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
-                    bizLogger.error("checkDingMediumPushEvent error: ", e);
+                    bizLogger.error(LogFormatter.format(
+                            LogFormatter.LogEvent.EXCEPTION,
+                            "handleSyncData处理钉钉云普通推送消息失败",
+                            new LogFormatter.KeyValue("data", data)
+                    ), e);
                     data.setStatus(-1L);
                 }
                 openSyncBizDataManageService.updateMediumStatus(data);
             }
         }catch (Exception e){
-            bizLogger.error("checkDingMediumPushEvent error: ", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "checkDingMediumPushEvent error"
+            ), e);
         }finally {
             openGlobalLockService.releaseOpenGlobalLock(DB_CHECK_MEDIUM_LOCK_KEY);
         }

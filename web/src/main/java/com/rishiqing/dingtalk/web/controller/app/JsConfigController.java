@@ -2,13 +2,11 @@ package com.rishiqing.dingtalk.web.controller.app;
 
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.rishiqing.dingtalk.web.util.crypto.DingTalkJsApiSingnature;
 import com.rishiqing.dingtalk.web.util.crypto.Utils;
 import org.slf4j.Logger;
@@ -50,7 +48,13 @@ public class JsConfigController {
                                            @RequestParam(value = "appid", required = false) Long appId
 
     ) {
-        bizLogger.info("url: " + url + ", corpId: " + corpId + ", appId: " + appId);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/get_js_config",
+                new LogFormatter.KeyValue("url", url),
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("appId", appId)
+        ));
         try{
             //  检查url合法性
             url = check(url);
@@ -69,7 +73,13 @@ public class JsConfigController {
             jsapiConfig.put("appId", appId);
             return HttpResult.getSuccess(jsapiConfig);
         }catch (Exception e){
-            bizLogger.error("getJSConfig系统错误 " + "url: " + url + "corpId: " + corpId + "appId: " + appId, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/get_js_config",
+                    new LogFormatter.KeyValue("url", url),
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("appId", appId)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

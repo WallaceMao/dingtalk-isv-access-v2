@@ -1,8 +1,8 @@
 package com.rishiqing.dingtalk.biz.event;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.event.EventListener;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
@@ -32,7 +32,11 @@ public class CorpSuiteAuthEventListener implements EventListener {
     @AllowConcurrentEvents //  event并行执行
     public void listenCorpSuiteAuthEvent(CorpSuiteAuthEvent corpSuiteAuthEvent) {
         try{
-            bizLogger.info("corpAuthSuiteEvent: " + JSON.toJSONString(corpSuiteAuthEvent));
+            bizLogger.info(LogFormatter.format(
+                    LogFormatter.LogEvent.START,
+                    "CorpSuiteAuthEventListener",
+                    new LogFormatter.KeyValue("corpSuiteAuthEvent", corpSuiteAuthEvent)
+            ));
             String corpId = corpSuiteAuthEvent.getCorpId();
             CorpAuthInfoVO corpAuthInfo = new CorpAuthInfoVO();
             CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
@@ -42,7 +46,11 @@ public class CorpSuiteAuthEventListener implements EventListener {
         }catch (Exception e){
             //  加入失败job,失败任务会重试
             failBizService.saveCorpSuiteAuthFail(corpSuiteAuthEvent);
-            bizLogger.error("corpAuthSuiteEvent: " + corpSuiteAuthEvent, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "CorpSuiteAuthEventListener",
+                    new LogFormatter.KeyValue("corpSuiteAuthEvent", corpSuiteAuthEvent)
+            ), e);
         }
     }
 }

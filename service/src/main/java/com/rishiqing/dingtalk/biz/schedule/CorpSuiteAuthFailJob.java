@@ -1,12 +1,11 @@
 package com.rishiqing.dingtalk.biz.schedule;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
 import org.quartz.JobExecutionContext;
@@ -30,7 +29,11 @@ public class CorpSuiteAuthFailJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try{
-            bizLogger.info("授权失败的公司检查开始 nextFireTime" + jobExecutionContext.getNextFireTime());
+            bizLogger.info(LogFormatter.format(
+                    LogFormatter.LogEvent.START,
+                    "CorpSuiteAuthFailJob授权失败的公司检查开始",
+                    new LogFormatter.KeyValue("nextFireTime", jobExecutionContext.getNextFireTime())
+            ));
             XmlWebApplicationContext xmlWebApplicationContext = (XmlWebApplicationContext) jobExecutionContext.getScheduler().getContext().get("applicationContextKey");
             FailBizService failBizService = (FailBizService) xmlWebApplicationContext.getBean("failBizService");
             CorpBizService corpBizService = (CorpBizService) xmlWebApplicationContext.getBean("corpBizService");
@@ -59,7 +62,10 @@ public class CorpSuiteAuthFailJob extends QuartzJobBean {
                 }
             }
         }catch (Exception e){
-            bizLogger.error("CorpSuiteAuthFailJob任务执行异常", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "CorpSuiteAuthFailJob任务执行异常"
+            ), e);
         }
     }
 }

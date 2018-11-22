@@ -142,6 +142,7 @@ public class DemoController {
     @ResponseBody
     public String test3(){
         aliLogger.warn("--------------" + new Date());
+        consoleLogger.warn("consoleLogger--------------", "a--", "b--", new Date());
         return "success";
     }
 }

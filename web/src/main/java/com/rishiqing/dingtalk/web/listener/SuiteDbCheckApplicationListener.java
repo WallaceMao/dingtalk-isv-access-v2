@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.web.listener;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,10 @@ public class SuiteDbCheckApplicationListener implements ApplicationListener<Cont
                     try{
                         suiteDbCheckBizService.checkDingPushEvent();
                     } catch (Exception e){
-                        bizLogger.warn( "db check 发生错误：", e);
+                        bizLogger.error(LogFormatter.format(
+                                LogFormatter.LogEvent.EXCEPTION,
+                                "SuiteDbCheckApplicationListener"
+                        ), e);
                     }
                 }
             }, EXECUTE_INIT_DELAY_MILLS, EXECUTE_DELAY_MILLS, TimeUnit.MILLISECONDS);

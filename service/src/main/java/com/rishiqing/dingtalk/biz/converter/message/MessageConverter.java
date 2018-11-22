@@ -120,17 +120,21 @@ public class MessageConverter {
         }
         if(json.containsKey("receiverName")){
             receiverName = json.getString("receiverName");
-            MessageBody.OABody.Body.Form receiverItem = new MessageBody.OABody.Body.Form();
-            receiverItem.setKey("成员: ");
-            receiverItem.setValue(receiverName);
-            formList.add(receiverItem);
+            if(receiverName != null){
+                MessageBody.OABody.Body.Form receiverItem = new MessageBody.OABody.Body.Form();
+                receiverItem.setKey("成员: ");
+                receiverItem.setValue(receiverName);
+                formList.add(receiverItem);
+            }
         }
         if(json.containsKey("todoDate")){
             String todoDate = json.getString("todoDate");
             if(todoDate != null){
                 MessageBody.OABody.Body.Form todoDateItem = new MessageBody.OABody.Body.Form();
+                //  日期格式为yyyy.mm.dd的形式
+                int size = Math.min(todoDate.length(), 10);
                 todoDateItem.setKey("日期: ");
-                todoDateItem.setValue(todoDate.substring(0, 10));
+                todoDateItem.setValue(todoDate.substring(0, size));
                 formList.add(todoDateItem);
             }
         }

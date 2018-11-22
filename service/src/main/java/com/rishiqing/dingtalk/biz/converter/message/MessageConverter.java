@@ -91,7 +91,7 @@ public class MessageConverter {
         String title = json.getString("title");
         String desc = json.getString("description");
         String btntxt = json.getString("btntxt");
-        String from, type, receiverName, todoDate;
+        String from, type, receiverName;
 
         //  对url做修正处理，暂时这样实现
         String newUrl = url.replace("backauth", "dingtalk/workbei");
@@ -126,11 +126,13 @@ public class MessageConverter {
             formList.add(receiverItem);
         }
         if(json.containsKey("todoDate")){
-            todoDate = json.getString("todoDate");
-            MessageBody.OABody.Body.Form todoDateItem = new MessageBody.OABody.Body.Form();
-            todoDateItem.setKey("日期: ");
-            todoDateItem.setValue(todoDate.substring(0, 10));
-            formList.add(todoDateItem);
+            String todoDate = json.getString("todoDate");
+            if(todoDate != null){
+                MessageBody.OABody.Body.Form todoDateItem = new MessageBody.OABody.Body.Form();
+                todoDateItem.setKey("日期: ");
+                todoDateItem.setValue(todoDate.substring(0, 10));
+                formList.add(todoDateItem);
+            }
         }
         MessageBody.OABody.Body.Form btnItem = new MessageBody.OABody.Body.Form();
         btnItem.setKey("点击查看>>");

@@ -90,7 +90,7 @@ public class MessageController {
                                                 @RequestParam("corpid") String corpId,
                                                 @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpid: " + corpId + "json: ", json);
+        bizLogger.info("corpid: " + corpId + "json: " + json);
 
         try{
             JSONObject content = json.getJSONObject("textcard");

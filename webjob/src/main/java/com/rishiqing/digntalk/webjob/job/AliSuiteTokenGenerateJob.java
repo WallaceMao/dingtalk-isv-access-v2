@@ -22,7 +22,7 @@ public class AliSuiteTokenGenerateJob implements ScxSimpleJobProcessor {
     private static final Logger bizLogger = LoggerFactory.getLogger(AliSuiteTokenGenerateJob.class);
 
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteService suiteService;
 
     @Override
     public ProcessResult process(ScxSimpleJobContext context) {
@@ -31,10 +31,7 @@ public class AliSuiteTokenGenerateJob implements ScxSimpleJobProcessor {
                     LogFormatter.LogEvent.START,
                     "AliSuiteTokenGenerateJob套件TOKEN生成任务执行开始"
             ));
-            System.out.println("======hello: " + new Date() + ", " + suiteManageService.getSuite());
-//            XmlWebApplicationContext xmlWebApplicationContext = (XmlWebApplicationContext) jobExecutionContext.getScheduler().getContext().get("applicationContextKey");
-//            SuiteService suiteService = (SuiteService)xmlWebApplicationContext.getBean("suiteService");
-//            suiteService.fetchAndSaveSuiteToken();
+            suiteService.fetchAndSaveSuiteToken();
             return new ProcessResult(true);
         }catch (Exception e){
             bizLogger.error(LogFormatter.format(

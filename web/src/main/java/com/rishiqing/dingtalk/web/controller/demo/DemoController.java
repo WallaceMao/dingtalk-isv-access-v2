@@ -38,8 +38,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/manual")
 public class DemoController {
-    private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
-    private static final Logger aliLogger = LoggerFactory.getLogger("ALIYUN_LOGHUB_LOGGER");
+    private static final Logger consoleLogger = LoggerFactory.getLogger(DemoController.class);
+    private static final Logger aliLogger = LoggerFactory.getLogger(DemoController.class);
 
     @Autowired
     private OpenSyncBizDataManageService openSyncBizDataManageService;
@@ -142,6 +142,7 @@ public class DemoController {
     @ResponseBody
     public String test3(){
         aliLogger.warn("--------------" + new Date());
+        consoleLogger.warn("consoleLogger--------------", "a--", "b--", new Date());
         return "success";
     }
 }

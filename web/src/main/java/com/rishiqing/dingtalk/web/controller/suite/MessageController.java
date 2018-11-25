@@ -1,18 +1,16 @@
 package com.rishiqing.dingtalk.web.controller.suite;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.message.MessageConverter;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.message.MessageVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.AppManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
 import com.rishiqing.dingtalk.isv.api.service.biz.MessageBizService;
-import org.quartz.*;
-import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,7 @@ import java.util.*;
  */
 @Controller
 public class MessageController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_MESSAGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private MessageBizService messageBizService;
@@ -52,7 +50,13 @@ public class MessageController {
                                                     @RequestParam("appid") Long appId,
                                                     @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpid: " + corpId + ", appid: " + appId + ", json: " + json);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/msg/sendasynccorpmessage",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("appId", appId),
+                new LogFormatter.KeyValue("json", json)
+        ));
         try{
             CorpAppVO corpApp = corpAppManageService.getCorpAppByCorpIdAndAppId(corpId, appId);
             MessageVO messageVO = MessageConverter.json2MessageVO(corpId, corpApp.getAgentId(), json);
@@ -63,7 +67,13 @@ public class MessageController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("sendAsyncCorpMessage系统错误: " + ", json: " + json + ", appid: " + appId + ", corpId: " + corpId,e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/msg/sendasynccorpmessage",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("appId", appId),
+                    new LogFormatter.KeyValue("json", json)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }
@@ -90,8 +100,12 @@ public class MessageController {
                                                 @RequestParam("corpid") String corpId,
                                                 @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpid: " + corpId + "json: " + json);
-
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/msg/sendNotification",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("json", json)
+        ));
         try{
             JSONObject content = json.getJSONObject("textcard");
             //  针对文集、笔记、邀请类型的通知，不发送钉钉通知
@@ -116,7 +130,12 @@ public class MessageController {
             return HttpResult.getSuccess(map);
 
         }catch(Exception e){
-            bizLogger.error("sendNotification系统错误: json: " + json + ", corpId: " + corpId, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/msg/sendNotification",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("json", json)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

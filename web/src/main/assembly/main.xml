@@ -11,15 +11,15 @@
             <!--web文件-->
             <directory>src/main/webapp</directory>
             <outputDirectory>./</outputDirectory>
-            <excludes>
-                <!--排除默认的log4j2配置文件-->
-                <exclude>**/log4j2.xml</exclude>
-            </excludes>
         </fileSet>
         <fileSet>
             <!--编译后的class文件-->
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>./WEB-INF/classes</outputDirectory>
+            <excludes>
+                <!--排除默认的logbacj配置文件-->
+                <exclude>logback.xml</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <!--直接放到lib目录下的jar包-->
@@ -29,9 +29,9 @@
     </fileSets>
     <files>
         <file>
-            <source>src/main/assembly/log4j2/log4j2-${env}.xml</source>
-            <outputDirectory>./WEB-INF</outputDirectory>
-            <destName>log4j2.xml</destName>
+            <source>src/main/assembly/log/logback-${env}.xml</source>
+            <outputDirectory>./WEB-INF/classes</outputDirectory>
+            <destName>logback.xml</destName>
         </file>
     </files>
     <dependencySets>

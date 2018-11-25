@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-11-03 20:37
  */
 public class OrderChargeEventListener implements EventListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_ORDER_CHARGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(OrderChargeEventListener.class);
 
     /**
      * 企业授权套件临时授权码异步逻辑

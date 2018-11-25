@@ -6,6 +6,7 @@ import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 import com.rishiqing.dingtalk.biz.event.SolutionEvent;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.workbei.listener.SolutionListener;
 import com.workbei.service.SolutionService;
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-11-21 15:29
  */
 public class SolutionListenerAlimqImpl implements MessageListener, SolutionListener {
-    private static final Logger logger = LoggerFactory.getLogger("LSN_RSQ_CORP_CHANGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SolutionListenerAlimqImpl.class);
 
     @Autowired
     private SolutionService solutionService;
@@ -40,7 +41,11 @@ public class SolutionListenerAlimqImpl implements MessageListener, SolutionListe
             }
             return Action.CommitMessage;
         } catch (Exception e) {
-            logger.error("solution generate error: ", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "SolutionListenerAlimqImpl",
+                    new LogFormatter.KeyValue("message", message)
+            ), e);
             //消费失败
             return Action.ReconsumeLater;
         }

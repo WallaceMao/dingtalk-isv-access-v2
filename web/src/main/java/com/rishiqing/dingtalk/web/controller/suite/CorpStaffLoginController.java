@@ -4,8 +4,8 @@ import com.rishiqing.dingtalk.biz.converter.corp.CorpStaffConverter;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
 import com.rishiqing.dingtalk.biz.service.util.StaffService;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 public class CorpStaffLoginController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_CORP_STAFF_LOGIN_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(CorpStaffLoginController.class);
     @Autowired
     private StaffService staffService;
     @Autowired
@@ -47,7 +47,13 @@ public class CorpStaffLoginController {
             @RequestParam("corpid") String corpId,
             @RequestParam("code") String code
     ) {
-        bizLogger.info("getStaffByAuthCode corpid: " + corpId + ", appid: " + appId + ", code: " + code);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/staff/authCode",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("appId", appId),
+                new LogFormatter.KeyValue("code", code)
+        ));
         try{
 
             //  请求钉钉服务器获取当前登录的staff信息
@@ -59,7 +65,13 @@ public class CorpStaffLoginController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("getStaffByAuthCode系统错误: " + ", code: " + code + ", appid: " + appId + ", corpId: " + corpId,e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/staff/authCode",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("appId", appId),
+                    new LogFormatter.KeyValue("code", code)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }
@@ -79,7 +91,13 @@ public class CorpStaffLoginController {
             @RequestParam("corpid") String corpId,
             @RequestParam("userid") String userId
     ) {
-        bizLogger.info("getStaffByUserId corpid: " + corpId + ", appid: " + appId + ", code: " + userId);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/staff/userId",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("appId", appId),
+                new LogFormatter.KeyValue("userId", userId)
+        ));
         try{
 
             //  直接读取数据库获取用户信息
@@ -91,7 +109,13 @@ public class CorpStaffLoginController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("getStaffByUserId系统错误: " + ", userId: " + userId + ", appid: " + appId + ", corpId: " + corpId,e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/staff/userId",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("appId", appId),
+                    new LogFormatter.KeyValue("userId", userId)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

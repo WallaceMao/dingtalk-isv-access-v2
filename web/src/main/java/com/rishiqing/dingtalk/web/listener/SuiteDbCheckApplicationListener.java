@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.web.listener;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018-10-31 23:54
  */
 public class SuiteDbCheckApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_DB_CHECK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteDbCheckApplicationListener.class);
     private static final Long EXECUTE_INIT_DELAY_MILLS = 300L;
     private static final Long EXECUTE_DELAY_MILLS = 3000L;
     private static boolean isStarted = false;
@@ -35,7 +36,10 @@ public class SuiteDbCheckApplicationListener implements ApplicationListener<Cont
                     try{
                         suiteDbCheckBizService.checkDingPushEvent();
                     } catch (Exception e){
-                        bizLogger.warn( "db check 发生错误：", e);
+                        bizLogger.error(LogFormatter.format(
+                                LogFormatter.LogEvent.EXCEPTION,
+                                "SuiteDbCheckApplicationListener"
+                        ), e);
                     }
                 }
             }, EXECUTE_INIT_DELAY_MILLS, EXECUTE_DELAY_MILLS, TimeUnit.MILLISECONDS);

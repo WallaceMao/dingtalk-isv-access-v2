@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.biz.schedule;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  * Date: 2018-11-09 20:26
  */
 public class RsqCorpChangePushFailJob extends QuartzJobBean {
-    private static final Logger bizLogger = LoggerFactory.getLogger("JOB_RSQ_CORP_CHANGE_FAIL_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(RsqCorpChangePushFailJob.class);
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -20,7 +21,10 @@ public class RsqCorpChangePushFailJob extends QuartzJobBean {
             //TODO  如果公司的组织结构变化同步到日事清发生了失败，那么也会进行重试
 
         }catch (Exception e){
-            bizLogger.error("CorpSuiteAuthFailJob任务执行异常", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "CorpSuiteAuthFailJob任务执行异常"
+            ), e);
         }
     }
 }

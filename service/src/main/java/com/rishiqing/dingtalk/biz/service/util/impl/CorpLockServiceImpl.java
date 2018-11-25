@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.biz.service.util.impl;
 
 import com.rishiqing.dingtalk.biz.enmutype.CorpLockType;
 import com.rishiqing.dingtalk.biz.service.util.CorpLockService;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.dao.mapper.corp.CorpLockDao;
 import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import java.util.Date;
  * Date: 2018-11-07 10:58
  */
 public class CorpLockServiceImpl implements CorpLockService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("SYS_CORP_LOCK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(CorpLockServiceImpl.class);
 
     @Autowired
     CorpLockDao corpLockDao;
@@ -56,7 +57,6 @@ public class CorpLockServiceImpl implements CorpLockService {
             if(corpLock.getExpire().compareTo(new Date()) <= 0){
                 corpLock.setExpire(date);
             }else{
-                bizLogger.warn("请求锁被占用: " + corpId + ", lockType: " + lockType);
                 //  如果lock的期限未到，说明锁已被占用，则返回null，表示请求锁失败
                 return null;
             }
@@ -80,7 +80,12 @@ public class CorpLockServiceImpl implements CorpLockService {
         corpLock = corpLockDao.getCorpLockByLockKey(lockKey);
         //  如果不存在，则直接保存
         if(null == corpLock){
-            bizLogger.error("释放锁异常：锁不存在: " + corpId + ", lockType: " + lockType);
+            bizLogger.warn(LogFormatter.format(
+                    LogFormatter.LogEvent.END,
+                    "释放锁异常：锁不存在",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("lockType", lockType)
+            ));
         } else {
             corpLock.setExpire(new Date());
         }

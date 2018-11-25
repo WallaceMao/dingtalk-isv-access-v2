@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * Date: 2018-11-10 14:58
  */
 public class DefaultSyncActionHandler implements SyncActionHandler {
-    private static final org.slf4j.Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
+    private static final org.slf4j.Logger consoleLogger = LoggerFactory.getLogger(DefaultSyncActionHandler.class);
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
         consoleLogger.error("--------------handler没有实现，default handler将什么也不做！");

@@ -1,5 +1,6 @@
 package com.workbei.listener.impl;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.workbei.listener.SolutionListener;
 import com.workbei.service.SolutionService;
@@ -16,7 +17,7 @@ import javax.jms.MessageListener;
  * Date: 2018-11-12 5:35
  */
 public class SolutionListenerActivemqImpl implements MessageListener, SolutionListener {
-    private static final Logger logger = LoggerFactory.getLogger("LSN_RSQ_CORP_CHANGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SolutionListenerActivemqImpl.class);
 
     @Autowired
     private SolutionService solutionService;
@@ -37,7 +38,11 @@ public class SolutionListenerActivemqImpl implements MessageListener, SolutionLi
                 throw new BizRuntimeException("invalid solution type: " + type + ", teamId: " + teamId + ", userId: " + userId);
             }
         } catch (Exception e) {
-            logger.error("solution generate error: ", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "SolutionListenerAlimqImpl",
+                    new LogFormatter.KeyValue("message", message)
+            ), e);
         }
     }
 }

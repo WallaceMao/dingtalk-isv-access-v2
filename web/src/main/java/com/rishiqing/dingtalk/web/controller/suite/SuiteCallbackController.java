@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.web.controller.suite;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.enumtype.SuitePushType;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 public class SuiteCallbackController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_SUITE_CALLBACK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteCallbackController.class);
 
     @Autowired
     private SuiteManageService suiteManageService;
@@ -48,7 +48,15 @@ public class SuiteCallbackController {
                                                @RequestParam(value = "nonce", required = false) String nonce,
                                                @RequestBody(required = false) JSONObject json
     ) {
-        bizLogger.info("/suite/callback/{suiteKey}: " + passSuiteKey + ", " + signature + ", " + timestamp + "," + nonce + "," + JSON.toJSONString(json));
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/suite/callback/{suiteKey}",
+                new LogFormatter.KeyValue("suiteKey", passSuiteKey),
+                new LogFormatter.KeyValue("signature", signature),
+                new LogFormatter.KeyValue("timestamp", timestamp),
+                new LogFormatter.KeyValue("nonce", nonce),
+                new LogFormatter.KeyValue("json", json)
+        ));
         String successString = "success";
         SuiteVO globalSuite = suiteManageService.getSuite();
         String suiteKey = globalSuite.getSuiteKey();
@@ -60,15 +68,41 @@ public class SuiteCallbackController {
                     globalSuite.getSuiteKey());
             String encryptMsg = json.getString("encrypt");
             String plainText = dingTalkEncryptor.getDecryptMsg(signature,timestamp,nonce,encryptMsg);
-            bizLogger.info("解密之后明文消息: " + suiteKey + "," + signature + "," + timestamp + "," + nonce + "," + json + "," + plainText);
+            bizLogger.info(LogFormatter.format(
+                    LogFormatter.LogEvent.COMMON,
+                    "/suite/callback/{suiteKey}解密之后明文消息",
+                    new LogFormatter.KeyValue("suiteKey", suiteKey),
+                    new LogFormatter.KeyValue("signature", signature),
+                    new LogFormatter.KeyValue("timestamp", timestamp),
+                    new LogFormatter.KeyValue("nonce", nonce),
+                    new LogFormatter.KeyValue("json", json),
+                    new LogFormatter.KeyValue("plainText", plainText)
+            ));
 
             //  处理解密后的信息
             isvCallbackEvent(plainText) ;
             Map<String, String> encryptedMap = dingTalkEncryptor.getEncryptedMap(successString, System.currentTimeMillis(), Utils.getRandomStr(8));
-            bizLogger.info("返回值："+ "," + suiteKey+ "," + signature+ "," + timestamp+ "," + nonce+ "," + json+ "," + encryptedMap);
+            bizLogger.info(LogFormatter.format(
+                    LogFormatter.LogEvent.END,
+                    "/suite/callback/{suiteKey}返回值",
+                    new LogFormatter.KeyValue("suiteKey", suiteKey),
+                    new LogFormatter.KeyValue("signature", signature),
+                    new LogFormatter.KeyValue("timestamp", timestamp),
+                    new LogFormatter.KeyValue("nonce", nonce),
+                    new LogFormatter.KeyValue("json", json),
+                    new LogFormatter.KeyValue("encryptedMap", encryptedMap)
+            ));
             return encryptedMap;
         } catch (Exception e){
-            bizLogger.error("/suite/callback/{suiteKey} error: ", e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/suite/callback/{suiteKey}error",
+                    new LogFormatter.KeyValue("suiteKey", suiteKey),
+                    new LogFormatter.KeyValue("signature", signature),
+                    new LogFormatter.KeyValue("timestamp", timestamp),
+                    new LogFormatter.KeyValue("nonce", nonce),
+                    new LogFormatter.KeyValue("json", json)
+            ), e);
             return null;
         }
     }
@@ -111,7 +145,10 @@ public class SuiteCallbackController {
             );
         }else{
             //当开放平台更新了新的推送类型,为了避免不认识,需要报警出来
-            bizLogger.error("suite callback, event type can not handled: "+ callbackMsg);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.END,
+                    new LogFormatter.KeyValue("suite callback, event type can not handled: ", callbackMsg)
+            ));
         }
     }
 }

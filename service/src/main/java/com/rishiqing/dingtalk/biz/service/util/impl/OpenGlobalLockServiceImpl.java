@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.biz.service.util.impl;
 
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenGlobalLockManageService;
 import com.rishiqing.dingtalk.isv.api.service.util.OpenGlobalLockService;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Date: 2018-11-06 21:43
  */
 public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("SYS_GLOBAL_LOCK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(OpenGlobalLockServiceImpl.class);
 
     private static final String LOCK_STATUS_OPEN= "open";
     private static final String LOCK_STATUS_LOCKED= "locked";
@@ -42,7 +43,11 @@ public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
         }
 
         if(!LOCK_STATUS_OPEN.equals(lock.getStatus())){
-            bizLogger.warn("global lock锁被占用……" + lockKey);
+            bizLogger.warn(LogFormatter.format(
+                    LogFormatter.LogEvent.END,
+                    "global lock锁被占用",
+                    new LogFormatter.KeyValue("lockKey", lockKey)
+            ));
             return null;
         }
         lock.setStatus(LOCK_STATUS_LOCKED);

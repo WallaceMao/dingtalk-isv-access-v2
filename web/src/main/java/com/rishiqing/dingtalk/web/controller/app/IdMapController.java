@@ -3,6 +3,7 @@ package com.rishiqing.dingtalk.web.controller.app;
 import com.alibaba.fastjson.JSONArray;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.front.IdMapStaffVO;
 import com.rishiqing.dingtalk.isv.api.service.base.front.IdMapStaffManageService;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @Controller
 public class IdMapController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_ID_MAP_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(IdMapController.class);
     @Autowired
     private IdMapStaffManageService idMapStaffManageService;
 
@@ -31,7 +32,12 @@ public class IdMapController {
             @RequestParam("corpid") String corpId,
             @RequestBody JSONArray json
     ) {
-        bizLogger.info("userId2RsqId corpId: " + corpId, ", json: " + json);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/idmap/userid2rsqid",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("json", json)
+        ));
         try{
             List<IdMapStaffVO> list = idMapStaffManageService.getRsqIdFromUserId(corpId, json.toArray(new String[]{}));
             Map<String, Object> map = new HashMap<String, Object>();
@@ -39,7 +45,12 @@ public class IdMapController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("系统错误: " + ", corpId: " + corpId + ", json: " + json, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/idmap/userid2rsqid",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("json", json)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }
@@ -50,7 +61,12 @@ public class IdMapController {
             @RequestParam("corpid") String corpId,
             @RequestBody JSONArray json
     ) {
-        bizLogger.info("rsqId2UserId corpId: " + corpId + ", json: " + json);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/idmap/rsqid2userid",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("json", json)
+        ));
         try{
             Object[] objArray = json.toArray();
             String[] idArray = new String[objArray.length];
@@ -63,7 +79,12 @@ public class IdMapController {
 
             return HttpResult.getSuccess(map);
         }catch(Exception e){
-            bizLogger.error("系统错误: corpId: " + corpId + ", json: " + json, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/idmap/rsqid2userid",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("json", json)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

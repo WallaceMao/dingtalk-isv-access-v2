@@ -3,12 +3,10 @@ package com.rishiqing.dingtalk.web.controller.app;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.front.PopupInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupConfigVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupLogVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.front.PopupManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.rishiqing.dingtalk.isv.api.service.biz.PopupBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 public class StaffPopupController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_STAFF_POPUP_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(StaffPopupController.class);
 
     @Autowired
     private PopupBizService popupBizService;
@@ -42,12 +40,22 @@ public class StaffPopupController {
             @RequestParam("corpId") String corpId,
             @RequestParam("userId") String userId
     ) {
-        bizLogger.info("corpId: " + corpId + ", userId: " + userId);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "/corp/user/popup",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("userId", userId)
+        ));
         try{
             PopupInfoVO popupInfo = popupBizService.getPopupInfo(corpId, userId);
             return HttpResult.getSuccess(convertPopoupInfo(popupInfo));
         }catch(Exception e){
-            bizLogger.error("fetchCorpChargeInfo系统错误: " + "corpId" + corpId + "userId" + userId, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "/corp/user/popup",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("userId", userId)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }
@@ -65,13 +73,25 @@ public class StaffPopupController {
             @RequestParam("userId") String userId,
             @RequestBody JSONObject json
     ) {
-        bizLogger.info("corpId: " + corpId + ", userId: " + userId + ", json: " + json);
+        bizLogger.info(LogFormatter.format(
+                LogFormatter.LogEvent.START,
+                "POST /corp/user/popup",
+                new LogFormatter.KeyValue("corpId", corpId),
+                new LogFormatter.KeyValue("userId", userId),
+                new LogFormatter.KeyValue("userId", json)
+        ));
         try{
             String type = json.getString("popupType");
             popupBizService.logStaffPopup(corpId, userId, type);
             return HttpResult.getSuccess(null);
         }catch(Exception e){
-            bizLogger.error("fetchCorpChargeInfo系统错误: " + "corpId: " + corpId + ", userId: " + ", json: " + json, e);
+            bizLogger.error(LogFormatter.format(
+                    LogFormatter.LogEvent.EXCEPTION,
+                    "POST /corp/user/popup",
+                    new LogFormatter.KeyValue("corpId", corpId),
+                    new LogFormatter.KeyValue("userId", userId),
+                    new LogFormatter.KeyValue("userId", json)
+            ), e);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

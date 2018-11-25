@@ -20,7 +20,7 @@
 
         <!-- sls 项目配置 -->
         <projectName>workbei-dingtalk-auth</projectName>
-        <logstore>workbei-dingtalk-authjob-store</logstore>
+        <logstore>workbei-dingtalk-auth-store</logstore>
         <!--必选项 (end)-->
 
         <!-- 可选项 -->

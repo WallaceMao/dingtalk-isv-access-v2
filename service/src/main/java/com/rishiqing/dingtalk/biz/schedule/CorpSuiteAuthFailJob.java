@@ -24,7 +24,7 @@ import java.util.List;
  * Date: 2018-11-09 19:16
  */
 public class CorpSuiteAuthFailJob extends QuartzJobBean {
-    private static final Logger bizLogger = LoggerFactory.getLogger("JOB_CORP_SUITE_AUTH_FAIL_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(CorpSuiteAuthFailJob.class);
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

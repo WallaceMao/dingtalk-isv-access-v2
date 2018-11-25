@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-11-21 15:29
  */
 public class SolutionListenerAlimqImpl implements MessageListener, SolutionListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_RSQ_CORP_CHANGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SolutionListenerAlimqImpl.class);
 
     @Autowired
     private SolutionService solutionService;

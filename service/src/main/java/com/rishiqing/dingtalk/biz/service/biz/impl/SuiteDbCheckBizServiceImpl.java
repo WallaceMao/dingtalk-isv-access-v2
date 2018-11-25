@@ -18,7 +18,7 @@ import java.util.List;
  * Date: 2018-11-06 21:27
  */
 public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_DB_CHECK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteDbCheckBizServiceImpl.class);
 
     private static final String DB_CHECK_LOCK_KEY = "auth_check";
     private static final String DB_CHECK_MEDIUM_LOCK_KEY = "auth_medium_check";

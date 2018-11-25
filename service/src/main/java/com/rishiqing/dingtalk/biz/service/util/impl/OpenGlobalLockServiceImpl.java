@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Date: 2018-11-06 21:43
  */
 public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
-    private static final Logger bizLogger = LoggerFactory.getLogger("SYS_GLOBAL_LOCK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(OpenGlobalLockServiceImpl.class);
 
     private static final String LOCK_STATUS_OPEN= "open";
     private static final String LOCK_STATUS_LOCKED= "locked";

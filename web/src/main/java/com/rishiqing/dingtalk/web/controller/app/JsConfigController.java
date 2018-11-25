@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Controller
 public class JsConfigController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_JS_CONFIG_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(JsConfigController.class);
 
     @Autowired
     private CorpManageService corpManageService;

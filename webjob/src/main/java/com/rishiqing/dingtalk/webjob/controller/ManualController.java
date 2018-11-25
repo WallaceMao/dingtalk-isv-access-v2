@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
+
 /**
  * @author Wallace Mao
  * Date: 2018-10-31 20:56
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/db")
 public class ManualController {
-    private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
+    private static final Logger consoleLogger = LoggerFactory.getLogger(ManualController.class);
 
     @Autowired
     private SuiteService suiteService;
@@ -81,5 +83,13 @@ public class ManualController {
             consoleLogger.error("error in demo test", e);
             return "error";
         }
+    }
+
+    private Logger logbackLogger = LoggerFactory.getLogger(ManualController.class);
+    @RequestMapping("/test")
+    @ResponseBody
+    public String generateSolution(){
+        logbackLogger.info("====logback====: " + new Date());
+        return "success";
     }
 }

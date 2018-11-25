@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-11-07 2:14
  */
 public class RsqSuiteAuthPushEventListener implements EventListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_RSQ_SUITE_AUTH_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(RsqSuiteAuthPushEventListener.class);
 
     @Autowired
     private RsqAccountBizService rsqAccountBizService;

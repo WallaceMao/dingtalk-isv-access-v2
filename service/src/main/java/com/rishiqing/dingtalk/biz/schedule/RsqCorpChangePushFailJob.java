@@ -12,7 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  * Date: 2018-11-09 20:26
  */
 public class RsqCorpChangePushFailJob extends QuartzJobBean {
-    private static final Logger bizLogger = LoggerFactory.getLogger("JOB_RSQ_CORP_CHANGE_FAIL_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(RsqCorpChangePushFailJob.class);
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

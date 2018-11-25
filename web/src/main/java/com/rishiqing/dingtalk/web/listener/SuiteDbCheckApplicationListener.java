@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018-10-31 23:54
  */
 public class SuiteDbCheckApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_DB_CHECK_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteDbCheckApplicationListener.class);
     private static final Long EXECUTE_INIT_DELAY_MILLS = 300L;
     private static final Long EXECUTE_DELAY_MILLS = 3000L;
     private static boolean isStarted = false;

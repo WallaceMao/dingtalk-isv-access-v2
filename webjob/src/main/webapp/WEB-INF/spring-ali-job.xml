@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="aliSuiteTokenGenerateJob" class="com.rishiqing.digntalk.webjob.job.AliSuiteTokenGenerateJob" />
+    <bean id="schedulerXClient" class="com.alibaba.edas.schedulerx.SchedulerXClient" init-method="init">
+        <property name="groupId">
+            <value>${alijob.groupId}</value>
+        </property>
+        <property name="regionName">
+            <value>${alijob.regionName}</value>
+        </property>
+    </bean>
+</beans>

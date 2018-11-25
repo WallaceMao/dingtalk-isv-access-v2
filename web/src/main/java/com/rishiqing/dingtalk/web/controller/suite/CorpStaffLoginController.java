@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 public class CorpStaffLoginController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_CORP_STAFF_LOGIN_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(CorpStaffLoginController.class);
     @Autowired
     private StaffService staffService;
     @Autowired

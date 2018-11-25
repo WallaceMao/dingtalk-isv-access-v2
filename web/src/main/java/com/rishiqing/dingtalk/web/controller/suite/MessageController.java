@@ -26,7 +26,7 @@ import java.util.*;
  */
 @Controller
 public class MessageController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_MESSAGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private MessageBizService messageBizService;

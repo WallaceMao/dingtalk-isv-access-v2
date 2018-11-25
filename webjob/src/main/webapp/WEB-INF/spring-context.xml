@@ -13,6 +13,7 @@
         <property name="locations">
             <list>
                 <value>file:${user.home}/dingtalk/ddauth-config.properties</value>
+                <value>file:${user.home}/dingtalk/alijob-config.properties</value>
             </list>
         </property>
     </bean>
@@ -23,7 +24,7 @@
     <!--</util:map>-->
 
     <!--webjob需要启动quartz-->
-    <import resource="spring-quartz.xml" />
+    <import resource="spring-ali-job.xml" />
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
     <import resource="classpath:spring-queue-ali.xml" />

@@ -17,7 +17,7 @@ import javax.jms.MessageListener;
  * Date: 2018-11-12 5:35
  */
 public class SolutionListenerActivemqImpl implements MessageListener, SolutionListener {
-    private static final Logger bizLogger = LoggerFactory.getLogger("LSN_RSQ_CORP_CHANGE_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SolutionListenerActivemqImpl.class);
 
     @Autowired
     private SolutionService solutionService;

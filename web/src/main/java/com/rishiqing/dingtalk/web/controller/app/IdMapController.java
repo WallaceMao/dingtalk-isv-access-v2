@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Controller
 public class IdMapController {
-    private static final Logger bizLogger = LoggerFactory.getLogger("CON_ID_MAP_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(IdMapController.class);
     @Autowired
     private IdMapStaffManageService idMapStaffManageService;
 

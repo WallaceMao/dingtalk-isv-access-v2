@@ -16,7 +16,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  * Date: 2018-11-09 19:16
  */
 public class SuiteTokenGenerateJob  extends QuartzJobBean {
-    private static final Logger bizLogger = LoggerFactory.getLogger("JOB_SUITE_TOKEN_LOGGER");
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteTokenGenerateJob.class);
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

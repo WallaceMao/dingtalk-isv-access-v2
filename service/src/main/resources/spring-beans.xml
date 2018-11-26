@@ -18,7 +18,6 @@
     <bean id="popupManageService" class="com.rishiqing.dingtalk.biz.service.base.front.impl.PopupManageServiceImpl" />
     <!--业务相关的service-->
     <bean id="suiteCallbackBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteCallbackBizServiceImpl" />
-    <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
     <bean id="corpBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.CorpBizServiceImpl" />
     <bean id="failBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.FailBizServiceImpl" />
     <bean id="popupBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.PopupBizServiceImpl" />

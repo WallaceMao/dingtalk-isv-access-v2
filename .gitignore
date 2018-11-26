@@ -10,7 +10,7 @@ service/*.iml
 service/target/
 web/*.iml
 web/target/
-webalert/*.iml
-webalert/target/
+taskjob/*.iml
+taskjob/target/
 webjob/*.iml
 webjob/target/

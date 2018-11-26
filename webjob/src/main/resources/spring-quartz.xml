@@ -30,7 +30,7 @@
             <ref bean="dataSource" />
         </property>
         <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
-        <property name="configLocation" value="WEB-INF/quartz.properties" />
+        <property name="configLocation" value="quartz.properties" />
         <property name="triggers">
             <list>
                 <ref bean="suiteTokenTrigger" />

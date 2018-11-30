@@ -5,6 +5,7 @@ import com.rishiqing.dingtalk.biz.enmutype.CorpLockType;
 import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.biz.service.util.CorpLockService;
 import com.rishiqing.dingtalk.dao.mapper.corp.*;
+import com.rishiqing.dingtalk.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthDao;
 import com.rishiqing.dingtalk.dao.model.corp.CorpJSAPITicketDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
@@ -41,6 +42,8 @@ public class CorpManageServiceImpl implements CorpManageService {
     private CorpLockService corpLockService;
     @Autowired
     private SuiteRequestHelper suiteTopRequestHelper;
+    @Autowired
+    private CorpAppDao corpAppDao;
 
     @Override
     public void saveOrUpdateCorp(CorpVO corpVO){
@@ -148,5 +151,25 @@ public class CorpManageServiceImpl implements CorpManageService {
             return CorpStaffConverter.corpStaffDO2CorpStaffVO(firstCommonUser.get(0));
         }
         return null;
+    }
+
+    @Override
+    public void deleteCorpSuiteAuthByCorpId(String corpId){
+        corpSuiteAuthDao.deleteCorpSuiteAuthByCorpId(corpId);
+    }
+
+    @Override
+    public void deleteCorpAppByCorpId(String corpId, Long appId){
+        corpAppDao.deleteCorpAppByCorpIdAndAppId(corpId, appId);
+    }
+
+    @Override
+    public void deleteCorpTokenByCorpId(String corpId){
+        corpTokenDao.deleteCorpTokenByCorpId(corpId);
+    }
+
+    @Override
+    public void deleteCorpJSAPITicketByCorpId(String corpId){
+        corpJSAPITicketDao.deleteCorpJSAPITicketByCorpId(corpId);
     }
 }

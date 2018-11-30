@@ -22,4 +22,12 @@ public interface CorpManageService {
     CorpChargeStatusVO getCorpChargeStatusByCorpId(String corpId);
 
     CorpStaffVO findATeamCreator(String corpId);
+
+    void deleteCorpSuiteAuthByCorpId(String corpId);
+
+    void deleteCorpAppByCorpId(String corpId, Long appId);
+
+    void deleteCorpTokenByCorpId(String corpId);
+
+    void deleteCorpJSAPITicketByCorpId(String corpId);
 }

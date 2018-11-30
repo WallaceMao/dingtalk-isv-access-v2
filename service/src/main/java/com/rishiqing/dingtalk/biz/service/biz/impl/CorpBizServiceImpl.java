@@ -162,8 +162,8 @@ public class CorpBizServiceImpl implements CorpBizService {
         //  使用eventBus异步调用
         OrderChargeEvent event = new OrderChargeEvent();
         event.setSuiteKey(orderEvent.getSuiteKey());
-        event.setOrderEventId(orderEvent.getId());
-
+        event.setOrderId(orderEvent.getOrderId());
+        event.setCorpId(orderEvent.getBuyCorpId());
         asyncOrderChargeEventBus.post(event);
     }
 }

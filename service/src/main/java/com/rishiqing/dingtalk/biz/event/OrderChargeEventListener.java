@@ -34,8 +34,8 @@ public class OrderChargeEventListener implements EventListener {
         try{
             bizLogger.info("listenOrderChargeEvent: " + JSON.toJSONString(event));
             String suiteKey = event.getSuiteKey();
-            Long eventId = event.getOrderEventId();
-            OrderEventVO orderEventVO = orderManageService.getOrderEventById(eventId);
+            Long orderId = event.getOrderId();
+            OrderEventVO orderEventVO = orderManageService.getOrderEventByOrderId(orderId);
             //  充值
             chargeBizService.charge(orderEventVO);
         }catch (Exception e){

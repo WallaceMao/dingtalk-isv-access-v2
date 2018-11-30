@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class OrderChargeEvent implements Serializable {
     private String suiteKey;
-    private Long OrderEventId;
+    private Long orderId;
     private String corpId;
 
     public String getSuiteKey() {
@@ -19,12 +19,12 @@ public class OrderChargeEvent implements Serializable {
         this.suiteKey = suiteKey;
     }
 
-    public Long getOrderEventId() {
-        return OrderEventId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrderEventId(Long orderEventId) {
-        OrderEventId = orderEventId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getCorpId() {
@@ -39,7 +39,7 @@ public class OrderChargeEvent implements Serializable {
     public String toString() {
         return "OrderChargeEvent{" +
                 "suiteKey='" + suiteKey + '\'' +
-                ", OrderEventId=" + OrderEventId +
+                ", orderId='" + orderId + '\'' +
                 ", corpId='" + corpId + '\'' +
                 '}';
     }

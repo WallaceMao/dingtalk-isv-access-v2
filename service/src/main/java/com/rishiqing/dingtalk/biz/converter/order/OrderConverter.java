@@ -256,16 +256,15 @@ public class OrderConverter {
             return null;
         }
         CorpChargeStatusVO corpChargeStatus = new CorpChargeStatusVO();
-        CorpChargeStatusDO corpStatus = new CorpChargeStatusDO();
-        corpStatus.setSuiteKey(orderStatus.getSuiteKey());
-        corpStatus.setCorpId(orderStatus.getBuyCorpId());
-        corpStatus.setCurrentOrderId(orderStatus.getOrderId());
-        corpStatus.setCurrentGoodsCode(orderStatus.getGoodsCode());
-        corpStatus.setCurrentItemCode(orderStatus.getItemCode());
-        corpStatus.setCurrentSubQuantity(orderStatus.getSubQuantity());
-        corpStatus.setCurrentMaxOfPeople(orderStatus.getMaxOfPeople());
-        corpStatus.setCurrentMinOfPeople(orderStatus.getMinOfPeople());
-        corpStatus.setCurrentServiceStopTime(orderStatus.getServiceStopTime());
+        corpChargeStatus.setSuiteKey(orderStatus.getSuiteKey());
+        corpChargeStatus.setCorpId(orderStatus.getBuyCorpId());
+        corpChargeStatus.setCurrentOrderId(orderStatus.getOrderId());
+        corpChargeStatus.setCurrentGoodsCode(orderStatus.getGoodsCode());
+        corpChargeStatus.setCurrentItemCode(orderStatus.getItemCode());
+        corpChargeStatus.setCurrentSubQuantity(orderStatus.getSubQuantity());
+        corpChargeStatus.setCurrentMaxOfPeople(orderStatus.getMaxOfPeople());
+        corpChargeStatus.setCurrentMinOfPeople(orderStatus.getMinOfPeople());
+        corpChargeStatus.setCurrentServiceStopTime(orderStatus.getServiceStopTime());
 
         return corpChargeStatus;
     }
@@ -286,10 +285,17 @@ public class OrderConverter {
         obj.setServiceStopTime(json.getLong("serviceStopTime"));
         obj.setPayFee(json.getLong("payFee"));
 
-
-        if(json.containsKey("eventType")){
-            obj.setEventType(json.getString("eventType"));
+        //  eventType不能为空。钉钉云使用的字段是syncAction，回调方式使用的字段是eventType
+        String eventType;
+        if(json.containsKey("syncAction")){
+            eventType = json.getString("syncAction");
+        }else if(json.containsKey("eventType")){
+            eventType = json.getString("eventType");
+        }else{
+            eventType = "default";
         }
+        obj.setEventType(eventType);
+
         if(json.containsKey("maxOfPeople")){
             obj.setMaxOfPeople(json.getLong("maxOfPeople"));
         }

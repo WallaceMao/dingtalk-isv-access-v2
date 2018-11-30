@@ -13,6 +13,7 @@
         <property name="locations">
             <list>
                 <value>file:${user.home}/dingtalk/ddauth-config.properties</value>
+                <value>file:${user.home}/dingtalk/logback-config.properties</value>
             </list>
         </property>
     </bean>

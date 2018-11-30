@@ -69,7 +69,6 @@
                 <entry key-ref="asyncCorpSuiteAuthEventBus" value-ref="corpSuiteAuthEventListener" />
                 <entry key-ref="asyncCorpOrgSyncEventBus" value-ref="corpOrgSyncEventListener" />
                 <entry key-ref="asyncOrderChargeEventBus" value-ref="orderChargeEventListener" />
-                <entry key-ref="asyncOrderChargeEventBus" value-ref="orderChargeEventListener" />
             </map>
         </property>
     </bean>

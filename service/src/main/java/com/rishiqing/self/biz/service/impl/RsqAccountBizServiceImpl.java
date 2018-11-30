@@ -105,11 +105,15 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
             throw new BizRuntimeException("order status is null");
         }
         String corpId = orderStatus.getBuyCorpId();
+        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
+        if(corpVO.getRsqId() == null){
+            throw new BizRuntimeException("corp has no rsqId: " + corpVO);
+        }
 
         // 保存OrderRsqPushEventVO
         OrderRsqPushEventVO rsqPushEvent = OrderConverter.orderStatusVO2OrderRsqPushEventVO(orderStatus);
         rsqPushEvent.setStatus(SystemConstant.ORDER_PUSH_STATUS_PENDING);
-        rsqPushEvent.setRsqTeamId(Long.valueOf(corpId));
+        rsqPushEvent.setRsqTeamId(Long.valueOf(corpVO.getRsqId()));
         orderManageService.saveOrUpdateOrderRsqPushEvent(rsqPushEvent);
 
         //发送后台接口进行充值
@@ -329,7 +333,8 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
             //  使用eventBus异步调用
             OrderChargeEvent event = new OrderChargeEvent();
             event.setSuiteKey(dbEvent.getSuiteKey());
-            event.setOrderEventId(dbEvent.getId());
+            event.setOrderId(dbEvent.getOrderId());
+            event.setCorpId(dbEvent.getBuyCorpId());
             asyncOrderChargeEventBus.post(event);
         }
     }

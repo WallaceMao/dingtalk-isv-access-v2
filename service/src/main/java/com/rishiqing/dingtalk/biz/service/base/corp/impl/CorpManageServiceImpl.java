@@ -13,7 +13,6 @@ import com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpTokenDO;
 import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 

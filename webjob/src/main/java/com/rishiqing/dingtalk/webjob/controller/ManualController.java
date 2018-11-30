@@ -17,9 +17,9 @@ import java.util.Date;
  * Date: 2018-10-31 20:56
  */
 @Controller
-@RequestMapping("/db")
+@RequestMapping("/manual")
 public class ManualController {
-    private static final Logger consoleLogger = LoggerFactory.getLogger(ManualController.class);
+    private static final Logger bizLogger = LoggerFactory.getLogger(ManualController.class);
 
     @Autowired
     private SuiteService suiteService;
@@ -27,11 +27,11 @@ public class ManualController {
     @ResponseBody
     public String demoLog(){
         try {
-            consoleLogger.info("this is consoleLogger from demoLogController:");
+            bizLogger.info("this is consoleLogger from demoLogController:");
             suiteService.fetchAndSaveSuiteToken();
             return "success";
         } catch (Exception e){
-            consoleLogger.error("error in demo test", e);
+            bizLogger.error("error in demo test", e);
             return "error";
         }
     }
@@ -55,16 +55,15 @@ public class ManualController {
             }
             return "success";
         } catch (Exception e){
-            consoleLogger.error("error in demo test", e);
+            bizLogger.error("error in demo test", e);
             return "error";
         }
     }
 
-    private Logger logbackLogger = LoggerFactory.getLogger(ManualController.class);
-    @RequestMapping("/test")
+    @RequestMapping("/testLog")
     @ResponseBody
     public String generateSolution(){
-        logbackLogger.info("====logback====: " + new Date());
+        bizLogger.info("====logback webjob====: " + new Date());
         return "success";
     }
 }

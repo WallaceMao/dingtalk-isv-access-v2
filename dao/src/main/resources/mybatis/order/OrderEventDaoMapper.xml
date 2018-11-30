@@ -106,6 +106,12 @@
 			WHERE id=#{id}
 		 ]]>
     </select>
+    <select id="getOrderEventByOrderId" resultMap="orderEventMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_order_event
+        <![CDATA[
+			WHERE order_id=#{orderId}
+		 ]]>
+    </select>
     <select id="getLatestOrderEventByCorpId" resultMap="orderEventMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_order_event
         <![CDATA[

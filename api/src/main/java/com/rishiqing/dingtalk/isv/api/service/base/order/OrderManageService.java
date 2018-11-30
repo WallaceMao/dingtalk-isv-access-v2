@@ -13,6 +13,8 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 public interface OrderManageService {
     OrderEventVO getOrderEventById(Long id);
 
+    OrderEventVO getOrderEventByOrderId(Long orderId);
+
     OrderEventVO getOrderEventByCorpIdAndLatest(String corpId);
 
     OrderStatusVO getOrderStatusByOrderId(Long orderId);
@@ -24,4 +26,6 @@ public interface OrderManageService {
     void saveOrUpdateCorpChargeStatus(CorpChargeStatusVO corpChargeStatusDO);
 
     void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventVO rsqPushEvent);
+
+    void saveOrUpdateOrderEvent(OrderEventVO orderEvent);
 }

@@ -39,6 +39,13 @@ public class OrderManageServiceImpl implements OrderManageService {
     }
 
     @Override
+    public OrderEventVO getOrderEventByOrderId(Long orderId) {
+        return OrderConverter.orderEventDO2OrderEventVO(
+                orderEventDao.getOrderEventByOrderId(orderId)
+        );
+    }
+
+    @Override
     public OrderEventVO getOrderEventByCorpIdAndLatest(String corpId) {
         return OrderConverter.orderEventDO2OrderEventVO(
                 orderEventDao.getLatestOrderEventByCorpId(corpId)
@@ -77,6 +84,13 @@ public class OrderManageServiceImpl implements OrderManageService {
     public void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventVO rsqPushEvent) {
         orderRsqPushEventDao.saveOrUpdateOrderRsqPushEvent(
                 OrderConverter.orderRsqPushEventVO2OrderRsqPushEventDO(rsqPushEvent)
+        );
+    }
+
+    @Override
+    public void saveOrUpdateOrderEvent(OrderEventVO orderEvent) {
+        orderEventDao.saveOrUpdateOrderEvent(
+                OrderConverter.orderEventVO2OrderEventDO(orderEvent)
         );
     }
 }

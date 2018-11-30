@@ -20,6 +20,13 @@ public interface OrderEventDao {
 	public OrderEventDO getOrderEventById(@Param("id") Long id);
 
 	/**
+	 * 根据order查询event
+	 * @param orderId
+	 * @return
+	 */
+	OrderEventDO getOrderEventByOrderId(@Param("orderId") Long orderId);
+
+	/**
 	 * 获取一个公司最近一条orderEvent记录
 	 * @param corpId
 	 * @return

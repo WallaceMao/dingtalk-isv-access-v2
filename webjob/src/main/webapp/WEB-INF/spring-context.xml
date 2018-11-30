@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/util
-       http://www.springframework.org/schema/util/spring-util.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -18,18 +15,9 @@
         </property>
     </bean>
 
-    <!--<util:map id="isvGlobal">-->
-        <!--<entry key="suiteKey" value="${isv.suite.key}" />-->
-        <!--<entry key="appId" value="${isv.app.id}" />-->
-    <!--</util:map>-->
-
     <!--webjob需要启动quartz-->
-    <import resource="spring-ali-job.xml" />
+    <import resource="spring-alijob.xml" />
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
     <import resource="classpath:spring-queue-ali.xml" />
-    <import resource="classpath:spring-dingpush.xml" />
-
-    <!--加载功倍api-->
-    <import resource="classpath:workbei/wb-spring-beans-alimq.xml" />
 </beans>

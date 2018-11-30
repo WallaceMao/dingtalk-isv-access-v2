@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.eventbus.AsyncEventBus;
 import com.rishiqing.dingtalk.biz.constant.SystemConstant;
+import com.rishiqing.dingtalk.biz.converter.order.OrderConverter;
 import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
@@ -11,6 +12,8 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderRsqPushEventVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderSpecItemVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
@@ -94,6 +97,31 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         for(CorpStaffVO staffVO : staffList){
             queueService.sendToGenerateStaffSolution(corpId, staffVO.getUserId());
         }
+    }
+
+    @Override
+    public void doRsqCharge(OrderStatusVO orderStatus){
+        if(orderStatus == null){
+            throw new BizRuntimeException("order status is null");
+        }
+        String corpId = orderStatus.getBuyCorpId();
+
+        // 保存OrderRsqPushEventVO
+        OrderRsqPushEventVO rsqPushEvent = OrderConverter.orderStatusVO2OrderRsqPushEventVO(orderStatus);
+        rsqPushEvent.setStatus(SystemConstant.ORDER_PUSH_STATUS_PENDING);
+        rsqPushEvent.setRsqTeamId(Long.valueOf(corpId));
+        orderManageService.saveOrUpdateOrderRsqPushEvent(rsqPushEvent);
+
+        //发送后台接口进行充值
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        OrderSpecItemVO specItemVO = orderManageService.getOrderSpecItemByGoodsCodeAndItemCode(
+                orderStatus.getGoodsCode(),
+                orderStatus.getItemCode());
+        rsqRequestHelper.doCharge(suiteVO, specItemVO, rsqPushEvent);
+
+        // 更新OrderRsqPushEventDO的状态为success
+        rsqPushEvent.setStatus(SystemConstant.ORDER_PUSH_STATUS_SUCCESS);
+        orderManageService.saveOrUpdateOrderRsqPushEvent(rsqPushEvent);
     }
 
     /**

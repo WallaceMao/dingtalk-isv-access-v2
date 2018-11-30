@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:amq="http://activemq.apache.org/schema/core"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://activemq.apache.org/schema/core
-       http://activemq.apache.org/schema/core/activemq-core.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:spring-dao-ding-push.xml" />
 
     <bean id="openGlobalLockManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenGlobalLockManageServiceImpl" />
     <bean id="openSyncBizDataManageService" class="com.rishiqing.dingtalk.biz.service.base.dingpush.impl.OpenSyncBizDataManageServiceImpl" />
-
     <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl" />
     <bean id="openSyncBizDataBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl" />
+    <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl" />
 
     <!--相关的用来处理钉钉推送过来的消息的处理器-->
     <bean id="suiteTicketSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.SuiteTicketSyncActionHandler" />
@@ -32,6 +29,8 @@
     <bean id="orgDeptRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptRemoveSyncActionHandler" />
     <bean id="orgUpdateSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgUpdateSyncActionHandler" />
     <bean id="orgRemoveSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgRemoveSyncActionHandler" />
+    <bean id="marketOrderSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderSyncActionHandler" />
+    <bean id="marketOrderCancelSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderCancelSyncActionHandler" />
     <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.DefaultSyncActionHandler" />
 
     <bean id="syncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.SyncActionManager">
@@ -57,7 +56,7 @@
                 <entry key="org_remove" value-ref="orgRemoveSyncActionHandler" />
                 <entry key="org_role_add" value-ref="defaultSyncActionHandler" />
                 <entry key="org_role_modify" value-ref="defaultSyncActionHandler" />
-                <entry key="market_order" value-ref="defaultSyncActionHandler" />
+                <entry key="market_order" value-ref="marketOrderSyncActionHandler" />
                 <entry key="market_order_cancel" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_add_org" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_modify_org" value-ref="defaultSyncActionHandler" />

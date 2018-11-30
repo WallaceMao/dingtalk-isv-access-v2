@@ -2,6 +2,7 @@ package com.rishiqing.self.api.service;
 
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
 
 /**
  * @author Wallace Mao
@@ -15,6 +16,8 @@ public interface RsqAccountBizService {
     void deleteRsqDepartment(CorpDepartmentVO departmentVO);
 
     void createRsqTeamStaff(CorpStaffVO staffVO);
+
+    void doRsqCharge(OrderStatusVO orderStatus);
 
     void createRsqDepartment(CorpDepartmentVO departmentVO);
 

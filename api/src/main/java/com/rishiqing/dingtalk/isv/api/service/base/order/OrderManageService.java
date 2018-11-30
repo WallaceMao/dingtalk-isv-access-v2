@@ -11,6 +11,8 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
  * Date: 2018-11-08 0:02
  */
 public interface OrderManageService {
+    OrderEventVO getOrderEventById(Long id);
+
     OrderEventVO getOrderEventByCorpIdAndLatest(String corpId);
 
     OrderStatusVO getOrderStatusByOrderId(Long orderId);

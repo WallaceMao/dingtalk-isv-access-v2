@@ -6,6 +6,8 @@ import com.google.common.eventbus.Subscribe;
 import com.rishiqing.dingtalk.biz.service.biz.impl.ChargeBizService;
 import com.rishiqing.dingtalk.isv.api.event.EventListener;
 import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
+import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
+import com.rishiqing.dingtalk.isv.api.service.base.order.OrderManageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class OrderChargeEventListener implements EventListener {
 
     @Autowired
     private ChargeBizService chargeBizService;
+    @Autowired
+    private OrderManageService orderManageService;
 
     /**
      * 企业授权套件临时授权码异步逻辑
@@ -31,8 +35,9 @@ public class OrderChargeEventListener implements EventListener {
             bizLogger.info("listenOrderChargeEvent: " + JSON.toJSONString(event));
             String suiteKey = event.getSuiteKey();
             Long eventId = event.getOrderEventId();
+            OrderEventVO orderEventVO = orderManageService.getOrderEventById(eventId);
             //  充值
-//            chargeBizService.charge(suiteKey, eventId);
+            chargeBizService.charge(orderEventVO);
         }catch (Exception e){
             bizLogger.error("OrderChargeEvent: " + event, e);
         }

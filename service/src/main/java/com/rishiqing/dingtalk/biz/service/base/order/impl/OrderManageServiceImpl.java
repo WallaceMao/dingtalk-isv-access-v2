@@ -32,6 +32,13 @@ public class OrderManageServiceImpl implements OrderManageService {
 
 
     @Override
+    public OrderEventVO getOrderEventById(Long id) {
+        return OrderConverter.orderEventDO2OrderEventVO(
+                orderEventDao.getOrderEventById(id)
+        );
+    }
+
+    @Override
     public OrderEventVO getOrderEventByCorpIdAndLatest(String corpId) {
         return OrderConverter.orderEventDO2OrderEventVO(
                 orderEventDao.getLatestOrderEventByCorpId(corpId)

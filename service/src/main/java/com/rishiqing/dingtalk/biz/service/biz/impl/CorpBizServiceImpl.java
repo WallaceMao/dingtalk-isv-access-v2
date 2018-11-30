@@ -8,6 +8,7 @@ import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.biz.service.util.DeptService;
 import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgSyncEvent;
+import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
@@ -51,6 +52,8 @@ public class CorpBizServiceImpl implements CorpBizService {
     private CorpStaffManageService corpStaffManageService;
     @Autowired
     private EventBus asyncCorpOrgSyncEventBus;
+    @Autowired
+    private AsyncEventBus asyncOrderChargeEventBus;
 
     /**
      * 激活应用。
@@ -152,8 +155,15 @@ public class CorpBizServiceImpl implements CorpBizService {
 
     /**
      * 进行充值
-     * @param orderId
+     * @param orderEvent
      */
     @Override
-    public void chargeCorpApp(Long orderId){}
+    public void chargeCorpApp(OrderEventVO orderEvent){
+        //  使用eventBus异步调用
+        OrderChargeEvent event = new OrderChargeEvent();
+        event.setSuiteKey(orderEvent.getSuiteKey());
+        event.setOrderEventId(orderEvent.getId());
+
+        asyncOrderChargeEventBus.post(event);
+    }
 }

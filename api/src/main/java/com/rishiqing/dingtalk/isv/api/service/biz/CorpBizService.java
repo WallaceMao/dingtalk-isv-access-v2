@@ -17,5 +17,6 @@ public interface CorpBizService {
 
     void prepareChargeCorpApp(OrderEventVO orderEvent);
 
-    void chargeCorpApp(Long orderId);
+
+    void chargeCorpApp(OrderEventVO orderEvent);
 }

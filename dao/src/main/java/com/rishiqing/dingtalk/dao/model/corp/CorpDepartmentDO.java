@@ -44,6 +44,8 @@ public class CorpDepartmentDO {
     private String deptManagerUseridList;
     //  钉钉与日事清绑定的id
     private String rsqId;
+    //  用来存储可见范围版本的字段，每次用户修改可见范围都会更新该字段为修改时的时间戳
+    private Long scopeVersion;
 
     public Long getId() {
         return id;
@@ -197,6 +199,14 @@ public class CorpDepartmentDO {
         this.rsqId = rsqId;
     }
 
+    public Long getScopeVersion() {
+        return scopeVersion;
+    }
+
+    public void setScopeVersion(Long scopeVersion) {
+        this.scopeVersion = scopeVersion;
+    }
+
     @Override
     public String toString() {
         return "CorpDepartmentDO{" +
@@ -219,6 +229,7 @@ public class CorpDepartmentDO {
                 ", orgDeptOwner='" + orgDeptOwner + '\'' +
                 ", deptManagerUseridList='" + deptManagerUseridList + '\'' +
                 ", rsqId='" + rsqId + '\'' +
+                ", scopeVersion=" + scopeVersion +
                 '}';
     }
 }

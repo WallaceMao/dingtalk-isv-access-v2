@@ -47,25 +47,70 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
     }
 
     @Override
+    public void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId) {
+        corpDepartmentDao.deleteCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
+    }
+
+    @Override
+    public void deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(String corpId, Long scopeVersion) {
+        corpDepartmentDao.deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
+    }
+
+    @Override
     public List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentId(String corpId, Long deptId) {
         return CorpDepartmentConverter.corpDepartmentDOList2CorpDepartmentVOList(
                 corpDepartmentDao.getCorpDepartmentListByParentId(corpId, deptId)
         );
     }
 
+    @Override
+    public CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion){
+        return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(
+                corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(corpId, deptId, scopeVersion)
+        );
+    }
+
+    @Override
+    public List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersion(
+            String corpId, Long scopeVersion){
+        return CorpDepartmentConverter.corpDepartmentDOList2CorpDepartmentVOList(
+                corpDepartmentDao.getCorpDepartmentListByCorpIdAndScopeVersion(corpId, scopeVersion)
+        );
+    }
+
+    @Override
+    public List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersionLessThan(
+            String corpId, Long scopeVersion){
+        return CorpDepartmentConverter.corpDepartmentDOList2CorpDepartmentVOList(
+                corpDepartmentDao.getCorpDepartmentListByCorpIdAndScopeVersionLessThan(corpId, scopeVersion)
+        );
+    }
+
+    @Override
+    public List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion) {
+        return CorpDepartmentConverter.corpDepartmentDOList2CorpDepartmentVOList(
+                corpDepartmentDao.getCorpDepartmentListByParentIdAndScopeVersion(corpId, deptId, scopeVersion)
+        );
+    }
+
     /**
      * 获取一个公司中的所有部门中的最顶层的部门
      * @param corpId
+     * @param scopeVersion
      * @return
      */
     @Override
-    public CorpDepartmentVO getTopCorpDepartment(String corpId){
-        List<CorpDepartmentDO> deptDOList = corpDepartmentDao.getCorpDepartmentListByCorpIdLimit(corpId, 1L);
+    public CorpDepartmentVO getTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion){
+        List<CorpDepartmentDO> deptDOList = corpDepartmentDao.getCorpDepartmentListByCorpIdAndScopeVersionLimit(
+                corpId, scopeVersion, 1L);
         //  如果找不到部门，说明该公司没有部门，那么顶层部门为空
         if(deptDOList == null || deptDOList.size() == 0){
             return null;
         }
-        CorpDepartmentDO rootDept = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptId(corpId, 1L);
+        CorpDepartmentDO rootDept = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
+                corpId, 1L, scopeVersion);
         //  根据钉钉的约定，公司的根部门的id为1，那么如果能找到根部门，那么直接将根部门作为顶层部门返回
         if(rootDept != null){
             return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(rootDept);
@@ -82,7 +127,8 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
             if(currentDept.getParentId() == null){
                 break;
             }
-            CorpDepartmentDO parentDept  = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptId(corpId, currentDept.getParentId());
+            CorpDepartmentDO parentDept  = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
+                    corpId, currentDept.getParentId(), scopeVersion);
             //  如果parentDept为空，那么跳出循环，currentDpet就是topDept
             if(parentDept == null){
                 break;
@@ -94,10 +140,5 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
             }
         }
         return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(currentDept);
-    }
-
-    @Override
-    public void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId) {
-        corpDepartmentDao.deleteCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
     }
 }

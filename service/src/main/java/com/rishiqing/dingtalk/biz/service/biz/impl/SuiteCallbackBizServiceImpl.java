@@ -1,17 +1,22 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.google.common.eventbus.AsyncEventBus;
+import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteCallbackBizService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -26,6 +31,8 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
     private CorpSuiteAuthManageService corpSuiteAuthManageService;
     @Autowired
     private AsyncEventBus asyncCorpSuiteAuthEventBus;
+    @Autowired
+    private SuiteRequestHelper suiteRequestHelper;
 
     /**
      * 接受到推送过来的suite ticket
@@ -61,7 +68,14 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
      */
     @Override
     public void receiveChangeAuth(String authCorpId){
-        corpBizService.changeCorpApp(authCorpId);
+        SuiteVO suiteVO = suiteManageService.getSuite();
+        SuiteTokenVO suiteTokenVO = suiteManageService.getSuiteToken();
+        SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
+        //  调用接口获取授权信息
+        CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, authCorpId);
+        CorpAuthScopeInfoVO scopeInfoVO = suiteRequestHelper.getCorpAuthScopeInfo(suiteVO, suiteTokenVO);
+        corpAuthInfoVO.setAuthScope(scopeInfoVO);
+        corpBizService.changeCorpApp(corpAuthInfoVO, new Date().getTime());
     }
 
     /**

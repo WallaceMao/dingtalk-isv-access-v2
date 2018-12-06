@@ -24,16 +24,26 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
     }
 
     @Override
-    public CorpStaffVO getCorpStaffByCorpIdAndUserId(String corpId, String userId) {
-        return CorpStaffConverter.corpStaffDO2CorpStaffVO(
-                corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, userId)
+    public void updateRsqInfo(CorpStaffVO staffVO) {
+        corpStaffDao.updateCorpStaffRsqInfo(
+                CorpStaffConverter.corpStaffVO2CorpStaffDO(staffVO)
         );
     }
 
     @Override
-    public void updateRsqInfo(CorpStaffVO staffVO) {
-        corpStaffDao.updateCorpStaffRsqInfo(
-                CorpStaffConverter.corpStaffVO2CorpStaffDO(staffVO)
+    public void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId) {
+        corpStaffDao.deleteCorpStaffByCorpIdAndUserId(corpId, userId);
+    }
+
+    @Override
+    public void deleteCorpStaffByCorpIdAndScopeVersionLessThan(String corpId, Long lessThanScopeVersion){
+        corpStaffDao.deleteCorpStaffByCorpIdAndScopeVersionLessThan(corpId, lessThanScopeVersion);
+    }
+
+    @Override
+    public CorpStaffVO getCorpStaffByCorpIdAndUserId(String corpId, String userId) {
+        return CorpStaffConverter.corpStaffDO2CorpStaffVO(
+                corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, userId)
         );
     }
 
@@ -52,7 +62,35 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
     }
 
     @Override
-    public void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId) {
-        corpStaffDao.deleteCorpStaffByCorpIdAndUserId(corpId, userId);
+    public CorpStaffVO getCorpStaffByCorpIdAndUserIdAndScopeVersion(
+            String corpId, String userId, Long scopeVersion) {
+        return CorpStaffConverter.corpStaffDO2CorpStaffVO(
+                corpStaffDao.getCorpStaffByCorpIdAndUserIdAndScopeVersion(corpId, userId, scopeVersion)
+        );
     }
+
+    @Override
+    public List<CorpStaffVO> getCorpStaffListByCorpIdAndScopeVersion(
+            String corpId, Long scopeVersion) {
+        return CorpStaffConverter.corpStaffDOList2CorpStaffVOList(
+                corpStaffDao.getCorpStaffListByCorpIdAndScopeVersion(corpId, scopeVersion)
+        );
+    }
+
+    @Override
+    public List<CorpStaffVO> getCorpStaffListByCorpIdAndScopeVersionLessThan(
+            String corpId, Long scopeVersion) {
+        return CorpStaffConverter.corpStaffDOList2CorpStaffVOList(
+                corpStaffDao.getCorpStaffListByCorpIdAndScopeVersionLessThan(corpId, scopeVersion)
+        );
+    }
+
+    @Override
+    public List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
+            String corpId, Boolean isAdmin, Long scopeVersion) {
+        return CorpStaffConverter.corpStaffDOList2CorpStaffVOList(
+                corpStaffDao.getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(corpId, isAdmin, scopeVersion)
+        );
+    }
+
 }

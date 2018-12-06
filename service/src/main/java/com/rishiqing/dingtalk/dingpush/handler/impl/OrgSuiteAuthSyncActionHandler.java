@@ -17,8 +17,13 @@ public class OrgSuiteAuthSyncActionHandler implements SyncActionHandler {
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
         JSONObject json = JSONObject.parseObject(data.getBizData());
+        Long timestamp = 0L;
+        if(data.getGmtModified() != null){
+            timestamp = data.getGmtModified().getTime();
+        }
         corpBizService.activateCorpApp(
-                SuiteDbCheckConverter.json2CorpSuiteAuthInfo(json)
+                SuiteDbCheckConverter.json2CorpSuiteAuthInfo(json),
+                timestamp
         );
     }
 }

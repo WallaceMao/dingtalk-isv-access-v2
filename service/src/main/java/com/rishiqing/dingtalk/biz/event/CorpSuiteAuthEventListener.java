@@ -42,7 +42,7 @@ public class CorpSuiteAuthEventListener implements EventListener {
             CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
             corpInfo.setCorpId(corpId);
             corpAuthInfo.setAuthCorpInfo(corpInfo);
-            corpBizService.activateCorpApp(corpAuthInfo);
+            corpBizService.activateCorpApp(corpAuthInfo, 0L);
         }catch (Exception e){
             //  加入失败job,失败任务会重试
             failBizService.saveCorpSuiteAuthFail(corpSuiteAuthEvent);

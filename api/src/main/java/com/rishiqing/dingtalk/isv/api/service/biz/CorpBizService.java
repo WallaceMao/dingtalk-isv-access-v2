@@ -2,16 +2,15 @@ package com.rishiqing.dingtalk.isv.api.service.biz;
 
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 
 /**
  * @author Wallace Mao
  * Date: 2018-11-03 17:42
  */
 public interface CorpBizService {
-    void activateCorpApp(CorpAuthInfoVO corpAuthInfo);
+    void activateCorpApp(CorpAuthInfoVO corpAuthInfo, Long timestamp);
 
-    void changeCorpApp(String corpId);
+    void changeCorpApp(CorpAuthInfoVO corpAuthInfo, Long timestamp);
 
     void relieveCorpApp(String corpId);
 

@@ -51,6 +51,8 @@ public class CorpStaffConverter {
         staffDO.setRsqLoginToken(staffVO.getRsqLoginToken());
         staffDO.setRsqPassword(staffVO.getRsqPassword());
         staffDO.setUnionId(staffVO.getUnionId());
+        staffDO.setScopeVersion(staffVO.getScopeVersion());
+
         return staffDO;
     }
 
@@ -89,6 +91,8 @@ public class CorpStaffConverter {
         staffVO.setRsqPassword(staffDO.getRsqPassword());
         staffVO.setRsqLoginToken(staffDO.getRsqLoginToken());
         staffVO.setUnionId(staffDO.getUnionId());
+        staffVO.setScopeVersion(staffDO.getScopeVersion());
+
         return staffVO;
     }
 

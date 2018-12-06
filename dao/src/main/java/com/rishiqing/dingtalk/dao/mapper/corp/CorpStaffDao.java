@@ -16,21 +16,21 @@ public interface CorpStaffDao {
      * 保持公司用户信息
      * @param corpStaffDO
      */
-    public void saveOrUpdateCorpStaff(CorpStaffDO corpStaffDO);
+    void saveOrUpdateCorpStaff(CorpStaffDO corpStaffDO);
 
     /**
      * 更新第三方应用id的信息
      * @param corpStaffDO
      * @return
      */
-    public void updateCorpStaffRsqInfo(CorpStaffDO corpStaffDO);
+    void updateCorpStaffRsqInfo(CorpStaffDO corpStaffDO);
 
     /**
      * 更新unionId
      * @param corpStaffDO
      * @return
      */
-    public void updateCorpStaffUnionId(CorpStaffDO corpStaffDO);
+    void updateCorpStaffUnionId(CorpStaffDO corpStaffDO);
 
     /**
      * 更新用户是否为管理员
@@ -40,7 +40,7 @@ public interface CorpStaffDao {
      * corpStaffDO.sysLevel: 必要的
      * @param corpStaffDO
      */
-    public void updateCorpStaffIsAdmin(CorpStaffDO corpStaffDO);
+    void updateCorpStaffIsAdmin(CorpStaffDO corpStaffDO);
 
     /**
      * 根据corpId和userId删除用户
@@ -48,7 +48,19 @@ public interface CorpStaffDao {
      * @param userId
      * @return
      */
-    public void deleteCorpStaffByCorpIdAndUserId(@Param("corpId") String corpId, @Param("userId") String userId);
+    void deleteCorpStaffByCorpIdAndUserId(
+            @Param("corpId") String corpId,
+            @Param("userId") String userId);
+
+    /**
+     * 删除某个企业中scopeVersion小于指定数值的corpStaff记录
+     * @param corpId
+     * @param lessThanScopeVersion
+     */
+    void deleteCorpStaffByCorpIdAndScopeVersionLessThan(
+            @Param("corpId") String corpId,
+            @Param("lessThanScopeVersion") Long lessThanScopeVersion
+    );
 
     /**
      * 根据corpId和userId查询用户
@@ -56,39 +68,83 @@ public interface CorpStaffDao {
      * @param userId
      * @return
      */
-    public CorpStaffDO getCorpStaffByCorpIdAndUserId(@Param("corpId") String corpId, @Param("userId") String userId);
+    CorpStaffDO getCorpStaffByCorpIdAndUserId(
+            @Param("corpId") String corpId,
+            @Param("userId") String userId);
 
     /**
      * 根据corpId查询用户列表
      * @param corpId
      * @return
      */
-    public List<CorpStaffDO> getCorpStaffListByCorpId(@Param("corpId") String corpId);
+    List<CorpStaffDO> getCorpStaffListByCorpId(
+            @Param("corpId") String corpId);
 
     /**
      * 根据isAmdin属性获取用户
      * @param isAdmin
      * @return
      */
-    public List<CorpStaffDO> getCorpStaffListByCorpIdAndIsAdmin(@Param("corpId") String corpId, @Param("isAdmin") Boolean isAdmin);
+    List<CorpStaffDO> getCorpStaffListByCorpIdAndIsAdmin(
+            @Param("corpId") String corpId,
+            @Param("isAdmin") Boolean isAdmin);
 
     /**
      * 根据corpId查询用户id列表
      * @param corpId
      * @return
      */
-    public List<String> getCorpStaffUserIdListByCorpId(@Param("corpId") String corpId);
+    List<String> getCorpStaffUserIdListByCorpId(
+            @Param("corpId") String corpId);
 
     /**
      * 保存用户的删除信息，当用户被删除后，为保存用户与日事清的关联信息，需要将用于移入删除表
      * @param corpStaffDO
      */
-    public void saveCorpStaffDeleted(CorpStaffDO corpStaffDO);
+    void saveCorpStaffDeleted(CorpStaffDO corpStaffDO);
 
-    public List<CorpStaffDO> getPageCorpStaffListByCorpId(
+    List<CorpStaffDO> getPageCorpStaffListByCorpId(
             @Param("corpId") String corpId,
             @Param("limit") Long limit,
             @Param("offset") Long offset);
+
+    /**
+     * 根据corpId和userId查询用户
+     * @param corpId
+     * @param userId
+     * @return
+     */
+    CorpStaffDO getCorpStaffByCorpIdAndUserIdAndScopeVersion(
+            @Param("corpId") String corpId,
+            @Param("userId") String userId,
+            @Param("scopeVersion") Long scopeVersion
+    );
+
+    /**
+     * 根据corpId查询用户列表
+     * @param corpId
+     * @return
+     */
+    List<CorpStaffDO> getCorpStaffListByCorpIdAndScopeVersion(
+            @Param("corpId") String corpId,
+            @Param("scopeVersion") Long scopeVersion
+    );
+
+    /**
+     * 根据isAmdin属性获取用户
+     * @param isAdmin
+     * @return
+     */
+    List<CorpStaffDO> getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
+            @Param("corpId") String corpId,
+            @Param("isAdmin") Boolean isAdmin,
+            @Param("scopeVersion") Long scopeVersion
+    );
+
+    List<CorpStaffDO> getCorpStaffListByCorpIdAndScopeVersionLessThan(
+            @Param("corpId") String corpId,
+            @Param("scopeVersion") Long scopeVersion
+    );
 
 //    /**
 //     * 根据staff的rsqId获取到userId

@@ -7,7 +7,6 @@ import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageServ
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,13 +28,14 @@ public class StaffService {
      * 根据userIdList中的id，从钉钉处获取用户，然后保存到本地
      * @param corpId
      * @param userIdList
+     * @param scopeVersion
      */
-    public void fetchAndSaveCorpStaffList(String corpId, List<String> userIdList){
+    public void fetchAndSaveCorpStaffList(String corpId, List<String> userIdList, Long scopeVersion){
         if(userIdList == null){
             return;
         }
         for(String userId : userIdList){
-            this.fetchAndSaveCorpStaff(corpId, userId);
+            this.fetchAndSaveCorpStaff(corpId, userId, scopeVersion);
         }
     }
 
@@ -44,10 +44,10 @@ public class StaffService {
      * 2.  循环保存部门下的所有人
      * @param corpId
      */
-    public void fetchAndSaveCorpDepartmentStaff(String corpId){
-        List<CorpDepartmentVO> deptList = corpDepartmentManageService.getCorpDepartmentListByCorpId(corpId);
+    public void fetchAndSaveAllCorpDepartmentStaff(String corpId, Long scopeVersion){
+        List<CorpDepartmentVO> deptList = corpDepartmentManageService.getCorpDepartmentListByCorpIdAndScopeVersion(corpId, scopeVersion);
         for(CorpDepartmentVO dept : deptList){
-            this.fetchAndSaveCorpDepartmentStaff(corpId, dept.getDeptId());
+            this.fetchAndSaveCorpDepartmentStaff(corpId, dept.getDeptId(), scopeVersion);
         }
     }
 
@@ -61,12 +61,13 @@ public class StaffService {
         return corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, staff.getUserId());
     }
 
-    private void fetchAndSaveCorpStaff(String corpId, String userId){
+    private void fetchAndSaveCorpStaff(String corpId, String userId, Long scopeVersion){
         CorpStaffVO staff = corpRequestHelper.getCorpStaff(corpId, userId);
+        staff.setScopeVersion(scopeVersion);
         corpStaffManageService.saveOrUpdateCorpStaff(staff);
     }
 
-    private void fetchAndSaveCorpDepartmentStaff(String corpId, Long deptId){
+    private void fetchAndSaveCorpDepartmentStaff(String corpId, Long deptId, Long scopeVersion){
         boolean hasMore = true;
         long offset = 0;
         while(hasMore){
@@ -84,6 +85,7 @@ public class StaffService {
                     corpStaff = this.mergeDepartmentProperties(dbStaff, corpStaff);
 
                 }
+                corpStaff.setScopeVersion(scopeVersion);
                 corpStaffManageService.saveOrUpdateCorpStaff(corpStaff);
             }
 

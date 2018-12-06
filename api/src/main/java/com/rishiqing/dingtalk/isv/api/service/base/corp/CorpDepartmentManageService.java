@@ -17,9 +17,23 @@ public interface CorpDepartmentManageService {
 
     void updateRsqInfo(CorpDepartmentVO departmentVO);
 
+    void deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(String corpId, Long scopeVersion);
+
     List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentId(String corpId, Long deptId);
 
-    CorpDepartmentVO getTopCorpDepartment(String corpId);
+    CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersion(
+            String corpId, Long scopeVersion);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndScopeVersionLessThan(
+            String corpId, Long scopeVersion);
+
+    List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentIdAndScopeVersion(
+            String corpId, Long deptId, Long scopeVersion);
+
+    CorpDepartmentVO getTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion);
 
     void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
 }

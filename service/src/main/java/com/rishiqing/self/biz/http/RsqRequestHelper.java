@@ -10,8 +10,6 @@ import com.rishiqing.self.api.model.RsqCorp;
 import com.rishiqing.self.api.model.RsqDepartment;
 import com.rishiqing.self.api.model.RsqUser;
 
-import java.util.Map;
-
 /**
  * @author Wallace Mao
  * Date: 2018-11-07 21:18
@@ -21,13 +19,13 @@ public interface RsqRequestHelper {
 
     RsqDepartment createDepartment(SuiteVO suiteVO, CorpVO corpVO, CorpDepartmentVO departmentVO, CorpDepartmentVO parentCorpDepartmentVO);
 
-    RsqDepartment updateDepartment(SuiteVO suiteVO, CorpDepartmentVO departmentVO, CorpDepartmentVO parentCorpDepartmentVO);
+    RsqDepartment updateDepartment(SuiteVO suiteVO, CorpDepartmentVO departmentVO);
 
     RsqDepartment deleteDepartment(SuiteVO suiteVO, CorpDepartmentVO departmentVO);
 
-    RsqUser createUser(SuiteVO suiteVO, CorpStaffVO staffVO, CorpVO corpVO, Map others);
+    RsqUser createUser(SuiteVO suiteVO, CorpStaffVO staffVO, CorpVO corpVO);
 
-    RsqUser updateUser(SuiteVO suiteVO, CorpStaffVO staffVO, Map others);
+    RsqUser updateUser(SuiteVO suiteVO, CorpStaffVO staffVO);
 
     RsqUser setUserAdmin(SuiteVO suiteVO, CorpStaffVO staffVO);
 

@@ -197,7 +197,7 @@
     <delete id="deleteCorpStaffByCorpIdAndScopeVersionLessThan">
         DELETE FROM isv_corp_staff
         <![CDATA[
-        WHERE corp_id = #{corpId} AND user_id = #{userId} AND scope_version < #{lessThanScopeVersion}
+        WHERE corp_id = #{corpId} AND scope_version < #{lessThanScopeVersion}
         ]]>
     </delete>
 

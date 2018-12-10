@@ -28,12 +28,16 @@
         </dependency>
 
         <!--taobao sdk-->
+        <!--<dependency>-->
+            <!--<groupId>com.dingtalk.open</groupId>-->
+            <!--<artifactId>taobao-sdk-java</artifactId>-->
+            <!--<version>1.0</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20181101.jar</systemPath>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.dingtalk.open</groupId>
             <artifactId>taobao-sdk-java</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20181101.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -141,4 +145,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!--<configuration>-->
+                    <!--<release>11</release>-->
+                <!--</configuration>-->
+            </plugin>
+        </plugins>
+    </build>
 </project>

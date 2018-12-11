@@ -19,6 +19,8 @@ public interface RsqAccountBizService {
 
     void syncAllChanged(String corpId);
 
+    void updateAllCorpAdmin(String corpId, Long scopeVersion);
+
     void doRsqCharge(OrderStatusVO orderStatus);
 
     void createRsqDepartment(CorpDepartmentVO departmentVO);

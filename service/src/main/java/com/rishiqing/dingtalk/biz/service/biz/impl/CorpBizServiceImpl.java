@@ -179,9 +179,13 @@ public class CorpBizServiceImpl implements CorpBizService {
         //  6.  根据可见范围获取成员信息。获取的成员信息有两部分：
         // （1）第一部分是可见范围内的部门所包含的成员信息
         // （2）第二部分是可见范围内的成员列表所包含的成员信息
-        staffService.fetchAndSaveAllCorpDepartmentStaff(corpId, timestamp);
-        staffService.fetchAndSaveCorpStaffList(corpId, scopes.getAuthedUser(), timestamp);
-
+        long userCount = staffService.fetchAndSaveAllCorpDepartmentStaff(corpId, timestamp);
+        List<String> authUserList = scopes.getAuthedUser();
+        if (authUserList != null) {
+            userCount = userCount + authUserList.size();
+        }
+        staffService.fetchAndSaveCorpStaffList(corpId, authUserList, timestamp);
+        corpManageService.saveOrUpdateCorpStatisticUserCount(corpId, userCount);
 
         //  7.  处理授权方管理员，谁开通的日事清，就以谁作为创建者。
         CorpAuthInfoVO.AuthUserInfo authUserInfo = corpAuthInfo.getAuthUserInfo();

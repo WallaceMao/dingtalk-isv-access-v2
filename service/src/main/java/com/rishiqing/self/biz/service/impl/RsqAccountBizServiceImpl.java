@@ -97,6 +97,21 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         this.syncDeleted(corp);
     }
 
+    /**
+     * 设置corpId中的所有管理员
+     *
+     * @param corpId
+     * @return
+     */
+    @Override
+    public void updateAllCorpAdmin(String corpId, Long scopeVersion) {
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
+                corpId, true, scopeVersion);
+        for (CorpStaffVO staffVO : list) {
+            this.updateRsqTeamAdmin(staffVO);
+        }
+    }
+
     private void syncCreated(CorpVO corp) {
         //  1  创建日事清企业
         String corpId = corp.getCorpId();
@@ -115,8 +130,9 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  3  新建企业部门成员
         this.createAllCorpStaff(corpId, scopeVersion);
 
-        //  4  更新企业部门的管理员状态
-        this.updateAllCorpAdmin(corpId, scopeVersion);
+        // 4  fix bug:不能在这里更新企业部门的管理员状态。当用户修改可见范围时，旧的管理员如果也会被同步，而旧的管理员不在新的可见范围之内！
+        // 这里应该等create和delete都同步完成了之后再更新管理员状态
+        // this.updateAllCorpAdmin(corpId, scopeVersion);
     }
 
     private void syncDeleted(CorpVO corp) {
@@ -276,7 +292,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
     @Override
     public void removeRsqTeamStaff(CorpStaffVO corpStaffVO) {
-        if (null == corpStaffVO.getRsqUserId()) {
+        if (null == corpStaffVO) {
             return;
         }
         //  suiteKey
@@ -389,20 +405,6 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndScopeVersion(corpId, scopeVersion);
         for (CorpStaffVO staffVO : list) {
             this.createRsqTeamStaff(staffVO);
-        }
-    }
-
-    /**
-     * 设置corpId中的所有管理员
-     *
-     * @param corpId
-     * @return
-     */
-    private void updateAllCorpAdmin(String corpId, Long scopeVersion) {
-        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
-                corpId, true, scopeVersion);
-        for (CorpStaffVO staffVO : list) {
-            this.updateRsqTeamAdmin(staffVO);
         }
     }
 

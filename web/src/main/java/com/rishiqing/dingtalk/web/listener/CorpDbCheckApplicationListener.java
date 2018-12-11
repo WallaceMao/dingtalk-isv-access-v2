@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class CorpDbCheckApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
     private static final Logger bizLogger = LoggerFactory.getLogger(CorpDbCheckApplicationListener.class);
-    private static final Long EXECUTE_INIT_DELAY_MILLS = 300L;
-    private static final Long EXECUTE_DELAY_MILLS = 3000L;
+    private static final Long EXECUTE_INIT_DELAY_MILLS = 3000L;
+    private static final Long EXECUTE_DELAY_MILLS = 10000L;
     private static boolean isStarted = false;
 
     @Override

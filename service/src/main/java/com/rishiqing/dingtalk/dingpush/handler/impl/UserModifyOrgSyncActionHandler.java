@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
+import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -9,15 +10,15 @@ import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-10 14:33
  */
 public class UserModifyOrgSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
-    @Autowired
-    private RsqAccountBizService rsqAccountBizService;
+    private StaffService staffService;
     /**
      * @link https://open-doc.dingtalk.com/microapp/ln6dmh/troq7i
      subscribe_id  ： 套件suiteid加下划线0
@@ -37,10 +38,6 @@ public class UserModifyOrgSyncActionHandler implements SyncActionHandler {
         String corpId = data.getCorpId();
         CorpStaffVO corpStaffVO = SuiteDbCheckConverter.json2CorpStaff(json);
         corpStaffVO.setCorpId(corpId);
-        corpStaffManageService.saveOrUpdateCorpStaff(corpStaffVO);
-        corpStaffVO = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, corpStaffVO.getUserId());
-
-        //  然后推送到日事清
-        rsqAccountBizService.updateRsqTeamStaff(corpStaffVO);
+        staffService.updateAndPushCorpStaff(corpStaffVO, new Date().getTime());
     }
 }

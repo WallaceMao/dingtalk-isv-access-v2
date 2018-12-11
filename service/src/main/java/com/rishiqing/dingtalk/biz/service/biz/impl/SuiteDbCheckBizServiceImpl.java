@@ -1,6 +1,7 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.dingtalk.dingpush.handler.CorpSyncActionManager;
 import com.rishiqing.dingtalk.dingpush.handler.SuiteSyncActionManager;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -28,11 +29,13 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     private OpenSyncBizDataManageService openSyncBizDataManageService;
     @Autowired
     private SuiteSyncActionManager suiteSyncActionManager;
+    @Autowired
+    private CorpSyncActionManager corpSyncActionManager;
 
     @Override
     public void checkDingPushEvent(){
         OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_LOCK_KEY);
-        System.out.println(">>>>>>>>>>>>>>>>>" + lock);
+        // System.out.println(">>>>>>>>>>>>>>>>>" + lock);
         if(lock == null){
             return;
         }
@@ -65,7 +68,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     @Override
     public void checkDingMediumPushEvent() {
         OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_MEDIUM_LOCK_KEY);
-        System.out.println(">>>>>>>>>>>>>>>>>" + lock);
+        // System.out.println(">>>>>>>>>>>>>>>>>" + lock);
         if(lock == null){
             return;
         }
@@ -73,7 +76,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
-                    suiteSyncActionManager.handleSyncData(data);
+                    corpSyncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
                     bizLogger.error(LogFormatter.format(

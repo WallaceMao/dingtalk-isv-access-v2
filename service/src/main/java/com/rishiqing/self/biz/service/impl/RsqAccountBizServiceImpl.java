@@ -15,7 +15,6 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderRsqPushEventVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderSpecItemVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderStatusVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
@@ -29,11 +28,7 @@ import com.rishiqing.self.api.model.RsqUser;
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import com.rishiqing.self.biz.http.RsqRequestHelper;
 import org.apache.commons.lang.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.core.JmsTemplate;
 
 import java.util.*;
 
@@ -67,46 +62,98 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      * 1  公司信息
      * 2  部门信息
      * 3  部门成员信息
+     * 4  需要删除的部门的信息
+     * 5  需要删除的人员的信息
+     *
      * @return
      */
     @Override
-    public void pushCreateAll(String corpId){
+    public void syncAllCreated(String corpId) {
+        CorpVO corp = corpManageService.getCorpByCorpId(corpId);
+        boolean noRsqId = corp.getRsqId() == null;
+        //  1  将组织架构信息全部同步
+        this.syncCreated(corp);
+        //  2  将需要删除的组织结构信息同步到日事清
+        this.syncDeleted(corp);
+
+        if (noRsqId) {
+            //  2  当全部都同步成功后，发到corpAuthSuiteQueue队列中，由第三方异步处理
+            //  发送生成全公司解决方案的消息
+            queueService.sendToGenerateTeamSolution(corpId, null);
+            //  公司中的人逐个发送
+            List<CorpStaffVO> staffList = corpStaffManageService.getCorpStaffListByCorpId(corpId);
+            for (CorpStaffVO staffVO : staffList) {
+                queueService.sendToGenerateStaffSolution(corpId, staffVO.getUserId());
+            }
+        }
+    }
+
+    @Override
+    public void syncAllChanged(String corpId) {
+        CorpVO corp = corpManageService.getCorpByCorpId(corpId);
+        //  1  将新增的组织架构信息全部同步
+        this.syncCreated(corp);
+        //  2  将需要删除的组织结构信息同步到日事清
+        this.syncDeleted(corp);
+    }
+
+    /**
+     * 设置corpId中的所有管理员
+     *
+     * @param corpId
+     * @return
+     */
+    @Override
+    public void updateAllCorpAdmin(String corpId, Long scopeVersion) {
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
+                corpId, true, scopeVersion);
+        for (CorpStaffVO staffVO : list) {
+            this.updateRsqTeamAdmin(staffVO);
+        }
+    }
+
+    private void syncCreated(CorpVO corp) {
         //  1  创建日事清企业
-        this.createRsqTeam(corpId);
+        String corpId = corp.getCorpId();
+        Long scopeVersion = corp.getScopeVersion();
+        this.createRsqTeam(corp);
         this.checkOrderCharge(corpId);
         //  2  创建企业部门。创建部门时存在三种情况：
         //  a. 包含deptId为1的部门，即全公司的部门已经获取到。这种情况
         //  b. 不包含deptId为1的部门，但是是全公司部门的一个子集
         //  c. 不包含任何部门。当用户开通时选择仅管理员可见会出现这种情况
-        CorpDepartmentVO topDept = corpDepartmentManageService.getTopCorpDepartment(corpId);
-        if(topDept != null){
-            this.createRecursiveSubDepartment(topDept);
+        CorpDepartmentVO topDept = corpDepartmentManageService.getTopCorpDepartmentByScopeVersion(corpId, scopeVersion);
+        if (topDept != null) {
+            this.createRecursiveSubDepartment(topDept, scopeVersion);
         }
 
         //  3  新建企业部门成员
-        this.createAllCorpStaff(corpId);
+        this.createAllCorpStaff(corpId, scopeVersion);
 
-        //  4  更新企业部门的管理员状态
-        this.updateAllCorpAdmin(corpId);
+        // 4  fix bug:不能在这里更新企业部门的管理员状态。当用户修改可见范围时，旧的管理员如果也会被同步，而旧的管理员不在新的可见范围之内！
+        // 这里应该等create和delete都同步完成了之后再更新管理员状态
+        // this.updateAllCorpAdmin(corpId, scopeVersion);
+    }
 
-        //  5  当全部都同步成功后，发到corpAuthSuiteQueue队列中，由第三方异步处理
-        //  发送生成全公司解决方案的消息
-        queueService.sendToGenerateTeamSolution(corpId, null);
-        //  公司中的人逐个发送
-        List<CorpStaffVO> staffList = corpStaffManageService.getCorpStaffListByCorpId(corpId);
-        for(CorpStaffVO staffVO : staffList){
-            queueService.sendToGenerateStaffSolution(corpId, staffVO.getUserId());
-        }
+    private void syncDeleted(CorpVO corp) {
+        String corpId = corp.getCorpId();
+        Long scopeVersion = corp.getScopeVersion();
+
+        //  6  检查是否有需要删除的成员
+        this.deleteAllDeprecatedCorpStaff(corpId, scopeVersion);
+
+        //  5  检查是否有需要删除的部门
+        this.deleteAllDeprecatedCorpDepartment(corpId, scopeVersion);
     }
 
     @Override
-    public void doRsqCharge(OrderStatusVO orderStatus){
-        if(orderStatus == null){
+    public void doRsqCharge(OrderStatusVO orderStatus) {
+        if (orderStatus == null) {
             throw new BizRuntimeException("order status is null");
         }
         String corpId = orderStatus.getBuyCorpId();
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        if(corpVO.getRsqId() == null){
+        if (corpVO.getRsqId() == null) {
             throw new BizRuntimeException("corp has no rsqId: " + corpVO);
         }
 
@@ -133,21 +180,22 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      * 1  根据corpId和deptId查询是否有记录，是否department的rsqId存在，则直接返回department
      * 2  如果记录不存在或者rsqId不存在，则发送到日事清服务器请求创建
      * 3  保存返回结果
-     * @param departmentVO  部门的数据库对象
+     *
+     * @param departmentVO 部门的数据库对象
      * @return
      */
     @Override
-    public void createRsqDepartment(CorpDepartmentVO departmentVO){
+    public void createRsqDepartment(CorpDepartmentVO departmentVO) {
         String corpId = departmentVO.getCorpId();
         //  如果departmentVO的rsqId存在，则不重新创建部门
-        if(null != departmentVO.getRsqId()){
+        if (null != departmentVO.getRsqId()) {
             return;
         }
 
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
 
         //  如果corpVO的rsqId不存在，那么返回失败
-        if(null == corpVO.getRsqId()){
+        if (null == corpVO.getRsqId()) {
             throw new BizRuntimeException("department corp rsqId not exist: " + departmentVO);
         }
 
@@ -163,29 +211,29 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     @Override
-    public void updateRsqDepartment(CorpDepartmentVO departmentVO){
-        if(departmentVO.getRsqId() == null){
+    public void updateRsqDepartment(CorpDepartmentVO departmentVO) {
+        if (departmentVO == null) {
             return;
         }
-        String corpId = departmentVO.getCorpId();
-        Long parentId = departmentVO.getParentId();
+        // String corpId = departmentVO.getCorpId();
+        // Long parentId = departmentVO.getParentId();
 
         //  suiteKey
         SuiteVO suiteVO = suiteManageService.getSuite();
-        CorpDepartmentVO parentDepartmentVO = null;
-        if(null != parentId) {
-            parentDepartmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, parentId);
-            if (null == parentDepartmentVO.getRsqId()) {
-                throw new BizRuntimeException("parent department corp rsqId not exist: " + departmentVO);
-            }
-        }
+        // CorpDepartmentVO parentDepartmentVO = null;
+        // if (null != parentId) {
+        //     parentDepartmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, parentId);
+        //     if (null == parentDepartmentVO.getRsqId()) {
+        //         throw new BizRuntimeException("parent department corp rsqId not exist: " + departmentVO);
+        //     }
+        // }
         //  提交更新
-        rsqRequestHelper.updateDepartment(suiteVO, departmentVO, parentDepartmentVO);
+        rsqRequestHelper.updateDepartment(suiteVO, departmentVO);
     }
 
     @Override
-    public void deleteRsqDepartment(CorpDepartmentVO departmentVO){
-        if(null == departmentVO.getRsqId()){
+    public void deleteRsqDepartment(CorpDepartmentVO departmentVO) {
+        if (null == departmentVO.getRsqId()) {
             return;
         }
         //  suiteKey
@@ -196,13 +244,14 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
     /**
      * 创建公司员工
+     *
      * @param staffVO
      * @return
      */
     @Override
     public void createRsqTeamStaff(CorpStaffVO staffVO) {
         //  如果staffVO的rsqUserId存在，则不重新发送请求创建
-        if(null != staffVO.getRsqUserId()){
+        if (null != staffVO.getRsqUserId()) {
             return;
         }
 
@@ -211,7 +260,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  生成用户信息
 
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        if(null == corpVO || null == corpVO.getRsqId()){
+        if (null == corpVO || null == corpVO.getRsqId()) {
             throw new BizRuntimeException("rsqId not found in corpVO: " + corpVO);
         }
 
@@ -223,14 +272,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         staffVO.setRsqUsername(username);
         staffVO.setRsqPassword(password);
 
-        JSONArray rsqIdArray = convertRsqDepartment(corpId, staffVO.getDepartment());
-        if(null == rsqIdArray){
-            throw new BizRuntimeException("系统异常:one of the staff department don't have rsqId: " + corpId);
-        }
-        Map<String, Object> params = new HashMap<>();
-        params.put("rsqDepartment", rsqIdArray);
-
-        RsqUser user = rsqRequestHelper.createUser(suiteVO, staffVO, corpVO, params);
+        RsqUser user = rsqRequestHelper.createUser(suiteVO, staffVO, corpVO);
 
         staffVO.setRsqUserId(String.valueOf(user.getId()));
         // 为控制并发，保证username和password与日事清系统一致，使用返回值作为rsqUsername和rsqPassword
@@ -241,25 +283,16 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     @Override
-    public void updateRsqTeamStaff(CorpStaffVO corpStaffVO){
+    public void updateRsqTeamStaff(CorpStaffVO corpStaffVO) {
         //  suiteKey
         SuiteVO suiteVO = suiteManageService.getSuite();
-
-        //  将员工的部门的deptId转换成rsqId
-        JSONArray rsqIdArray = convertRsqDepartment(corpStaffVO.getCorpId(), corpStaffVO.getDepartment());
-        if(null == rsqIdArray){
-            return;
-        }
-        Map<String, Object> params = new HashMap<>();
-        params.put("rsqDepartment", rsqIdArray);
-
         //  提交更新
-        rsqRequestHelper.updateUser(suiteVO, corpStaffVO, params);
+        rsqRequestHelper.updateUser(suiteVO, corpStaffVO);
     }
 
     @Override
-    public void removeRsqTeamStaff(CorpStaffVO corpStaffVO){
-        if(null == corpStaffVO.getRsqUserId()){
+    public void removeRsqTeamStaff(CorpStaffVO corpStaffVO) {
+        if (null == corpStaffVO) {
             return;
         }
         //  suiteKey
@@ -269,7 +302,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     }
 
     @Override
-    public void updateRsqTeamStaffSetAdmin(CorpStaffVO corpStaffVO){
+    public void updateRsqTeamStaffSetAdmin(CorpStaffVO corpStaffVO) {
         //  suiteKey
         SuiteVO suiteVO = suiteManageService.getSuite();
         //  提交更新
@@ -281,22 +314,21 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      * 1  根据corpId查询是否有记录，是否rsqId存在，如果rsqId存在，则直接返回rsqId
      * 2  如果记录不存在或者rsqId不存在，则发送到日事清服务器请求创建
      * 3  保存返回结果
-     * @param corpId
+     *
+     * @param corpVO
      * @return
      */
-    private CorpVO createRsqTeam(String corpId){
-        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-
+    private CorpVO createRsqTeam(CorpVO corpVO) {
         //  如果corpVO的rsqId存在，那么直接返回
-        if(null != corpVO.getRsqId()){
+        if (null != corpVO.getRsqId()) {
             return corpVO;
         }
 
         //  如果corpVO的rsqId不存在，那么就请求日事清服务器创建，创建成功后更新corpVO
         SuiteVO suiteVO = suiteManageService.getSuite();
         //  找到开通微应用的管理员，作为创建者传给接口
-        CorpStaffVO creator = corpManageService.findATeamCreator(corpId);
-        if(creator != null && creator.getRsqUserId() == null){
+        CorpStaffVO creator = corpManageService.findATeamCreator(corpVO.getCorpId());
+        if (creator != null && creator.getRsqUserId() == null) {
             creator.setRsqUsername(generateRsqUsername(suiteVO.getRsqAppName()));
             creator.setRsqPassword(generateRsqPassword());
         }
@@ -320,16 +352,17 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
     /**
      * 查看是否有需要充值的订单，如果有那么调用接口进行充值
+     *
      * @param corpId
      */
-    private void checkOrderCharge(String corpId){
+    private void checkOrderCharge(String corpId) {
         OrderEventVO dbEvent = orderManageService.getOrderEventByCorpIdAndLatest(corpId);
-        if(dbEvent == null){
+        if (dbEvent == null) {
             return;
         }
         OrderStatusVO dbOrderStatus = orderManageService.getOrderStatusByOrderId(dbEvent.getOrderId());
         //  要么orderStatus不存在，要么orderStatus的状态为初始的状态，这两种情况都进行充值
-        if(dbOrderStatus == null || SystemConstant.ORDER_STATUS_PAID.equals(dbOrderStatus.getStatus())){
+        if (dbOrderStatus == null || SystemConstant.ORDER_STATUS_PAID.equals(dbOrderStatus.getStatus())) {
             //  使用eventBus异步调用
             OrderChargeEvent event = new OrderChargeEvent();
             event.setSuiteKey(dbEvent.getSuiteKey());
@@ -341,50 +374,43 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
     /**
      * 将departmentVO同步到日事清，并递归同步其子部门
+     *
      * @param departmentVO
+     * @param scopeVersion
      * @return
      */
-    private void createRecursiveSubDepartment(CorpDepartmentVO departmentVO){
+    private void createRecursiveSubDepartment(CorpDepartmentVO departmentVO, Long scopeVersion) {
         String corpId = departmentVO.getCorpId();
         Long deptId = departmentVO.getDeptId();
 
         this.createRsqDepartment(departmentVO);
 
-        List<CorpDepartmentVO> deptList =  corpDepartmentManageService.getCorpDepartmentListByCorpIdAndParentId(corpId, deptId);
-        if(0 == deptList.size()){
+        List<CorpDepartmentVO> deptList = corpDepartmentManageService.getCorpDepartmentListByCorpIdAndParentIdAndScopeVersion(
+                corpId, deptId, scopeVersion);
+        if (0 == deptList.size()) {
             return;
         }
-        for(CorpDepartmentVO dept : deptList){
-            createRecursiveSubDepartment(dept);
+        for (CorpDepartmentVO dept : deptList) {
+            createRecursiveSubDepartment(dept, scopeVersion);
         }
     }
 
     /**
      * 将一个公司的所有员工同步到日事清
+     *
      * @param corpId
      * @return
      */
-    private void createAllCorpStaff(String corpId){
-        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpId(corpId);
-        for(CorpStaffVO staffVO : list){
+    private void createAllCorpStaff(String corpId, Long scopeVersion) {
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndScopeVersion(corpId, scopeVersion);
+        for (CorpStaffVO staffVO : list) {
             this.createRsqTeamStaff(staffVO);
         }
     }
 
     /**
-     * 设置corpId中的所有管理员
-     * @param corpId
-     * @return
-     */
-    private void updateAllCorpAdmin(String corpId){
-        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndIsAdmin(corpId, true);
-        for(CorpStaffVO staffVO : list){
-            this.updateRsqTeamAdmin(staffVO);
-        }
-    }
-
-    /**
      * 设置staffVO是否是管理员
+     *
      * @param staffVO
      * @return
      */
@@ -393,7 +419,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         rsqRequestHelper.setUserAdmin(suiteVO, staffVO);
     }
 
-    private String generateRsqUsername(String appName){
+    private String generateRsqUsername(String appName) {
         StringBuffer sb = new StringBuffer();
         sb.append(RandomStringUtils.randomAlphabetic(5))
                 .append("_")
@@ -401,22 +427,22 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
                 .append("@")
                 .append(appName)
                 .append(".rishiqing.com");
-        return  sb.toString();
+        return sb.toString();
     }
 
-    private String generateRsqPassword(){
+    private String generateRsqPassword() {
         return "123456";
     }
 
-    private JSONArray convertRsqDepartment(String corpId, String dingDepartment){
+    private JSONArray convertRsqDepartment(String corpId, String dingDepartment) {
         JSONArray orgArray = JSON.parseArray(dingDepartment);
         JSONArray rsqArray = new JSONArray();
 
-        for(int i = 0; i < orgArray.size(); i++){
+        for (int i = 0; i < orgArray.size(); i++) {
             Long orgId = orgArray.getLong(i);
             CorpDepartmentVO departmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, orgId);
             String rsqId = departmentVO.getRsqId();
-            if(null == rsqId){
+            if (null == rsqId) {
                 return null;
             }
             rsqArray.add(rsqId);
@@ -424,15 +450,15 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         return rsqArray;
     }
 
-    private JSONArray convertRsqDepartment(String corpId, List<Long> departmentIdList){
+    private JSONArray convertRsqDepartment(String corpId, List<Long> departmentIdList) {
         JSONArray rsqArray = new JSONArray();
-        for(Long deptId : departmentIdList){
+        for (Long deptId : departmentIdList) {
             CorpDepartmentVO departmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
-            if(departmentVO == null){
+            if (departmentVO == null) {
                 continue;
             }
             String rsqId = departmentVO.getRsqId();
-            if(null == rsqId){
+            if (null == rsqId) {
                 continue;
             }
             rsqArray.add(rsqId);
@@ -440,16 +466,33 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         return rsqArray;
     }
 
+    private void deleteAllDeprecatedCorpDepartment(String corpId, Long scopeVersion) {
+        List<CorpDepartmentVO> list = corpDepartmentManageService.getCorpDepartmentListByCorpIdAndScopeVersionLessThan(
+                corpId, scopeVersion
+        );
+        for (CorpDepartmentVO dept : list) {
+            this.deleteRsqDepartment(dept);
+        }
+    }
+
+    private void deleteAllDeprecatedCorpStaff(String corpId, Long scopeVersion) {
+        List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
+        for (CorpStaffVO staff : list) {
+            this.removeRsqTeamStaff(staff);
+        }
+    }
+
     /**
      * 将一个公司的所有部门同步到日事清
+     *
      * @param corpId
      * @return
      */
     @Deprecated
-    private void createAllCorpDepartment(String corpId){
+    private void createAllCorpDepartment(String corpId) {
         List<CorpDepartmentVO> deptList = corpDepartmentManageService.getCorpDepartmentListByCorpId(corpId);
 
-        for(CorpDepartmentVO dept : deptList){
+        for (CorpDepartmentVO dept : deptList) {
             this.createRsqDepartment(dept);
         }
     }

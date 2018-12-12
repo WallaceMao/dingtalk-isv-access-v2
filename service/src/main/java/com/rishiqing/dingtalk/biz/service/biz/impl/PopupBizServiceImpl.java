@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpChargeStatusVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpStatisticVO;
 import com.rishiqing.dingtalk.isv.api.model.front.PopupInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupConfigVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupLogVO;
@@ -50,7 +51,14 @@ public class PopupBizServiceImpl implements PopupBizService {
             popupInfo.setServiceExpire(corpStatus.getCurrentServiceStopTime());
             Long buyNumber = corpStatus.getCurrentSubQuantity() != null ? corpStatus.getCurrentSubQuantity() : corpStatus.getCurrentMaxOfPeople();
             popupInfo.setBuyNumber(buyNumber);
-            popupInfo.setTotalNumber(corpStatus.getTotalQuantity());
+
+            //TODO 暂时使用count来数团队的人数，以后遇到性能问题，需要从corpStatistic中读取公司的用户数量
+            Long staffCount = corpStaffManageService.countCorpStaffByCorpId(corpId);
+            popupInfo.setTotalNumber(staffCount);
+            // CorpStatisticVO corpStatistic = corpManageService.getCorpStatisticByCorpId(corpId);
+            // if(corpStatistic != null) {
+            //     popupInfo.setTotalNumber(corpStatistic.getStaffCount());
+            // }
 
             //  读取规格信息
             OrderSpecItemVO spec = orderManageService.getOrderSpecItemByGoodsCodeAndItemCode(

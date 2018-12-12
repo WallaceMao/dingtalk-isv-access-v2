@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Wallace Mao
  * Date: 2018-11-10 13:56
  */
-public class SyncActionManager {
+public class CorpSyncActionManager {
     private Map<String, SyncActionHandler> syncActionMap;
 
     public Map<String, SyncActionHandler> getSyncActionMap() {
@@ -33,7 +33,7 @@ public class SyncActionManager {
         String type = SuiteDbCheckConverter.json2SyncActionString(json);
         SyncActionHandler handler = syncActionMap.get(type);
         if(handler == null){
-            throw new BizRuntimeException("no handler found for sync action: " + type);
+            throw new BizRuntimeException("no handler found for corp sync action: " + type);
         }
         handler.handleSyncAction(data);
     }

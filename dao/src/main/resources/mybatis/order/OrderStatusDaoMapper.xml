@@ -8,6 +8,7 @@
         <result property="gmtModified" column="gmt_modified" />
         <result property="orderId" column="order_id" />
         <result property="suiteKey" column="suite_key" />
+        <result property="suiteId" column="suite_id" />
         <result property="buyCorpId" column="buy_corp_id" />
         <result property="goodsCode" column="goods_code" />
         <result property="itemCode" column="item_code" />
@@ -24,6 +25,8 @@
         <result property="discount" column="discount" />
         <result property="distributorCorpId" column="distributor_corp_id" />
         <result property="distributorCorpName" column="distributor_corp_name" />
+        <result property="mainArticleCode" column="main_article_code" />
+        <result property="mainArticleName" column="main_article_name" />
         <result property="status" column="status" />
     </resultMap>
 
@@ -33,6 +36,7 @@
         gmt_modified,
         order_id,
         suite_key,
+        suite_id,
         buy_corp_id,
         goods_code,
         item_code,
@@ -49,7 +53,9 @@
         discount,
         distributor_corp_id,
         distributor_corp_name,
-        `status`
+        `status`,
+        main_article_code,
+        main_article_name
     </sql>
 
     <insert id="saveOrUpdateOrderStatus" useGeneratedKeys="true" keyProperty="id">
@@ -58,6 +64,7 @@
         gmt_modified,
         order_id,
         suite_key,
+        suite_id,
         buy_corp_id,
         goods_code,
         item_code,
@@ -74,12 +81,15 @@
         discount,
         distributor_corp_id,
         distributor_corp_name,
-        `status`
+        `status`,
+        main_article_code,
+        main_article_name
         )VALUES(
         now(),
         now(),
         #{orderId},
         #{suiteKey},
+        #{suiteId},
         #{buyCorpId},
         #{goodsCode},
         #{itemCode},
@@ -96,7 +106,9 @@
         #{discount},
         #{distributorCorpId},
         #{distributorCorpName},
-        #{status}
+        #{status},
+        #{mainArticleCode},
+        #{mainArticleName}
         )ON DUPLICATE KEY UPDATE gmt_modified=now(), `status`=#{status}
     </insert>
 

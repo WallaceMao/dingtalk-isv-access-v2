@@ -25,6 +25,8 @@ public class CorpVO implements Serializable {
     private String corpLogoUrl;
     //  日事清id
     private String rsqId;
+    //  用来存储可见范围版本的字段，每次用户修改可见范围都会更新该字段为修改时的时间戳
+    private Long scopeVersion;
 
     public Long getId() {
         return id;
@@ -106,6 +108,14 @@ public class CorpVO implements Serializable {
         this.rsqId = rsqId;
     }
 
+    public Long getScopeVersion() {
+        return scopeVersion;
+    }
+
+    public void setScopeVersion(Long scopeVersion) {
+        this.scopeVersion = scopeVersion;
+    }
+
     @Override
     public String toString() {
         return "CorpVO{" +
@@ -119,6 +129,7 @@ public class CorpVO implements Serializable {
                 ", inviteUrl='" + inviteUrl + '\'' +
                 ", corpLogoUrl='" + corpLogoUrl + '\'' +
                 ", rsqId='" + rsqId + '\'' +
+                ", scopeVersion=" + scopeVersion +
                 '}';
     }
 }

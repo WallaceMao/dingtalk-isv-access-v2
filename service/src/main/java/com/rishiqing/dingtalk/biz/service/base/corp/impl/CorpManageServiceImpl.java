@@ -7,10 +7,7 @@ import com.rishiqing.dingtalk.biz.service.util.CorpLockService;
 import com.rishiqing.dingtalk.dao.mapper.corp.*;
 import com.rishiqing.dingtalk.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthDao;
-import com.rishiqing.dingtalk.dao.model.corp.CorpJSAPITicketDO;
-import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
-import com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO;
-import com.rishiqing.dingtalk.dao.model.corp.CorpTokenDO;
+import com.rishiqing.dingtalk.dao.model.corp.*;
 import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
@@ -43,6 +40,8 @@ public class CorpManageServiceImpl implements CorpManageService {
     private SuiteRequestHelper suiteTopRequestHelper;
     @Autowired
     private CorpAppDao corpAppDao;
+    @Autowired
+    private CorpStatisticDao corpStatisticDao;
 
     @Override
     public void saveOrUpdateCorp(CorpVO corpVO){
@@ -170,5 +169,37 @@ public class CorpManageServiceImpl implements CorpManageService {
     @Override
     public void deleteCorpJSAPITicketByCorpId(String corpId){
         corpJSAPITicketDao.deleteCorpJSAPITicketByCorpId(corpId);
+    }
+
+    @Override
+    public void saveOrUpdateCorpStatisticUserCount(String corpId, Long userCount) {
+        CorpStatisticDO corpStatisticDO = corpStatisticDao.getCorpStatisticByCorpId(corpId);
+        if(corpStatisticDO == null) {
+            corpStatisticDO = new CorpStatisticDO();
+            corpStatisticDO.setCorpId(corpId);
+        }
+        corpStatisticDO.setStaffCount(userCount);
+        corpStatisticDao.saveOrUpdateCorpStatistic(corpStatisticDO);
+    }
+
+    @Override
+    public void saveOrUpdateCorpStatistic(CorpStatisticVO corpStatisticVO) {
+        corpStatisticDao.saveOrUpdateCorpStatistic(
+                CorpStatisticConverter.corpStatisticVO2CorpStatisticDO(corpStatisticVO)
+        );
+    }
+
+    @Override
+    public CorpStatisticVO getCorpStatisticByCorpId(String corpId) {
+        return CorpStatisticConverter.corpStatisticDO2CorpStatisticVO(
+                corpStatisticDao.getCorpStatisticByCorpId(corpId)
+        );
+    }
+
+    @Override
+    public CorpStatisticVO getCorpStatisticByCorpIdForUpdate(String corpId) {
+        return CorpStatisticConverter.corpStatisticDO2CorpStatisticVO(
+                corpStatisticDao.getCorpStatisticByCorpIdForUpdate(corpId)
+        );
     }
 }

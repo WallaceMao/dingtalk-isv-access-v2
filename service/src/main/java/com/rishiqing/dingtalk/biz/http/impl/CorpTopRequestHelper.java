@@ -30,12 +30,13 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
 
     /**
      * 获取部门详情
+     *
      * @param corpId
      * @param deptId
      * @return
      */
     @Override
-    public CorpDepartmentVO getCorpDepartment(String corpId, Long deptId){
+    public CorpDepartmentVO getCorpDepartment(String corpId, Long deptId) {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/get");
         OapiDepartmentGetRequest req = new OapiDepartmentGetRequest();
@@ -67,12 +68,13 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
 
     /**
      * 获取子部门列表
+     *
      * @param corpId
      * @param parentDeptId
      * @return
      */
     @Override
-    public List<CorpDepartmentVO> getChildCorpDepartment(String corpId, Long parentDeptId){
+    public List<CorpDepartmentVO> getChildCorpDepartment(String corpId, Long parentDeptId) {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list");
         OapiDepartmentListRequest req = new OapiDepartmentListRequest();
@@ -83,7 +85,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             OapiDepartmentListResponse resp = client.execute(req, corpTokenVO.getCorpToken());
             List<OapiDepartmentListResponse.Department> list = resp.getDepartment();
             List<CorpDepartmentVO> deptList = new ArrayList<>(list.size());
-            for(OapiDepartmentListResponse.Department dingDept : list){
+            for (OapiDepartmentListResponse.Department dingDept : list) {
                 CorpDepartmentVO dept = new CorpDepartmentVO();
                 dept.setCorpId(corpId);
                 dept.setDeptId(dingDept.getId());
@@ -100,7 +102,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
     }
 
     @Override
-    public CorpStaffVO getCorpStaff(String corpId, String userId){
+    public CorpStaffVO getCorpStaff(String corpId, String userId) {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest req = new OapiUserGetRequest();
@@ -109,6 +111,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
         try {
             OapiUserGetResponse resp = client.execute(req, corpTokenVO.getCorpToken());
             CorpStaffVO corpStaff = new CorpStaffVO();
+            corpStaff.setCorpId(corpId);
             corpStaff.setUserId(resp.getUserid());
             corpStaff.setName(resp.getName());
             corpStaff.setTel(resp.getTel());
@@ -117,17 +120,20 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             corpStaff.setMobile(resp.getMobile());
             corpStaff.setEmail(resp.getEmail());
             corpStaff.setActive(resp.getActive());
-            corpStaff.setOrderInDepts(JSON.parseObject(resp.getOrderInDepts(), new TypeReference<Map<Long, Long>>(){}));
+            corpStaff.setOrderInDepts(JSON.parseObject(resp.getOrderInDepts(), new TypeReference<Map<Long, Long>>() {
+            }));
             corpStaff.setBoss(resp.getIsBoss());
             corpStaff.setAdmin(resp.getIsAdmin());
             corpStaff.setDingId(resp.getDingId());
-            corpStaff.setIsLeaderInDepts(JSON.parseObject(resp.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>(){}));
+            corpStaff.setIsLeaderInDepts(JSON.parseObject(resp.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>() {
+            }));
             corpStaff.setHide(resp.getIsHide());
             corpStaff.setDepartment(resp.getDepartment());
             corpStaff.setPosition(resp.getPosition());
             corpStaff.setAvatar(resp.getAvatar());
             corpStaff.setJobnumber(resp.getJobnumber());
-            corpStaff.setExtattr(JSON.parseObject(resp.getExtattr(), new TypeReference<Map<String, String>>(){}));
+            corpStaff.setExtattr(JSON.parseObject(resp.getExtattr(), new TypeReference<Map<String, String>>() {
+            }));
             corpStaff.setUnionId(resp.getUnionid());
 
             return corpStaff;
@@ -137,7 +143,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
     }
 
     @Override
-    public Map<String, Object> getCorpDepartmentStaffByPage(String corpId, Long deptId, Long offset, Long size){
+    public Map<String, Object> getCorpDepartmentStaffByPage(String corpId, Long deptId, Long offset, Long size) {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/list");
         OapiUserListRequest req = new OapiUserListRequest();
@@ -149,7 +155,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             OapiUserListResponse resp = client.execute(req, corpTokenVO.getCorpToken());
             List<OapiUserListResponse.Userlist> list = resp.getUserlist();
             List<CorpStaffVO> staffList = new ArrayList<>(list.size());
-            for(OapiUserListResponse.Userlist user : list){
+            for (OapiUserListResponse.Userlist user : list) {
                 CorpStaffVO corpStaff = new CorpStaffVO();
                 corpStaff.setCorpId(corpId);
                 Map<Long, Long> orderMap = new HashMap<>();
@@ -171,11 +177,11 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
                 corpStaff.setDingId(user.getDingId());
                 corpStaff.setIsLeaderInDepts(isLeaderMap);
                 corpStaff.setHide(user.getIsHide());
-                corpStaff.setDepartment((List<Long>)JSON.parse(user.getDepartment()));
+                corpStaff.setDepartment((List<Long>) JSON.parse(user.getDepartment()));
                 corpStaff.setPosition(user.getPosition());
                 corpStaff.setAvatar(user.getAvatar());
                 corpStaff.setJobnumber(user.getJobnumber());
-                corpStaff.setExtattr((Map<String, String>)JSON.parse(user.getExtattr()));
+                corpStaff.setExtattr((Map<String, String>) JSON.parse(user.getExtattr()));
 
                 staffList.add(corpStaff);
             }
@@ -190,7 +196,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
     }
 
     @Override
-    public CorpStaffVO getCorpStaffByAuthCode(String corpId, String authCode){
+    public CorpStaffVO getCorpStaffByAuthCode(String corpId, String authCode) {
         CorpTokenVO corpTokenVO = corpManageService.getCorpTokenByCorpId(corpId);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
         OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();

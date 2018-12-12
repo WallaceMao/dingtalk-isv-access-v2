@@ -2,13 +2,13 @@ package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
-import com.rishiqing.dingtalk.biz.service.util.QueueService;
+import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
-import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -16,11 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class UserAddOrgSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
-    @Autowired
-    private RsqAccountBizService rsqAccountBizService;
-    @Autowired
-    private QueueService queueService;
+    private StaffService staffService;
+
     /**
      * @link https://open-doc.dingtalk.com/microapp/ln6dmh/troq7i
      subscribe_id  ： 套件suiteid加下划线0
@@ -40,12 +37,6 @@ public class UserAddOrgSyncActionHandler implements SyncActionHandler {
         String corpId = data.getCorpId();
         CorpStaffVO corpStaffVO = SuiteDbCheckConverter.json2CorpStaff(json);
         corpStaffVO.setCorpId(corpId);
-        corpStaffManageService.saveOrUpdateCorpStaff(corpStaffVO);
-
-        //  然后推送到日事清
-        rsqAccountBizService.createRsqTeamStaff(corpStaffVO);
-
-        //  生成解决方法
-        queueService.sendToGenerateStaffSolution(corpId, corpStaffVO.getUserId());
+        staffService.saveCorpStaffAndAddCount(corpStaffVO, new Date().getTime());
     }
 }

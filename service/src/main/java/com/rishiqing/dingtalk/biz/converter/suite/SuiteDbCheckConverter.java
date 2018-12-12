@@ -84,7 +84,7 @@ public class SuiteDbCheckConverter {
             CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
             corpInfo.setAuthChannel(jsonCorp.getString("auth_channel"));
             corpInfo.setAuthChannelType(jsonCorp.getString("auth_channel_type"));
-            corpInfo.setAuthLevel(jsonCorp.getInteger("auth_level"));
+            corpInfo.setAuthLevel(jsonCorp.getLong("auth_level"));
             corpInfo.setCorpLogoUrl(jsonCorp.getString("corp_logo_url"));
             corpInfo.setCorpName(jsonCorp.getString("corp_name"));
             corpInfo.setCorpId(jsonCorp.getString("corpid"));

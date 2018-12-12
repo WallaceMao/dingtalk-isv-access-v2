@@ -9,6 +9,8 @@ import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageServ
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-10 14:33
@@ -35,6 +37,7 @@ public class OrgDeptModifySyncActionHandler implements SyncActionHandler {
         String corpId = data.getCorpId();
         CorpDepartmentVO deptVO = SuiteDbCheckConverter.json2CorpDepartment(json);
         deptVO.setCorpId(corpId);
+        deptVO.setScopeVersion(new Date().getTime());
         corpDepartmentManageService.saveOrUpdateCorpDepartment(deptVO);
         deptVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, deptVO.getDeptId());
 

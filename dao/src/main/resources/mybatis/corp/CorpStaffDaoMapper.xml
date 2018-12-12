@@ -3,36 +3,37 @@
 <mapper namespace="com.rishiqing.dingtalk.dao.mapper.corp.CorpStaffDao">
 
     <resultMap type="com.rishiqing.dingtalk.dao.model.corp.CorpStaffDO" id="corpStaffMap">
-        <id property="id" column="id" />
-        <result property="gmtCreate" column="gmt_create" />
-        <result property="gmtModified" column="gmt_modified" />
-        <result property="corpId" column="corp_id" />
-        <result property="userId" column="user_id" />
-        <result property="name" column="name" />
-        <result property="tel" column="tel" />
-        <result property="workPlace" column="work_place" />
-        <result property="remark" column="remark" />
-        <result property="mobile" column="mobile" />
-        <result property="email" column="email" />
-        <result property="active" column="active" />
-        <result property="orderInDepts" column="order_in_depts" />
-        <result property="isAdmin" column="is_admin" />
-        <result property="isBoss" column="is_boss" />
-        <result property="dingId" column="ding_id" />
-        <result property="isLeaderInDepts" column="is_leader_in_depts" />
-        <result property="isHide" column="is_hide" />
-        <result property="department" column="department" />
-        <result property="position" column="position" />
-        <result property="avatar" column="avatar" />
-        <result property="jobnumber" column="jobnumber" />
-        <result property="extattr" column="extattr" />
-        <result property="isSys" column="is_sys" />
-        <result property="sysLevel" column="sys_level" />
-        <result property="unionId" column="union_id" />
-        <result property="rsqUserId" column="rsq_user_id" />
-        <result property="rsqUsername" column="rsq_username" />
-        <result property="rsqPassword" column="rsq_password" />
-        <result property="rsqLoginToken" column="rsq_login_token" />
+        <id property="id" column="id"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+        <result property="corpId" column="corp_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="tel" column="tel"/>
+        <result property="workPlace" column="work_place"/>
+        <result property="remark" column="remark"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="active" column="active"/>
+        <result property="orderInDepts" column="order_in_depts"/>
+        <result property="isAdmin" column="is_admin"/>
+        <result property="isBoss" column="is_boss"/>
+        <result property="dingId" column="ding_id"/>
+        <result property="isLeaderInDepts" column="is_leader_in_depts"/>
+        <result property="isHide" column="is_hide"/>
+        <result property="department" column="department"/>
+        <result property="position" column="position"/>
+        <result property="avatar" column="avatar"/>
+        <result property="jobnumber" column="jobnumber"/>
+        <result property="extattr" column="extattr"/>
+        <result property="isSys" column="is_sys"/>
+        <result property="sysLevel" column="sys_level"/>
+        <result property="unionId" column="union_id"/>
+        <result property="rsqUserId" column="rsq_user_id"/>
+        <result property="rsqUsername" column="rsq_username"/>
+        <result property="rsqPassword" column="rsq_password"/>
+        <result property="rsqLoginToken" column="rsq_login_token"/>
+        <result property="scopeVersion" column="scope_version"/>
     </resultMap>
 
     <sql id="select-all-fields">
@@ -65,134 +66,162 @@
         rsq_user_id,
         rsq_username,
         rsq_password,
-        rsq_login_token
+        rsq_login_token,
+        scope_version
     </sql>
 
     <insert id="saveOrUpdateCorpStaff" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_corp_staff (
-        gmt_create,
-        gmt_modified,
-        corp_id,
-        user_id,
-        `name`,
-        tel,
-        work_place,
-        remark,
-        mobile,
-        email,
-        active,
-        order_in_depts,
-        is_admin,
-        is_boss,
-        ding_id,
-        is_leader_in_depts,
-        is_hide,
-        department,
-        `position`,
-        avatar,
-        jobnumber,
-        extattr,
-        is_sys,
-        sys_level,
-        union_id,
-        rsq_user_id,
-        rsq_username,
-        rsq_password,
-        rsq_login_token
-        )VALUES(
-        now(),
-        now(),
-        #{corpId},
-        #{userId},
-        #{name},
-        #{tel},
-        #{workPlace},
-        #{remark},
-        #{mobile},
-        #{email},
-        #{active},
-        #{orderInDepts},
-        #{isAdmin},
-        #{isBoss},
-        #{dingId},
-        #{isLeaderInDepts},
-        #{isHide},
-        #{department},
-        #{position},
-        #{avatar},
-        #{jobnumber},
-        #{extattr},
-        #{isSys},
-        #{sysLevel},
-        #{unionId},
-        #{rsqUserId},
-        #{rsqUsername},
-        #{rsqPassword},
-        #{rsqLoginToken}
-        )ON DUPLICATE KEY UPDATE
-        gmt_modified=now(),
-        `name`=#{name},
-        tel=#{tel},
-        work_place=#{workPlace},
-        remark=#{remark},
-        mobile=#{mobile},
-        email=#{email},
-        active=#{active},
-        order_in_depts=#{orderInDepts},
-        is_admin=#{isAdmin},
-        is_boss=#{isBoss},
-        is_leader_in_depts=#{isLeaderInDepts},
-        is_hide=#{isHide},
-        department=#{department},
-        `position`=#{position},
-        avatar=#{avatar},
-        jobnumber=#{jobnumber},
-        extattr=#{extattr},
-        is_sys=#{isSys},
-        sys_level=#{sysLevel},
-        union_id=#{unionId}
+            gmt_create,
+            gmt_modified,
+            corp_id,
+            user_id,
+            `name`,
+            tel,
+            work_place,
+            remark,
+            mobile,
+            email,
+            active,
+            order_in_depts,
+            is_admin,
+            is_boss,
+            ding_id,
+            is_leader_in_depts,
+            is_hide,
+            department,
+            `position`,
+            avatar,
+            jobnumber,
+            extattr,
+            is_sys,
+            sys_level,
+            union_id,
+            rsq_user_id,
+            rsq_username,
+            rsq_password,
+            rsq_login_token,
+            scope_version
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{userId},
+            #{name},
+            #{tel},
+            #{workPlace},
+            #{remark},
+            #{mobile},
+            #{email},
+            #{active},
+            #{orderInDepts},
+            #{isAdmin},
+            #{isBoss},
+            #{dingId},
+            #{isLeaderInDepts},
+            #{isHide},
+            #{department},
+            #{position},
+            #{avatar},
+            #{jobnumber},
+            #{extattr},
+            #{isSys},
+            #{sysLevel},
+            #{unionId},
+            #{rsqUserId},
+            #{rsqUsername},
+            #{rsqPassword},
+            #{rsqLoginToken},
+            #{scopeVersion}
+        )
+        ON DUPLICATE KEY UPDATE
+            gmt_modified       = now(),
+            `name`             = #{name},
+            tel                = #{tel},
+            work_place         = #{workPlace},
+            remark             = #{remark},
+            mobile             = #{mobile},
+            email              = #{email},
+            active             = #{active},
+            order_in_depts     = #{orderInDepts},
+            is_admin           = #{isAdmin},
+            is_boss            = #{isBoss},
+            is_leader_in_depts = #{isLeaderInDepts},
+            is_hide            = #{isHide},
+            department         = #{department},
+            `position`         = #{position},
+            avatar             = #{avatar},
+            jobnumber          = #{jobnumber},
+            extattr            = #{extattr},
+            is_sys             = #{isSys},
+            sys_level          = #{sysLevel},
+            union_id           = #{unionId},
+            scope_version      = #{scopeVersion}
     </insert>
 
     <update id="updateCorpStaffRsqInfo">
-        UPDATE isv_corp_staff SET
-        gmt_modified=now(),
-        rsq_user_id=#{rsqUserId},
-        rsq_username=#{rsqUsername},
-        rsq_password=#{rsqPassword},
-        rsq_login_token=#{rsqLoginToken}
-        WHERE corp_id=#{corpId} AND user_id=#{userId}
+        UPDATE isv_corp_staff
+        SET
+            gmt_modified    = now(),
+            rsq_user_id     = #{rsqUserId},
+            rsq_username    = #{rsqUsername},
+            rsq_password    = #{rsqPassword},
+            rsq_login_token = #{rsqLoginToken}
+        WHERE corp_id = #{corpId} AND user_id = #{userId}
     </update>
 
     <update id="updateCorpStaffUnionId">
-        UPDATE isv_corp_staff SET gmt_modified=now(), union_id=#{unionId} WHERE corp_id=#{corpId} AND user_id=#{userId}
+        UPDATE isv_corp_staff
+        SET
+            gmt_modified = now(),
+            union_id     = #{unionId}
+        WHERE corp_id = #{corpId} AND user_id = #{userId}
     </update>
 
     <update id="updateCorpStaffIsAdmin">
-        UPDATE isv_corp_staff SET gmt_modified=now(), is_admin=#{isAdmin}, sys_level=#{sysLevel} WHERE corp_id=#{corpId} AND user_id=#{userId}
+        UPDATE isv_corp_staff
+        SET
+            gmt_modified = now(),
+            is_admin     = #{isAdmin},
+            sys_level    = #{sysLevel}
+        WHERE corp_id = #{corpId} AND user_id = #{userId}
     </update>
 
     <delete id="deleteCorpStaffByCorpIdAndUserId">
         DELETE FROM isv_corp_staff
         <![CDATA[
-			WHERE corp_id=#{corpId} and user_id=#{userId}
-		 ]]>
+        WHERE corp_id = #{corpId} AND user_id = #{userId}
+        ]]>
+    </delete>
+
+    <delete id="deleteCorpStaffByCorpIdAndScopeVersionLessThan">
+        DELETE FROM isv_corp_staff
+        <![CDATA[
+        WHERE corp_id = #{corpId} AND scope_version < #{lessThanScopeVersion}
+        ]]>
     </delete>
 
     <select id="getCorpStaffByCorpIdAndUserId" resultMap="corpStaffMap">
-        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
         <![CDATA[
 			WHERE corp_id=#{corpId} and user_id=#{userId}
 		 ]]>
     </select>
 
     <select id="getCorpStaffListByCorpId" resultMap="corpStaffMap">
-        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
         <![CDATA[
 			WHERE corp_id=#{corpId}
 		 ]]>
     </select>
     <select id="getPageCorpStaffListByCorpId" resultMap="corpStaffMap">
-        SELECT <include refid="select-all-fields"/> FROM isv_corp_staff
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
         <![CDATA[
 			WHERE corp_id=#{corpId}
 		 ]]>
@@ -200,76 +229,120 @@
     </select>
 
     <select id="getCorpStaffListByCorpIdAndIsAdmin" resultMap="corpStaffMap">
-        SELECT <include refid="select-all-fields"/>  FROM isv_corp_staff
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
         WHERE corp_id=#{corpId} AND is_admin=#{isAdmin}
     </select>
 
     <select id="getCorpStaffUserIdListByCorpId" resultType="java.lang.String">
-        SELECT user_id FROM isv_corp_staff
+        SELECT user_id
+        FROM isv_corp_staff
         <![CDATA[
-			WHERE corp_id=#{corpId}
+        WHERE corp_id = #{corpId}
+        ]]>
+    </select>
+
+    <select id="getCorpStaffByCorpIdAndUserIdAndScopeVersion" resultMap="corpStaffMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND user_id=#{userId} AND scope_version=#{scopeVersion}
 		 ]]>
     </select>
 
+    <select id="getCorpStaffListByCorpIdAndScopeVersion" resultMap="corpStaffMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpStaffListByCorpIdAndScopeVersionLessThan" resultMap="corpStaffMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND scope_version<#{scopeVersion}
+		 ]]>
+    </select>
+
+    <select id="getCorpStaffListByCorpIdAndIsAdminAndScopeVersion" resultMap="corpStaffMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
+        <![CDATA[
+                WHERE corp_id=#{corpId} AND is_admin=#{isAdmin} AND scope_version=#{scopeVersion}
+		 ]]>
+    </select>
+    <select id="countCorpStaffByCorpId" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM isv_corp_staff
+        <![CDATA[
+        WHERE corp_id=#{corpId}
+        ]]>
+    </select>
     <insert id="saveCorpStaffDeleted" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_corp_staff_deleted (
-        gmt_create,
-        gmt_modified,
-        corp_id,
-        user_id,
-        `name`,
-        tel,
-        work_place,
-        remark,
-        mobile,
-        email,
-        active,
-        order_in_depts,
-        is_admin,
-        is_boss,
-        ding_id,
-        is_leader_in_depts,
-        is_hide,
-        department,
-        `position`,
-        avatar,
-        jobnumber,
-        extattr,
-        is_sys,
-        sys_level,
-        union_id,
-        rsq_user_id,
-        rsq_username,
-        rsq_password
-        )VALUES(
-        now(),
-        now(),
-        #{corpId},
-        #{userId},
-        #{name},
-        #{tel},
-        #{workPlace},
-        #{remark},
-        #{mobile},
-        #{email},
-        #{active},
-        #{orderInDepts},
-        #{isAdmin},
-        #{isBoss},
-        #{dingId},
-        #{isLeaderInDepts},
-        #{isHide},
-        #{department},
-        #{position},
-        #{avatar},
-        #{jobnumber},
-        #{extattr},
-        #{isSys},
-        #{sysLevel},
-        #{unionId},
-        #{rsqUserId},
-        #{rsqUsername},
-        #{rsqPassword}
+            gmt_create,
+            gmt_modified,
+            corp_id,
+            user_id,
+            `name`,
+            tel,
+            work_place,
+            remark,
+            mobile,
+            email,
+            active,
+            order_in_depts,
+            is_admin,
+            is_boss,
+            ding_id,
+            is_leader_in_depts,
+            is_hide,
+            department,
+            `position`,
+            avatar,
+            jobnumber,
+            extattr,
+            is_sys,
+            sys_level,
+            union_id,
+            rsq_user_id,
+            rsq_username,
+            rsq_password
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{userId},
+            #{name},
+            #{tel},
+            #{workPlace},
+            #{remark},
+            #{mobile},
+            #{email},
+            #{active},
+            #{orderInDepts},
+            #{isAdmin},
+            #{isBoss},
+            #{dingId},
+            #{isLeaderInDepts},
+            #{isHide},
+            #{department},
+            #{position},
+            #{avatar},
+            #{jobnumber},
+            #{extattr},
+            #{isSys},
+            #{sysLevel},
+            #{unionId},
+            #{rsqUserId},
+            #{rsqUsername},
+            #{rsqPassword}
         )
     </insert>
 </mapper>

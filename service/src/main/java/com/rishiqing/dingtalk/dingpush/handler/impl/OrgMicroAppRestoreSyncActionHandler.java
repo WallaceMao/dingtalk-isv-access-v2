@@ -17,6 +17,6 @@ public class OrgMicroAppRestoreSyncActionHandler implements SyncActionHandler {
      */
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
-        //  删除团队后，暂时不会做任何处理
+        //  暂时不会做任何处理
     }
 }

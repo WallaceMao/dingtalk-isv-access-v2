@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
+import com.rishiqing.dingtalk.biz.service.util.DeptService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class OrgDeptRemoveSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private CorpDepartmentManageService corpDepartmentManageService;
-    @Autowired
-    private RsqAccountBizService rsqAccountBizService;
+    private DeptService deptService;
 
     /**
      subscribe_id  ： 套件suiteid加下划线0
@@ -30,10 +29,7 @@ public class OrgDeptRemoveSyncActionHandler implements SyncActionHandler {
     public void handleSyncAction(OpenSyncBizDataVO data) {
         String corpId = data.getCorpId();
         Long deptId = Long.valueOf(data.getBizId());
-        CorpDepartmentVO deptVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
-        corpDepartmentManageService.deleteCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
-
-        //  然后推送到日事清
-        rsqAccountBizService.deleteRsqDepartment(deptVO);
+        // 需要做级联删除，即删除该部门下的所有子级部门
+        deptService.deleteAndPushCorpDepartment(corpId, deptId);
     }
 }

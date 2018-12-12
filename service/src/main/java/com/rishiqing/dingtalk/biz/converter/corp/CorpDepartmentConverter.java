@@ -34,6 +34,8 @@ public class CorpDepartmentConverter {
         departmentVO.setOrder(departmentDO.getOrder());
 
         departmentVO.setRsqId(departmentDO.getRsqId());
+        departmentVO.setScopeVersion(departmentDO.getScopeVersion());
+
         return departmentVO;
     }
 
@@ -60,6 +62,8 @@ public class CorpDepartmentConverter {
         departmentDO.setOrder(departmentVO.getOrder());
 
         departmentDO.setRsqId(departmentVO.getRsqId());
+        departmentDO.setScopeVersion(departmentVO.getScopeVersion());
+
         return departmentDO;
     }
 

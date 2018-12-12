@@ -1,7 +1,8 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.rishiqing.dingtalk.biz.util.LogFormatter;
-import com.rishiqing.dingtalk.dingpush.handler.SyncActionManager;
+import com.rishiqing.dingtalk.dingpush.handler.CorpSyncActionManager;
+import com.rishiqing.dingtalk.dingpush.handler.SuiteSyncActionManager;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
@@ -27,12 +28,14 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     @Autowired
     private OpenSyncBizDataManageService openSyncBizDataManageService;
     @Autowired
-    private SyncActionManager syncActionManager;
+    private SuiteSyncActionManager suiteSyncActionManager;
+    @Autowired
+    private CorpSyncActionManager corpSyncActionManager;
 
     @Override
     public void checkDingPushEvent(){
         OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_LOCK_KEY);
-        System.out.println(">>>>>>>>>>>>>>>>>" + lock);
+        // System.out.println(">>>>>>>>>>>>>>>>>" + lock);
         if(lock == null){
             return;
         }
@@ -40,7 +43,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
-                    syncActionManager.handleSyncData(data);
+                    suiteSyncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
                     bizLogger.error(LogFormatter.format(
@@ -65,7 +68,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     @Override
     public void checkDingMediumPushEvent() {
         OpenGlobalLockVO lock = openGlobalLockService.requireOpenGlobalLock(DB_CHECK_MEDIUM_LOCK_KEY);
-        System.out.println(">>>>>>>>>>>>>>>>>" + lock);
+        // System.out.println(">>>>>>>>>>>>>>>>>" + lock);
         if(lock == null){
             return;
         }
@@ -73,7 +76,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
-                    syncActionManager.handleSyncData(data);
+                    corpSyncActionManager.handleSyncData(data);
                     data.setStatus(1L);
                 } catch (Exception e){
                     bizLogger.error(LogFormatter.format(

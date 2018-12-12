@@ -6,7 +6,7 @@
 
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
         <property name="locations">
             <list>
                 <value>file:${user.home}/dingtalk/ddauth-config.properties</value>
@@ -17,8 +17,8 @@
     </bean>
 
     <!--webjob需要启动quartz-->
-    <import resource="spring-alijob.xml" />
+    <import resource="classpath:spring-alijob.xml"/>
     <!--service层的服务beans-->
-    <import resource="classpath:spring-beans.xml" />
-    <import resource="classpath:spring-queue-ali.xml" />
+    <import resource="classpath:spring-beans.xml"/>
+    <import resource="classpath:spring-queue-ali.xml"/>
 </beans>

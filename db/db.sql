@@ -680,4 +680,33 @@ ALTER TABLE `isv_app`
 ALTER TABLE `isv_corp_suite_auth`
   ADD COLUMN `auth_user_id`  varchar(128) NULL COMMENT '开通套件的管理员的userId';
 
+#add 2018-11-16 新增钉钉云推送相关字段
+ALTER TABLE `isv_order_event`
+  ADD COLUMN `suite_id`  varchar(64) NULL COMMENT 'suite_id',
+  ADD COLUMN `main_article_code`  varchar(32) NULL COMMENT '内购订单中，应用商品码',
+  ADD COLUMN `main_article_name`  varchar(32) NULL COMMENT '内购订单中，应用商品名称';
+ALTER TABLE `isv_order_status`
+  ADD COLUMN `suite_id`  varchar(64) NULL COMMENT 'suite_id',
+  ADD COLUMN `main_article_code`  varchar(32) NULL COMMENT '内购订单中，应用商品码',
+  ADD COLUMN `main_article_name`  varchar(32) NULL COMMENT '内购订单中，应用商品名称';
+
+#add 2018-11-19 新增可见范围变更的版本字段
+ALTER TABLE `isv_corp`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+ALTER TABLE `isv_corp_dept`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+ALTER TABLE `isv_corp_staff`
+  ADD COLUMN `scope_version`  bigint(20) NOT NULL DEFAULT 0 COMMENT '用户修改可见范围的版本，以时间戳来标记';
+
+# 新增团队人数缓存表
+CREATE TABLE `isv_corp_statistic`
+(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(100) NOT NULL COMMENT 'corpId',
+  `staff_count` varchar(128) NOT NULL COMMENT '成员数量',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_statistic` (`corp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='团队统计信息缓存表';
 

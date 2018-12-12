@@ -6,6 +6,7 @@ import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.suite.AppManageService;
+import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,11 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class OrgSuiteRelieveSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private AppManageService appManageService;
-    @Autowired
-    private CorpManageService corpManageService;
-    @Autowired
-    private FailBizService failBizService;
+    private CorpBizService corpBizService;
     /**
      subscribe_id  ： 套件suiteid加下划线0
      copp_id : 开通套件微应用的企业corpid
@@ -39,13 +36,6 @@ public class OrgSuiteRelieveSyncActionHandler implements SyncActionHandler {
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
         String corpId = data.getCorpId();
-        //  删除团队后，暂时不会做任何处理
-        AppVO app = appManageService.getDefaultAppVO();
-        corpManageService.deleteCorpSuiteAuthByCorpId(corpId);
-        corpManageService.deleteCorpAppByCorpId(corpId, app.getAppId());
-        corpManageService.deleteCorpTokenByCorpId(corpId);
-        corpManageService.deleteCorpJSAPITicketByCorpId(corpId);
-        //  fail暂不处理
-//        failBizService.deleteCorpSuiteAuthFailById();
+        corpBizService.relieveCorpApp(corpId);
     }
 }

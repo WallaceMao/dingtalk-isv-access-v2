@@ -8,6 +8,7 @@
         <result property="gmtModified" column="gmt_modified" />
         <result property="eventType" column="event_type" />
         <result property="suiteKey" column="suite_key" />
+        <result property="suiteId" column="suite_id" />
         <result property="buyCorpId" column="buy_corp_id" />
         <result property="goodsCode" column="goods_code" />
         <result property="itemCode" column="item_code" />
@@ -25,6 +26,8 @@
         <result property="discount" column="discount" />
         <result property="distributorCorpId" column="distributor_corp_id" />
         <result property="distributorCorpName" column="distributor_corp_name" />
+        <result property="mainArticleCode" column="main_article_code" />
+        <result property="mainArticleName" column="main_article_name" />
     </resultMap>
 
     <sql id="select-all-fields">
@@ -33,6 +36,7 @@
         gmt_modified,
         event_type,
         suite_key,
+        suite_id,
         buy_corp_id,
         goods_code,
         item_code,
@@ -49,7 +53,9 @@
         discount_fee,
         discount,
         distributor_corp_id,
-        distributor_corp_name
+        distributor_corp_name,
+        main_article_code,
+        main_article_name
     </sql>
 
     <insert id="saveOrUpdateOrderEvent" useGeneratedKeys="true" keyProperty="id">
@@ -58,6 +64,7 @@
         gmt_modified,
         event_type,
         suite_key,
+        suite_id,
         buy_corp_id,
         goods_code,
         item_code,
@@ -74,12 +81,15 @@
         discount_fee,
         discount,
         distributor_corp_id,
-        distributor_corp_name
+        distributor_corp_name,
+        main_article_code,
+        main_article_name
         )VALUES(
         now(),
         now(),
         #{eventType},
         #{suiteKey},
+        #{suiteId},
         #{buyCorpId},
         #{goodsCode},
         #{itemCode},
@@ -96,7 +106,9 @@
         #{discountFee},
         #{discount},
         #{distributorCorpId},
-        #{distributorCorpName}
+        #{distributorCorpName},
+        #{mainArticleCode},
+        #{mainArticleName}
         )ON DUPLICATE KEY UPDATE gmt_modified=now()
     </insert>
 

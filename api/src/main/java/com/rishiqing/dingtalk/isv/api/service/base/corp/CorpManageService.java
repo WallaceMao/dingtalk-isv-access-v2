@@ -30,4 +30,12 @@ public interface CorpManageService {
     void deleteCorpTokenByCorpId(String corpId);
 
     void deleteCorpJSAPITicketByCorpId(String corpId);
+
+    void saveOrUpdateCorpStatisticUserCount(String corpId, Long userCount);
+
+    void saveOrUpdateCorpStatistic(CorpStatisticVO corpStatisticVO);
+
+    CorpStatisticVO getCorpStatisticByCorpId(String corpId);
+
+    CorpStatisticVO getCorpStatisticByCorpIdForUpdate(String corpId);
 }

@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
+import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserLeaveOrgSyncActionHandler implements SyncActionHandler {
     @Autowired
     private CorpStaffManageService corpStaffManageService;
+    @Autowired
+    private StaffService staffService;
     @Autowired
     private RsqAccountBizService rsqAccountBizService;
     /**
@@ -30,10 +33,6 @@ public class UserLeaveOrgSyncActionHandler implements SyncActionHandler {
     public void handleSyncAction(OpenSyncBizDataVO data) {
         String corpId = data.getCorpId();
         String userId = data.getBizId();
-        CorpStaffVO corpStaffVO = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
-        corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpId, userId);
-
-        //  推送到日事清
-        rsqAccountBizService.removeRsqTeamStaff(corpStaffVO);
+        staffService.deleteUserAndSubtractCount(corpId, userId);
     }
 }

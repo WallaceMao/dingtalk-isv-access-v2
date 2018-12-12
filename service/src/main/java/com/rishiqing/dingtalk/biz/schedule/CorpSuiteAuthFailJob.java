@@ -58,7 +58,7 @@ public class CorpSuiteAuthFailJob extends QuartzJobBean {
                                 JSONObject.parseObject(fail.getFailInfo())
                         );
                     }
-                    corpBizService.activateCorpApp(corpSuiteAuthVO);
+                    corpBizService.activateCorpApp(corpSuiteAuthVO, null);
                 }
             }
         }catch (Exception e){

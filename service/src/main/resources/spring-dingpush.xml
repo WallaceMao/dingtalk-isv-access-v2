@@ -63,10 +63,11 @@
                 <entry key="org_dept_create" value-ref="orgDeptCreateSyncActionHandler" />
                 <entry key="org_dept_modify" value-ref="orgDeptModifySyncActionHandler" />
                 <entry key="org_dept_remove" value-ref="orgDeptRemoveSyncActionHandler" />
-                <entry key="org_role_add" value-ref="defaultSyncActionHandler" />
-                <entry key="org_role_modify" value-ref="defaultSyncActionHandler" />
                 <entry key="org_update" value-ref="orgUpdateSyncActionHandler" />
                 <entry key="org_remove" value-ref="orgRemoveSyncActionHandler" />
+                <entry key="org_role_add" value-ref="defaultSyncActionHandler" />
+                <entry key="org_role_modify" value-ref="defaultSyncActionHandler" />
+                <!--以下没有实现-->
                 <entry key="contact_add_org" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_modify_org" value-ref="defaultSyncActionHandler" />
                 <entry key="contact_leave_org" value-ref="defaultSyncActionHandler" />

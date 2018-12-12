@@ -34,4 +34,6 @@ public interface CorpStaffManageService {
 
     List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
             String corpId, Boolean isAdmin, Long scopeVersion);
+
+    Long countCorpStaffByCorpId(String corpId);
 }

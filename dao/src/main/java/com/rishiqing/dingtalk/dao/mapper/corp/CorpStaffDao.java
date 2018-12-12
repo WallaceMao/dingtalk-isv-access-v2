@@ -146,6 +146,9 @@ public interface CorpStaffDao {
             @Param("scopeVersion") Long scopeVersion
     );
 
+    Long countCorpStaffByCorpId(
+            @Param("corpId") String corpId);
+
 //    /**
 //     * 根据staff的rsqId获取到userId
 //     * @param rsqIds

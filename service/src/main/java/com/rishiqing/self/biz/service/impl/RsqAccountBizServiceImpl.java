@@ -212,21 +212,21 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
 
     @Override
     public void updateRsqDepartment(CorpDepartmentVO departmentVO) {
-        if (departmentVO.getRsqId() == null) {
+        if (departmentVO == null) {
             return;
         }
-        String corpId = departmentVO.getCorpId();
-        Long parentId = departmentVO.getParentId();
+        // String corpId = departmentVO.getCorpId();
+        // Long parentId = departmentVO.getParentId();
 
         //  suiteKey
         SuiteVO suiteVO = suiteManageService.getSuite();
-        CorpDepartmentVO parentDepartmentVO = null;
-        if (null != parentId) {
-            parentDepartmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, parentId);
-            if (null == parentDepartmentVO.getRsqId()) {
-                throw new BizRuntimeException("parent department corp rsqId not exist: " + departmentVO);
-            }
-        }
+        // CorpDepartmentVO parentDepartmentVO = null;
+        // if (null != parentId) {
+        //     parentDepartmentVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, parentId);
+        //     if (null == parentDepartmentVO.getRsqId()) {
+        //         throw new BizRuntimeException("parent department corp rsqId not exist: " + departmentVO);
+        //     }
+        // }
         //  提交更新
         rsqRequestHelper.updateDepartment(suiteVO, departmentVO);
     }

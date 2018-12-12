@@ -8,6 +8,8 @@ import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-10 14:33
@@ -26,6 +28,7 @@ public class OrgUpdateSyncActionHandler implements SyncActionHandler {
     public void handleSyncAction(OpenSyncBizDataVO data) {
         JSONObject json = JSONObject.parseObject(data.getBizData());
         CorpVO corpVO = SuiteDbCheckConverter.json2Corp(json);
+        corpVO.setScopeVersion(new Date().getTime());
         corpManageService.saveOrUpdateCorp(corpVO);
 
         //TODO  然后推送到日事清

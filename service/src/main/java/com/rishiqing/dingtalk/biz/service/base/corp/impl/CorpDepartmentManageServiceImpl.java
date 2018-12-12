@@ -64,6 +64,11 @@ public class CorpDepartmentManageServiceImpl implements CorpDepartmentManageServ
     }
 
     @Override
+    public List<Long> listCorpDepartmentDeptIdByCorpIdAndParentId(String corpId, Long deptId) {
+        return corpDepartmentDao.listCorpDepartmentDeptIdByCorpIdAndParentId(corpId, deptId);
+    }
+
+    @Override
     public CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
             String corpId, Long deptId, Long scopeVersion){
         return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(

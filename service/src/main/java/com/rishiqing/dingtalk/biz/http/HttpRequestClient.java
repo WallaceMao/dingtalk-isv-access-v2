@@ -32,8 +32,8 @@ public class HttpRequestClient {
     private static final Logger bizLogger = LoggerFactory.getLogger(HttpRequestClient.class);
 
     private Integer connectionRequestTimeout = 10000;
-    private Integer socketTimeOut = 3000;
-    private Integer connectTimeout = 3000;
+    private Integer socketTimeOut = 5000;
+    private Integer connectTimeout = 5000;
 
     public Integer getConnectionRequestTimeout() {
         return connectionRequestTimeout;
@@ -160,7 +160,7 @@ public class HttpRequestClient {
             }
             result = EntityUtils.toString(response.getEntity(), "UTF-8");
         } catch (Exception e) {
-            throw new HttpRequestException("HTTP Request, httpClient exception, url: " + url, e);
+            throw new HttpRequestException(request.getMethod() + " HTTP Request, httpClient exception, url: " + url, e);
         } finally {
             IOUtils.closeQuietly(response);
         }

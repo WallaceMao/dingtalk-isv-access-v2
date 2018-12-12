@@ -164,6 +164,15 @@
 		 ]]>
     </select>
 
+    <select id="listCorpDepartmentDeptIdByCorpIdAndParentId" resultType="java.lang.Long">
+        SELECT
+        dept_id
+        FROM isv_corp_dept
+        <![CDATA[
+        WHERE corp_id=#{corpId} AND parent_id=#{parentId}
+        ]]>
+    </select>
+
     <select id="getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion" resultMap="corpDepartmentMap">
         SELECT <include refid="select-all-fields"/>  FROM isv_corp_dept
         <![CDATA[

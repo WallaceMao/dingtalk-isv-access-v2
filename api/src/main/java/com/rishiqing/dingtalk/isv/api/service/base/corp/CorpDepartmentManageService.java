@@ -21,6 +21,8 @@ public interface CorpDepartmentManageService {
 
     List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentId(String corpId, Long deptId);
 
+    List<Long> listCorpDepartmentDeptIdByCorpIdAndParentId(String corpId, Long deptId);
+
     CorpDepartmentVO getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
             String corpId, Long deptId, Long scopeVersion);
 

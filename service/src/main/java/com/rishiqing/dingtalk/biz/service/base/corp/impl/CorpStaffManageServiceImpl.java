@@ -93,4 +93,9 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
         );
     }
 
+    @Override
+    public Long countCorpStaffByCorpId(String corpId) {
+        return corpStaffDao.countCorpStaffByCorpId(corpId);
+    }
+
 }

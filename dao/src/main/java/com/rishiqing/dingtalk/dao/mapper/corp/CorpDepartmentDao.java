@@ -78,6 +78,16 @@ public interface CorpDepartmentDao {
             @Param("parentId") Long parentId);
 
     /**
+     * 只获取id
+     * @param corpId
+     * @param parentId
+     * @return
+     */
+    List<Long> listCorpDepartmentDeptIdByCorpIdAndParentId(
+            @Param("corpId") String corpId,
+            @Param("parentId") Long parentId);
+
+    /**
      * 根据corpId和deptId查询部门
      * @param corpId
      * @param deptId

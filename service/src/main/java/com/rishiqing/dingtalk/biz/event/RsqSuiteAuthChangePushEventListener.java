@@ -39,7 +39,8 @@ public class RsqSuiteAuthChangePushEventListener implements EventListener {
             //  再将本地删除
             corpDepartmentManageService.deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
             corpStaffManageService.deleteCorpStaffByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
-
+            // 最后，同步现有用户的管理员信息
+            rsqAccountBizService.updateAllCorpAdmin(corpId, scopeVersion);
         }catch (Exception e){
             //  加入失败job,失败任务会重试
 //            failBizService.saveCorpOrgSyncFail(corpOrgChangedEvent);

@@ -19,7 +19,7 @@ import java.util.Set;
  * Date: 2018-11-07 2:48
  */
 public class StaffService {
-    private static long DEFAULT_PAGE_SIZE = 10;
+    private static long DEFAULT_PAGE_SIZE = 50;
     @Autowired
     private CorpRequestHelper corpRequestHelper;
     @Autowired
@@ -160,7 +160,7 @@ public class StaffService {
                 corpStaffManageService.saveOrUpdateCorpStaff(corpStaff);
             }
 
-            offset ++;
+            offset += DEFAULT_PAGE_SIZE;
             hasMore = (Boolean)staffPageList.get("hasMore");
         }
         return count;

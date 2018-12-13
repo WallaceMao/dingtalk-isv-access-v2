@@ -20,7 +20,6 @@ import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -207,6 +206,52 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
             corpJSAPITicketVO.setCorpJSAPITicket(resp.getTicket());
             corpJSAPITicketVO.setExpiredTime(DateUtil.addSeconds(resp.getExpiresIn()));
             return corpJSAPITicketVO;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public String callCorpUser(SuiteTokenVO suiteTokenVO, String authedCorpId, String authedStaffId, String staffId) {
+        String suiteAccessToken = suiteTokenVO.getSuiteToken();
+        DingTalkClient client = new DefaultDingTalkClient("https://eco.taobao.com/router/rest");
+        IsvCallCalluserRequest req = new IsvCallCalluserRequest();
+        req.setStaffId(staffId);
+        req.setAuthedCorpId(authedCorpId);
+        req.setAuthedStaffId(authedStaffId);
+        IsvCallCalluserResponse rsp = null;
+        try {
+            rsp = client.execute(req, suiteAccessToken);
+            System.out.println(rsp.getBody());
+            return rsp.getBody();
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setCalleeList(SuiteTokenVO suiteTokenVO, String calleeList) {
+        DingTalkClient client = new DefaultDingTalkClient("https://eco.taobao.com/router/rest");
+        IsvCallSetuserlistRequest req = new IsvCallSetuserlistRequest();
+        req.setStaffIdList(calleeList);
+        IsvCallSetuserlistResponse rsp = null;
+        try {
+            rsp = client.execute(req, suiteTokenVO.getSuiteToken());
+            System.out.println(rsp.getBody());
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void removeCalleeList(SuiteTokenVO suiteTokenVO, String calleeList) {
+        DingTalkClient client = new DefaultDingTalkClient("https://eco.taobao.com/router/rest");
+        IsvCallRemoveuserlistRequest req = new IsvCallRemoveuserlistRequest();
+        req.setStaffIdList("xxx,xxx");
+        IsvCallRemoveuserlistResponse rsp = null;
+        try {
+            rsp = client.execute(req, suiteTokenVO.getSuiteToken());
+            System.out.println(rsp.getBody());
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
         }

@@ -26,4 +26,10 @@ public interface SuiteRequestHelper {
     CorpTokenVO getCorpToken(String corpId);
 
     CorpJSAPITicketVO getCorpJSAPITicket(CorpTokenVO corpToken);
+
+    String callCorpUser(SuiteTokenVO suiteTokenVO, String authedCorpId, String authedStaffId, String staffId);
+
+    void setCalleeList(SuiteTokenVO suiteTokenVO, String calleeList);
+
+    void removeCalleeList(SuiteTokenVO suiteTokenVO, String calleeList);
 }

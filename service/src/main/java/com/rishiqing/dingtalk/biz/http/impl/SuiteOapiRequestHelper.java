@@ -14,8 +14,6 @@ import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -135,6 +133,21 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
     @Override
     public CorpJSAPITicketVO getCorpJSAPITicket(CorpTokenVO corpToken) {
         return null;
+    }
+
+    @Override
+    public String callCorpUser(SuiteTokenVO suiteTokenVO, String authedCorpId, String authedStaffId, String staffId) {
+        return "";
+    }
+
+    @Override
+    public void setCalleeList(SuiteTokenVO suiteTokenVO, String calleeList) {
+
+    }
+
+    @Override
+    public void removeCalleeList(SuiteTokenVO suiteTokenVO, String calleeList) {
+
     }
 
 //    /**

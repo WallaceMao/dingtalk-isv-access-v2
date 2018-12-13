@@ -26,19 +26,20 @@ public class OrderChargeEventListener implements EventListener {
 
     /**
      * 企业授权套件临时授权码异步逻辑
+     *
      * @param event
      */
     @Subscribe
     @AllowConcurrentEvents //  event并行执行
-    public void listenCorpSuiteAuthEvent(OrderChargeEvent event) {
-        try{
+    public void listenOrderChargeEvent(OrderChargeEvent event) {
+        try {
             bizLogger.info("listenOrderChargeEvent: " + JSON.toJSONString(event));
             String suiteKey = event.getSuiteKey();
             Long orderId = event.getOrderId();
             OrderEventVO orderEventVO = orderManageService.getOrderEventByOrderId(orderId);
             //  充值
             chargeBizService.charge(orderEventVO);
-        }catch (Exception e){
+        } catch (Exception e) {
             bizLogger.error("OrderChargeEvent: " + event, e);
         }
     }

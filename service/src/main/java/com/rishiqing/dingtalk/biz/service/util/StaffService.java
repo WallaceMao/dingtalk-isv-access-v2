@@ -8,8 +8,10 @@ import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageServ
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import com.rishiqing.self.api.service.RsqAccountBizService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -233,19 +235,25 @@ public class StaffService {
         return count;
     }
 
-    private CorpStaffVO mergeDepartmentProperties(CorpStaffVO dbStaff, CorpStaffVO targetStaff) {
+    private void mergeDepartmentProperties(CorpStaffVO dbStaff, CorpStaffVO targetStaff) {
         Map<Long, Long> dbOrderInDept = dbStaff.getOrderInDepts();
-        Map<Long, Long> newOrderInDept = targetStaff.getOrderInDepts();
-        Set<Long> deptSet = dbOrderInDept.keySet();
-        for (Long deptId : deptSet) {
-            newOrderInDept.put(deptId, dbOrderInDept.get(deptId));
+        if (dbOrderInDept != null) {
+            Map<Long, Long> newOrderInDept = targetStaff.getOrderInDepts();
+            if (newOrderInDept == null) {
+                newOrderInDept = new HashMap<>(dbOrderInDept.size());
+                targetStaff.setOrderInDepts(newOrderInDept);
+            }
+            newOrderInDept.putAll(dbOrderInDept);
         }
 
         Map<Long, Boolean> dbIsLeaderInDept = dbStaff.getIsLeaderInDepts();
-        Map<Long, Boolean> newIsLeaderInDept = targetStaff.getIsLeaderInDepts();
-        for (Long deptId : dbIsLeaderInDept.keySet()) {
-            newIsLeaderInDept.put(deptId, dbIsLeaderInDept.get(deptId));
+        if (dbIsLeaderInDept != null) {
+            Map<Long, Boolean> newIsLeaderInDept = targetStaff.getIsLeaderInDepts();
+            if (newIsLeaderInDept == null) {
+                newIsLeaderInDept = new HashMap<>(dbIsLeaderInDept.size());
+                targetStaff.setIsLeaderInDepts(newIsLeaderInDept);
+            }
+            newIsLeaderInDept.putAll(dbIsLeaderInDept);
         }
-        return targetStaff;
     }
 }

@@ -30,7 +30,7 @@
 
     <update id="updateStatus">
         update open_sync_biz_data
-        set `status`=#{status}
+        set `status`=#{status}, gmt_modified=now()
         where subscribe_id=#{subscribeId}
         and corp_id=#{corpId}
         and biz_id=#{bizId}
@@ -39,7 +39,7 @@
 
     <update id="updateMediumStatus">
         update open_sync_biz_data_medium
-        set `status`=#{status}
+        set `status`=#{status}, gmt_modified=now()
         where subscribe_id=#{subscribeId}
         and corp_id=#{corpId}
         and biz_id=#{bizId}

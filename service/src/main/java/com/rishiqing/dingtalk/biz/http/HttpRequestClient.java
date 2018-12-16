@@ -155,7 +155,7 @@ public class HttpRequestClient {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != HttpStatus.SC_OK) {
                 throw new HttpRequestException(
-                        response.getStatusLine().getStatusCode() + "HTTP request, url: " + request.getMethod() + " " + url
+                        response.getStatusLine().getStatusCode() + " HTTP request, url: " + request.getMethod() + " " + url
                 );
             }
             result = EntityUtils.toString(response.getEntity(), "UTF-8");

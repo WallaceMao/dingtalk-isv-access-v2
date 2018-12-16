@@ -30,6 +30,6 @@ public class OrgDeptRemoveSyncActionHandler implements SyncActionHandler {
         String corpId = data.getCorpId();
         Long deptId = Long.valueOf(data.getBizId());
         // 需要做级联删除，即删除该部门下的所有子级部门
-        deptService.deleteAndPushCorpDepartment(corpId, deptId);
+        deptService.pushAndDeleteCorpDepartmentRecursive(corpId, deptId);
     }
 }

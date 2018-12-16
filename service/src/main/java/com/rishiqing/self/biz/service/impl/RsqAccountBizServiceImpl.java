@@ -124,11 +124,11 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  c. 不包含任何部门。当用户开通时选择仅管理员可见会出现这种情况
         CorpDepartmentVO topDept = corpDepartmentManageService.getTopCorpDepartmentByScopeVersion(corpId, scopeVersion);
         if (topDept != null) {
-            this.createRecursiveSubDepartment(topDept, scopeVersion);
+            this.createRecursiveSubDepartmentByScopeVersion(topDept, scopeVersion);
         }
 
         //  3  新建企业部门成员
-        this.createAllCorpStaff(corpId, scopeVersion);
+        this.createCorpStaffByScopeVersion(corpId, scopeVersion);
 
         // 4  fix bug:不能在这里更新企业部门的管理员状态。当用户修改可见范围时，旧的管理员如果也会被同步，而旧的管理员不在新的可见范围之内！
         // 这里应该等create和delete都同步完成了之后再更新管理员状态
@@ -379,7 +379,8 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      * @param scopeVersion
      * @return
      */
-    private void createRecursiveSubDepartment(CorpDepartmentVO departmentVO, Long scopeVersion) {
+    @Override
+    public void createRecursiveSubDepartmentByScopeVersion(CorpDepartmentVO departmentVO, Long scopeVersion) {
         String corpId = departmentVO.getCorpId();
         Long deptId = departmentVO.getDeptId();
 
@@ -391,7 +392,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
             return;
         }
         for (CorpDepartmentVO dept : deptList) {
-            createRecursiveSubDepartment(dept, scopeVersion);
+            createRecursiveSubDepartmentByScopeVersion(dept, scopeVersion);
         }
     }
 
@@ -401,7 +402,8 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      * @param corpId
      * @return
      */
-    private void createAllCorpStaff(String corpId, Long scopeVersion) {
+    @Override
+    public void createCorpStaffByScopeVersion(String corpId, Long scopeVersion) {
         List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndScopeVersion(corpId, scopeVersion);
         for (CorpStaffVO staffVO : list) {
             this.createRsqTeamStaff(staffVO);

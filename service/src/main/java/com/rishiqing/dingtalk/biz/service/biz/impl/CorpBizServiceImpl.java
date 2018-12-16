@@ -4,6 +4,7 @@ import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpAppConverter;
+import com.rishiqing.dingtalk.biz.converter.suite.CorpSuiteAuthConverter;
 import com.rishiqing.dingtalk.biz.service.util.DeptService;
 import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
@@ -164,6 +165,9 @@ public class CorpBizServiceImpl implements CorpBizService {
         corpManageService.saveOrUpdateCorp(
                 CorpConverter.corpAuthInfoVO2CorpVO(corpAuthInfo, timestamp)
         );
+        //TODO 3.1 获取一次corpToken和corpJSAPIToken
+        corpManageService.getCorpTokenByCorpId(corpId);
+        corpManageService.getCorpJSAPITicketByCorpId(corpId);
 
         //  4.  保存corpApp的关联信息
         List<CorpAppVO> corpAppVOList = CorpAppConverter.corpAuthInfoVO2AppVOList(corpAuthInfo);
@@ -187,16 +191,9 @@ public class CorpBizServiceImpl implements CorpBizService {
         staffService.fetchAndSaveCorpStaffList(corpId, authUserList, timestamp);
         corpManageService.saveOrUpdateCorpStatisticUserCount(corpId, userCount);
 
-        //  7.  处理授权方管理员，谁开通的日事清，就以谁作为创建者。
-        CorpAuthInfoVO.AuthUserInfo authUserInfo = corpAuthInfo.getAuthUserInfo();
-        CorpSuiteAuthVO corpSuite = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
-        if (corpSuite == null) {
-            corpSuite = new CorpSuiteAuthVO();
-            corpSuite.setSuiteKey(suiteKey);
-            corpSuite.setCorpId(corpId);
-        }
-        corpSuite.setAuthUserId(authUserInfo.getUserId());
-        corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuite);
+        //  7.  保存授权信息。处理授权方管理员，谁开通的日事清，就以谁作为创建者。
+        CorpSuiteAuthVO corpSuiteAuthVO = CorpSuiteAuthConverter.corpAuthInfoVO2CorpSuiteAuthVO(suiteKey, corpAuthInfo);
+        corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
     }
 
     private void postCorpOrgCreatedEvent(CorpAuthInfoVO corpAuthInfo, Long timestamp) {

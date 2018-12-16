@@ -55,13 +55,17 @@ public class DeptService {
     }
 
     /**
-     * 删除corpId和deptId下的所有子级部门
-     *
-     * @param corpId
-     * @param deptId
+     * 更新的deptVO
+     * @param deptVO
+     * @param scopeVersion
      */
-    public void deleteAndPushCorpDepartment(String corpId, Long deptId) {
-        pushAndDeleteCorpDepartmentRecursive(corpId, deptId);
+    public void updateAndPushCorpDepartment(CorpDepartmentVO deptVO, Long scopeVersion) {
+        deptVO.setScopeVersion(scopeVersion);
+        corpDepartmentManageService.saveOrUpdateCorpDepartment(deptVO);
+        deptVO = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(deptVO.getCorpId(), deptVO.getDeptId());
+
+        //  然后推送到日事清
+        rsqAccountBizService.updateRsqDepartment(deptVO);
     }
 
     private void fetchAndSaveCorpDepartment(String corpId, Long deptId, Long scopeVersion) {
@@ -79,7 +83,7 @@ public class DeptService {
      * @param scopeVersion
      * @return
      */
-    private void fetchAndSaveCorpDepartmentRecursive(String corpId, Long parentId, Long scopeVersion) {
+    public void fetchAndSaveCorpDepartmentRecursive(String corpId, Long parentId, Long scopeVersion) {
         //  先保存根部门
         this.fetchAndSaveCorpDepartment(corpId, parentId, scopeVersion);
         List<CorpDepartmentVO> deptList = corpRequestHelper.getChildCorpDepartment(corpId, parentId);
@@ -95,12 +99,14 @@ public class DeptService {
         }
     }
 
-    private void pushAndDeleteCorpDepartmentRecursive(String corpId, Long parentDeptId) {
+    public void pushAndDeleteCorpDepartmentRecursive(String corpId, Long parentDeptId) {
         List<Long> childDeptIdList =
                 corpDepartmentManageService.listCorpDepartmentDeptIdByCorpIdAndParentId(
                         corpId, parentDeptId);
         if (childDeptIdList != null && childDeptIdList.size() > 0) {
-            pushAndDeleteCorpDepartmentRecursive(corpId, parentDeptId);
+            for (Long childDeptId : childDeptIdList) {
+                pushAndDeleteCorpDepartmentRecursive(corpId, childDeptId);
+            }
         }
         pushAndDeleteSingleDepartment(corpId, parentDeptId);
     }

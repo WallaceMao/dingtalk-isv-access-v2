@@ -146,6 +146,11 @@ public interface CorpStaffDao {
             @Param("scopeVersion") Long scopeVersion
     );
 
+    List<CorpStaffDO> listCorpStaffByCorpIdAndDepartmentLike(
+            @Param("corpId") String corpId,
+            @Param("likeCondition") String likeCondition
+    );
+
     Long countCorpStaffByCorpId(
             @Param("corpId") String corpId);
 

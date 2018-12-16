@@ -19,6 +19,8 @@ public interface CorpStaffManageService {
 
     List<CorpStaffVO> getCorpStaffListByCorpId(String corpId);
 
+    List<String> getCorpStaffUserIdListByCorpId(String corpId);
+
     List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdmin(String corpId, Boolean isAdmin);
 
     void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId);
@@ -34,6 +36,8 @@ public interface CorpStaffManageService {
 
     List<CorpStaffVO> getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
             String corpId, Boolean isAdmin, Long scopeVersion);
+
+    List<CorpStaffVO> listCorpStaffByCorpIdAndDepartment(String corpId, Long deptId);
 
     Long countCorpStaffByCorpId(String corpId);
 }

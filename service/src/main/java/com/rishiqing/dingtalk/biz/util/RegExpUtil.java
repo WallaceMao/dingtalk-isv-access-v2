@@ -23,12 +23,28 @@ public class RegExpUtil {
         return result;
     }
 
+    /**
+     * arrayString格式为"[123,234,678678]"，当且尽当element为"123","234",678678"时，才返回true
+     * @param arrayString
+     * @param element
+     * @return
+     */
+    public static Boolean ArrayStringContainsElement(String arrayString, String element) {
+        if (arrayString == null) {
+            return false;
+        }
+        String str = arrayString.replace("[", ",").replace("]", ",");
+        return str.contains("," + element + ",");
+    }
+
     public static void main(String[] args) {
-        System.out.println("-------------------");
-        Map<String, Object> json = new HashMap<>();
-        json.put("abc", "123");
-        json.put("xyz", "456");
-        String result = replacePathVariable("aaa.com/{abc}/ddd/{xyz}", json);
-        System.out.println(result);
+        // System.out.println("-------------------");
+        // Map<String, Object> json = new HashMap<>();
+        // json.put("abc", "123");
+        // json.put("xyz", "456");
+        // String result = replacePathVariable("aaa.com/{abc}/ddd/{xyz}", json);
+        // System.out.println(result);
+        System.out.println(ArrayStringContainsElement("[123,234,678678]", "12"));
+        System.out.println(ArrayStringContainsElement("[123,234,678678]", "123"));
     }
 }

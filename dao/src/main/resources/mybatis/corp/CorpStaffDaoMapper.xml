@@ -284,6 +284,16 @@
         WHERE corp_id=#{corpId}
         ]]>
     </select>
+
+    <select id="listCorpStaffByCorpIdAndDepartmentLike" resultMap="corpStaffMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_staff
+        <![CDATA[
+			WHERE corp_id=#{corpId} AND department LIKE #{likeCondition}
+		 ]]>
+    </select>
+
     <insert id="saveCorpStaffDeleted" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_corp_staff_deleted (
             gmt_create,

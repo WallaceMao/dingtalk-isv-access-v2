@@ -6,6 +6,7 @@ import com.google.common.eventbus.AsyncEventBus;
 import com.rishiqing.dingtalk.biz.constant.SystemConstant;
 import com.rishiqing.dingtalk.biz.converter.order.OrderConverter;
 import com.rishiqing.dingtalk.biz.service.util.QueueService;
+import com.rishiqing.dingtalk.biz.util.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
@@ -28,6 +29,8 @@ import com.rishiqing.self.api.model.RsqUser;
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import com.rishiqing.self.biz.http.RsqRequestHelper;
 import org.apache.commons.lang.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -37,10 +40,9 @@ import java.util.*;
  * Created by Wallace on 2016/11/29.
  */
 public class RsqAccountBizServiceImpl implements RsqAccountBizService {
+    private static final Logger bizLogger = LoggerFactory.getLogger(RsqAccountBizServiceImpl.class);
     @Autowired
     private SuiteManageService suiteManageService;
-    @Autowired
-    private CorpSuiteAuthManageService corpSuiteAuthManageService;
     @Autowired
     private CorpManageService corpManageService;
     @Autowired
@@ -287,7 +289,12 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  suiteKey
         SuiteVO suiteVO = suiteManageService.getSuite();
         //  提交更新
-        rsqRequestHelper.updateUser(suiteVO, corpStaffVO);
+        RsqUser rsqUser = rsqRequestHelper.updateUser(suiteVO, corpStaffVO);
+
+        if (corpStaffVO.getRsqUserId() == null) {
+            corpStaffVO.setRsqUserId(String.valueOf(rsqUser.getId()));
+            corpStaffManageService.updateRsqInfo(corpStaffVO);
+        }
     }
 
     @Override
@@ -473,14 +480,38 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
                 corpId, scopeVersion
         );
         for (CorpDepartmentVO dept : list) {
-            this.deleteRsqDepartment(dept);
+            //这地方要try catch出来，防止循环中有一个失败了，循环就不会继续进行了
+            try {
+                this.deleteRsqDepartment(dept);
+            } catch (Exception e) {
+                bizLogger.error(
+                        LogFormatter.format(
+                                LogFormatter.LogEvent.EXCEPTION,
+                                "delete deprecated corp department error",
+                                LogFormatter.getKV("corpId", corpId),
+                                LogFormatter.getKV("dept", dept)
+                        )
+                );
+            }
         }
     }
 
     private void deleteAllDeprecatedCorpStaff(String corpId, Long scopeVersion) {
         List<CorpStaffVO> list = corpStaffManageService.getCorpStaffListByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
         for (CorpStaffVO staff : list) {
-            this.removeRsqTeamStaff(staff);
+            //这地方要try catch出来，防止循环中有一个失败了，循环就不会继续进行了
+            try {
+                this.removeRsqTeamStaff(staff);
+            } catch (Exception e) {
+                bizLogger.error(
+                        LogFormatter.format(
+                                LogFormatter.LogEvent.EXCEPTION,
+                                "delete deprecated corp staff error",
+                                LogFormatter.getKV("corpId", corpId),
+                                LogFormatter.getKV("staff", staff)
+                        )
+                );
+            }
         }
     }
 

@@ -52,7 +52,7 @@
     <logger name="org.springframework" level="ERROR" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
-    <logger name="com.rishiqing" level="info" additivity="false">
+    <logger name="com.rishiqing" level="INFO" additivity="false">
         <appender-ref ref="ALIYUN" />
     </logger>
     <root level="error">

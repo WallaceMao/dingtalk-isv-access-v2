@@ -35,6 +35,9 @@ insert into isv_staff_popup_config (gmt_create, gmt_modified, suite_key, popup_t
 mvn install:install-file -Dfile=.\service\lib\taobao-sdk-java-auto_1479188381469-20181101.jar -DgroupId=com.dingtalk.open -DartifactId=taobao-sdk-java -Dversion=1.0 -Dpackaging=jar
 ```
 
+3. 配置阿里云定时任务
+增加系统参数：`-Dspas.identity=C:\Users\czip\dingtalk\alijob-config.properties`
+
 3. 升级jdk11的问题
 taobao-sdk-java.jar包不能直接兼容jdk11，需要找到源码重新编译。
 ```

@@ -25,7 +25,7 @@ public class PhoneCallBizServiceImpl implements PhoneCallBizService {
         // String loginUserId = getLoginUserId();
         SuiteTokenVO suiteTokenVO = suiteManageService.getSuiteToken();
         CorpSuiteAuthVO corpSuiteAuthVO  = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
-        return suiteRequestHelper.callCorpUser(suiteTokenVO, corpSuiteAuthVO.getAuthUserId(), loginUserId, corpId);
+        return suiteRequestHelper.callCorpUser(suiteTokenVO, corpId, corpSuiteAuthVO.getAuthUserId(), loginUserId);
     }
 
     @Override

@@ -8,13 +8,11 @@ import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageServ
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
 import com.rishiqing.self.api.service.RsqAccountBizService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Wallace Mao

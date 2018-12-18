@@ -115,6 +115,7 @@
         FROM `isv_corp_suite_auth` a
                  LEFT JOIN `isv_corp` c ON a.corp_id = c.corp_id
                  LEFT JOIN `isv_corp_staff` s ON a.auth_user_id = s.user_id
+        ORDER BY a.id
         LIMIT #{offset}, #{size}
     </select>
     <select id="countCorp" resultType="java.lang.Long">

@@ -33,17 +33,11 @@
 
     <mvc:resources mapping="/checkpreload.html" location="/checkpreload.html" />
 
-    <!--interceptors-->
-    <!--<bean id="callbackVerifyInterceptor" class="com.rishiqing.qywx.web.interceptor.CallbackVerifyInterceptor" />-->
-    <!--<bean id="callbackMessageInterceptor" class="com.rishiqing.qywx.web.interceptor.CallbackMessageInterceptor" />-->
+    <!--拦截器-->
     <!--<mvc:interceptors>-->
         <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/suite/receive"/>-->
-            <!--<ref bean="callbackVerifyInterceptor" />-->
-        <!--</mvc:interceptor>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/suite/receive"/>-->
-            <!--<ref bean="callbackMessageInterceptor" />-->
+            <!--<mvc:mapping path="/v3w/**"/>-->
+            <!--<bean id="jwtInterceptor" class="com.rishiqing.dingtalk.web.interceptor.JwtInterceptor" />-->
         <!--</mvc:interceptor>-->
     <!--</mvc:interceptors>-->
 </beans>

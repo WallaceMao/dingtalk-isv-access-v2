@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.rishiqing.ding</groupId>
-    <artifactId>ding.isv.access</artifactId>
+    <artifactId>ding-isv-access</artifactId>
     <packaging>pom</packaging>
     <version>2.0.0</version>
     <modules>
@@ -15,6 +15,7 @@
         <module>web</module>
         <module>webjob</module>
         <module>taskjob</module>
+        <module>webcrm</module>
     </modules>
     <properties>
         <spring.version>5.1.3.RELEASE</spring.version>
@@ -23,17 +24,17 @@
         <dependencies>
             <dependency>
                 <groupId>com.rishiqing.ding</groupId>
-                <artifactId>ding.isv.access.dao</artifactId>
+                <artifactId>ding-isv-access-dao</artifactId>
                 <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.rishiqing.ding</groupId>
-                <artifactId>ding.isv.access.api</artifactId>
+                <artifactId>ding-isv-access-api</artifactId>
                 <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.rishiqing.ding</groupId>
-                <artifactId>ding.isv.access.service</artifactId>
+                <artifactId>ding-isv-access-service</artifactId>
                 <version>2.0.0</version>
             </dependency>
 
@@ -279,6 +280,12 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>1.11.3</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>3.4.1</version>
             </dependency>
             <!--本地jar包-->
             <dependency>

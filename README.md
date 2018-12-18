@@ -38,7 +38,10 @@ mvn install:install-file -Dfile=.\service\lib\taobao-sdk-java-auto_1479188381469
 3. 配置阿里云定时任务
 增加系统参数：`-Dspas.identity=C:\Users\czip\dingtalk\alijob-config.properties`
 
-3. 升级jdk11的问题
+4. 配置logback日志文件
+通过设置系统参数：`-Dlogback.configurationFile=logback-dev.xml`。logback会去classpath下查找logback-dev.xml文件
+
+5. 升级jdk11的问题（暂不升级）
 taobao-sdk-java.jar包不能直接兼容jdk11，需要找到源码重新编译。
 ```
 mvn clean test-compile -pl taobao-sdk-java -am

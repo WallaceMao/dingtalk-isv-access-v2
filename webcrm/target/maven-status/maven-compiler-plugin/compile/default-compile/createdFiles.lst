@@ -1,0 +1,6 @@
+com\rishiqing\dingtalk\webcrm\util\jwt\JwtUtil.class
+com\rishiqing\dingtalk\webcrm\controller\app\CorpController.class
+com\rishiqing\dingtalk\webcrm\controller\app\ManualController.class
+com\rishiqing\dingtalk\webcrm\controller\app\LoginController.class
+com\rishiqing\dingtalk\webcrm\controller\app\PhoneCallController.class
+com\rishiqing\dingtalk\webcrm\interceptor\JwtInterceptor.class

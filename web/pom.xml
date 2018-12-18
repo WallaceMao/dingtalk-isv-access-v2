@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>ding.isv.access</artifactId>
+        <artifactId>ding-isv-access</artifactId>
         <groupId>com.rishiqing.ding</groupId>
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ding.isv.access.web</artifactId>
+    <artifactId>ding-isv-access-web</artifactId>
     <packaging>war</packaging>
     <name>web app for dingtalk</name>
     <url>https://www.rishiqing.com</url>
@@ -23,7 +23,7 @@
         <!--</dependency>-->
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding.isv.access.service</artifactId>
+            <artifactId>ding-isv-access-service</artifactId>
         </dependency>
 
         <!--spring-->
@@ -100,42 +100,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>ding-isv-access</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <!--<configuration>-->
-                    <!--<webResources>-->
-                        <!--<resource>-->
-                            <!--&lt;!&ndash;不使用maven管理的本地的lib&ndash;&gt;-->
-                            <!--<directory>lib/</directory>-->
-                            <!--<targetPath>WEB-INF/lib</targetPath>-->
-                            <!--<includes>-->
-                                <!--<include>**/*.jar</include>-->
-                            <!--</includes>-->
-                        <!--</resource>-->
-                    <!--</webResources>-->
-                <!--</configuration>-->
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>web-service-war</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/main.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

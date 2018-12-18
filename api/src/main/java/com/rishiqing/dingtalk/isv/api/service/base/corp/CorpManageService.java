@@ -1,6 +1,9 @@
 package com.rishiqing.dingtalk.isv.api.service.base.corp;
 
+import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
+
+import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -38,4 +41,10 @@ public interface CorpManageService {
     CorpStatisticVO getCorpStatisticByCorpId(String corpId);
 
     CorpStatisticVO getCorpStatisticByCorpIdForUpdate(String corpId);
+
+    List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset);
+
+    Long countCorp();
+
+    Long countCorpSuiteAuth();
 }

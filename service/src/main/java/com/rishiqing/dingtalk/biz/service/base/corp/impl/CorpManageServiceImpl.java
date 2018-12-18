@@ -13,6 +13,7 @@ import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -201,5 +202,20 @@ public class CorpManageServiceImpl implements CorpManageService {
         return CorpStatisticConverter.corpStatisticDO2CorpStatisticVO(
                 corpStatisticDao.getCorpStatisticByCorpIdForUpdate(corpId)
         );
+    }
+
+    @Override
+    public List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset) {
+        return corpDao.listPageCorpWithCreator(pageSize, offset);
+    }
+
+    @Override
+    public Long countCorp() {
+        return corpDao.countCorp();
+    }
+
+    @Override
+    public Long countCorpSuiteAuth() {
+        return corpDao.countCorpSuiteAuth();
     }
 }

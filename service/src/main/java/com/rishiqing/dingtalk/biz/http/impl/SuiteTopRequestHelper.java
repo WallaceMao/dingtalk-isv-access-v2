@@ -222,7 +222,6 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
         IsvCallCalluserResponse rsp = null;
         try {
             rsp = client.execute(req, suiteAccessToken);
-            System.out.println(rsp.getBody());
             return rsp.getBody();
         } catch (ApiException e) {
             throw new BizRuntimeException(e);

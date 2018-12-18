@@ -21,11 +21,11 @@ public class PhoneCallBizServiceImpl implements PhoneCallBizService {
     private CorpSuiteAuthManageService corpSuiteAuthManageService;
 
     @Override
-    public void callActivateAdmin(String corpId, String loginUserId) {
+    public String callActivateAdmin(String corpId, String loginUserId) {
         // String loginUserId = getLoginUserId();
         SuiteTokenVO suiteTokenVO = suiteManageService.getSuiteToken();
         CorpSuiteAuthVO corpSuiteAuthVO  = corpSuiteAuthManageService.getCorpSuiteAuth(corpId);
-        suiteRequestHelper.callCorpUser(suiteTokenVO, corpSuiteAuthVO.getAuthUserId(), loginUserId, corpId);
+        return suiteRequestHelper.callCorpUser(suiteTokenVO, corpSuiteAuthVO.getAuthUserId(), loginUserId, corpId);
     }
 
     @Override

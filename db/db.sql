@@ -734,7 +734,7 @@ CREATE TABLE `isv_corp_suite_auth_user` (
   UNIQUE KEY `u_corp_suite_dept` (`corp_id`, `user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='企业授权用户的记录表';
 
-# 修改索引，统一去掉suiteKey
+# 修改索引，统一去掉suiteKey（暂不同步到日事清）
 ALTER TABLE `isv_corp_suite_jsapi_ticket`
   DROP INDEX `u_suite_corp`,
   ADD UNIQUE INDEX `u_suite_corp`(`corp_id`) USING BTREE;

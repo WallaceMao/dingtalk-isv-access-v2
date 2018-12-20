@@ -59,6 +59,11 @@ public class CorpManageServiceImpl implements CorpManageService {
     }
 
     @Override
+    public CorpDO getCorpById(Long id){
+        return corpDao.getCorpById(id);
+    }
+
+    @Override
     public CorpVO getCorpByCorpId(String corpId) {
         return CorpConverter.CorpDO2CorpVO(
                 corpDao.getCorpByCorpId(corpId)

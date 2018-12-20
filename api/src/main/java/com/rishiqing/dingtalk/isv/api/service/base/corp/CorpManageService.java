@@ -14,6 +14,8 @@ public interface CorpManageService {
 
     void saveOrUpdateCorpJSTicket(CorpJSAPITicketVO corpJSAPITicketVO);
 
+    CorpDO getCorpById(Long id);
+
     CorpVO getCorpByCorpId(String corpId);
 
     void updateRsqInfo(CorpVO corpVO);

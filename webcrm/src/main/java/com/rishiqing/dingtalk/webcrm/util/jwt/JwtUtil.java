@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.webcrm.util.jwt;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -25,6 +26,7 @@ public class JwtUtil {
         return JWT.create()
                 .withIssuer(JWT_ISSUER)
                 .withExpiresAt(new Date(now + JWT_EXPIRE_MILLS))
+                .withSubject(JSON.toJSONString(staffVO))
                 .sign(algorithm);
     }
 
@@ -36,7 +38,7 @@ public class JwtUtil {
                     .withIssuer(JWT_ISSUER)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
-            staffVO = JSONObject.parseObject(jwt.getPayload(), CorpStaffVO.class);
+            staffVO = JSONObject.parseObject(jwt.getSubject(), CorpStaffVO.class);
         } catch (JWTVerificationException e) {
             // 如果验证失败，那么就不做处理
         }

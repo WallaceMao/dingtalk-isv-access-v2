@@ -31,16 +31,15 @@
     <!--配置需要扫描的包-->
     <context:component-scan base-package="com.rishiqing.dingtalk.webcrm.controller" />
 
-    <mvc:resources mapping="/checkpreload.html" location="/checkpreload.html" />
-    <mvc:resources mapping="/index.html" location="/index.html" />
+    <mvc:resources mapping="/*.html" location="/" />
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/js/**" location="/js/" />
 
     <!--拦截器-->
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/v3w/**"/>-->
-            <!--<bean id="jwtInterceptor" class="com.rishiqing.dingtalk.web.interceptor.JwtInterceptor" />-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/v3w/**"/>
+            <bean id="jwtInterceptor" class="com.rishiqing.dingtalk.webcrm.interceptor.JwtInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

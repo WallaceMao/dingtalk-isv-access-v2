@@ -6,10 +6,16 @@
     <script src="./js/jquery-2.1.3.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./js/jquery.bootpag.js"></script>
+    <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
 </head>
 <body>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button id="logout" class="btn btn-default" type="button" onclick="logout()">注销</button>
+        </div>
+    </div>
     <div id="content">
         <table class="table table-striped table-hover">
             <thead>
@@ -31,6 +37,11 @@
     </div>
     <div id="page-selection"></div>
     <script>
+        var TOKEN_NAME = "WORKBEI_TOKEN";
+        var LOGIN_PAGE = "./login.html";
+        var URL_LIST_PAGE = "/crm/v3w/corp/list";
+        var URL_CALL_CORP_ADMIN = "/crm/v3w/isv/callActivateAdmin";
+        //  工具类
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
             name = name.replace(/[\[\]]/g, '\\$&');
@@ -40,28 +51,53 @@
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
-        function fetchData(){
-            $.get("/crm/v3w/corp/list", function(json){
+        function combineParams(params){
+            params = params || {};
+            var arr = [];
+            for(var key in params){
+                if(params.hasOwnProperty(key)){
+                    arr.push(encodeURIComponent(key) + "=" + encodeURIComponent(params(key)));
+                }
+            }
+            return arr.join("&");
+        }
+        function checkAuth(){
+            return localStorage.getItem(TOKEN_NAME);
+        }
+        // ajax方法
+        function fetchPageData(event, num){
+            var isInit = !event;
+            var url = URL_LIST_PAGE;
+            if(!isInit){
+                url += "?" + combineParams({pageOffset: num - 1});
+            }
+            $.ajax({
+                headers: {Authorization: checkAuth()},
+                method: "GET",
+                url: url
+            }).done(function(json){
                 console.log(json);
-                renderPage(json.data)
-                $('#page-selection').bootpag({
-                    total: Math.ceil(json.total / json.pageSize),
-                    page: json.pageOffset + 1,
-                    maxVisible: 10
-                }).on("page", function (event, num) {
-                    $.get("/crm/v3w/corp/list?pageOffset=" + (num-1), function(json){
-                        console.log(json);
-                        renderPage(json.data)
-                    });
-                });
+                renderPage(json.data);
+                if(isInit){
+                    renderPagination(json, fetchPageData);
+                }
             });
         }
         function phoneCall(corpId) {
-            var userId = getParameterByName("callUserId");
-            $.post("/crm/v3w/isv/callActivateAdmin?corpId=" + corpId + "&callUserId=" + userId, function(result){
+            var url = URL_CALL_CORP_ADMIN + "?" + combineParams({corpId: corpId});
+            $.ajax({
+                headers: {Authorization: checkAuth()},
+                method: "POST",
+                url: url
+            }).done(function(result){
                 alert(JSON.stringify(result));
             });
         }
+        function logout(){
+            localStorage.clear();
+            window.location.href = LOGIN_PAGE;
+        }
+        // view视图渲染方法
         function renderPage(array){
             var str = "";
             array.forEach(function(line){
@@ -76,15 +112,23 @@
                 str += "<td>" + line.creatorIsBoss + "</td>";
                 str += "<td><button type=\"button\" class=\"btn btn-success\" onclick=\"phoneCall('" + line.corpId + "')\">打电话</button></td>";
                 str += "</tr>";
-            })
+            });
             $("#data-content").html(str);
         }
+        function renderPagination(json, cb){
+            $('#page-selection').bootpag({
+                total: Math.ceil(json.total / json.pageSize),
+                page: json.pageOffset + 1,
+                maxVisible: 10
+            }).on("page", cb);
+        }
+        // 初始化
         function init(){
-            var userId = getParameterByName("callUserId");
-            if(!userId){
-                $('#content').html('error');
+            if(!checkAuth()){
+                window.location.href = LOGIN_PAGE;
+                return;
             }
-            fetchData();
+            fetchPageData();
         }
         init();
     </script>

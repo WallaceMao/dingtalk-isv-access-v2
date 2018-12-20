@@ -48,7 +48,10 @@ public class CorpController {
         ));
         try{
             //TODO  这里需要根据权限获取用户信息.这里需要读取当前登录用户的信息，作为主叫方
-            // CorpStaffVO loginUser = (CorpStaffVO) request.getAttribute("loginUser");
+            CorpStaffVO loginUser = (CorpStaffVO) request.getAttribute("loginUser");
+            if (loginUser == null) {
+                return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
+            }
             pageSize = pageSize == null ? 10L : pageSize;
             pageOffset = pageOffset == null ? 0L : pageOffset;
             List<CorpCountWithCreatorVO> dataList = corpQueryService.listPageCorpCount(pageSize, pageOffset * pageSize);

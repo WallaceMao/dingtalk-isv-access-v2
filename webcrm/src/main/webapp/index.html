@@ -56,7 +56,7 @@
             var arr = [];
             for(var key in params){
                 if(params.hasOwnProperty(key)){
-                    arr.push(encodeURIComponent(key) + "=" + encodeURIComponent(params(key)));
+                    arr.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
                 }
             }
             return arr.join("&");

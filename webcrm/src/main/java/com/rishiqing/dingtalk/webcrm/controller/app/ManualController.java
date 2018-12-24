@@ -74,12 +74,20 @@ public class ManualController {
                     bizLogger.warn("id not found: " + i);
                     continue;
                 }
-                SuiteVO suiteVO = suiteManager.getSuite();
-                SuiteTicketVO suiteTicketVO = suiteManager.getSuiteTicket();
-                CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, corpDO.getCorpId());
-                CorpSuiteAuthVO corpSuiteAuthVO = CorpSuiteAuthConverter.corpAuthInfoVO2CorpSuiteAuthVO(
-                        suiteVO.getSuiteKey(), corpAuthInfoVO);
-                corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
+                try {
+                    SuiteVO suiteVO = suiteManager.getSuite();
+                    SuiteTicketVO suiteTicketVO = suiteManager.getSuiteTicket();
+                    CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, corpDO.getCorpId());
+                    CorpSuiteAuthVO dbAuthVO = corpSuiteAuthManager.getCorpSuiteAuth(corpDO.getCorpId());
+                    if (dbAuthVO == null) {
+                        bizLogger.warn("corp auth VO not found: " + i);
+                        continue;
+                    }
+                    dbAuthVO.setAuthUserId(corpAuthInfoVO.getAuthUserInfo().getUserId());
+                    corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(dbAuthVO);
+                } catch (Exception e) {
+                    bizLogger.error("getCorpAuthInfo error corp id is " + i);
+                }
             }
             return "success";
         } catch (Exception e) {

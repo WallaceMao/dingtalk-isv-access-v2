@@ -2,7 +2,7 @@ package com.rishiqing.dingtalk.webcrm.controller.app;
 
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpCountWithCreatorVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpQueryService;

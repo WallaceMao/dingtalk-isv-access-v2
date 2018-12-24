@@ -2,7 +2,7 @@ package com.rishiqing.dingtalk.biz.schedule;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;

@@ -11,19 +11,22 @@
     <name>service layer for dingtalk</name>
     <url>https://www.rishiqing.com</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding-isv-access-dao</artifactId>
-            <version>2.0.0</version>
+            <artifactId>auth-manager-dao-dingmain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dingtalk.open</groupId>
-            <artifactId>taobao-sdk-java</artifactId>
+            <groupId>com.rishiqing.ding</groupId>
+            <artifactId>auth-manager-dao-dingpush</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rishiqing.ding</groupId>
+            <artifactId>auth-manager-req-rsq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rishiqing.ding</groupId>
+            <artifactId>auth-manager-req-dingtalk</artifactId>
         </dependency>
 
         <dependency>
@@ -75,11 +78,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
         </dependency>
 
         <!--jms-->

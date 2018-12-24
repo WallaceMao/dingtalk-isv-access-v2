@@ -2,9 +2,9 @@ package com.rishiqing.dingtalk.webcrm.controller.app;
 
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import com.rishiqing.dingtalk.webcrm.util.jwt.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class LoginController {
     private static final Logger bizLogger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -47,7 +47,7 @@ public class LoginController {
                 LogFormatter.getKV("password", password)
         ));
         try{
-            CorpStaffVO staffVO = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, username);
+            CorpStaffVO staffVO = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, username);
             if (staffVO == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(), HttpResultCode.SYS_ERROR.getErrMsg());

@@ -5,8 +5,6 @@ import com.google.common.eventbus.EventBus;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpAppConverter;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpSuiteAuthConverter;
-import com.rishiqing.dingtalk.biz.service.util.DeptService;
-import com.rishiqing.dingtalk.biz.service.util.StaffService;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgCreatedEvent;
 import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
@@ -18,12 +16,12 @@ import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.AppManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
+import com.rishiqing.dingtalk.manager.suite.AppManager;
+import com.rishiqing.dingtalk.manager.suite.CorpAppManager;
+import com.rishiqing.dingtalk.manager.suite.CorpSuiteAuthManager;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,21 +35,21 @@ import java.util.List;
  */
 public class CorpBizServiceImpl implements CorpBizService {
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
     @Autowired
-    private AppManageService appManageService;
+    private AppManager appManager;
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpManager corpManager;
     @Autowired
-    private CorpAppManageService corpAppManageService;
+    private CorpAppManager corpAppManager;
     @Autowired
-    private CorpSuiteAuthManageService corpSuiteAuthManageService;
+    private CorpSuiteAuthManager corpSuiteAuthManager;
     @Autowired
     private DeptService deptService;
     @Autowired
     private StaffService staffService;
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
     @Autowired
     private EventBus asyncCorpOrgCreatedEventBus;
     @Autowired
@@ -107,11 +105,11 @@ public class CorpBizServiceImpl implements CorpBizService {
     @Override
     public void relieveCorpApp(String corpId) {
         //  删除团队后，暂时不会做任何处理
-        AppVO app = appManageService.getDefaultAppVO();
-        corpManageService.deleteCorpSuiteAuthByCorpId(corpId);
-        corpManageService.deleteCorpAppByCorpId(corpId, app.getAppId());
-        corpManageService.deleteCorpTokenByCorpId(corpId);
-        corpManageService.deleteCorpJSAPITicketByCorpId(corpId);
+        AppVO app = appManager.getDefaultAppVO();
+        corpManager.deleteCorpSuiteAuthByCorpId(corpId);
+        corpManager.deleteCorpAppByCorpId(corpId, app.getAppId());
+        corpManager.deleteCorpTokenByCorpId(corpId);
+        corpManager.deleteCorpJSAPITicketByCorpId(corpId);
         //  fail暂不处理
 //        failBizService.deleteCorpSuiteAuthFailById();
     }
@@ -141,7 +139,7 @@ public class CorpBizServiceImpl implements CorpBizService {
     }
 
     private void fetchAndSaveCorpAuth(CorpAuthInfoVO corpAuthInfo, Long timestamp) {
-        SuiteVO suiteVO = suiteManageService.getSuite();
+        SuiteVO suiteVO = suiteManager.getSuite();
         String suiteKey = suiteVO.getSuiteKey();
 
         String corpId = corpAuthInfo.getAuthCorpInfo().getCorpId();
@@ -162,17 +160,17 @@ public class CorpBizServiceImpl implements CorpBizService {
         //  在这里corpAuthInfo是完整的包含可见范围和授权的企业信息的对象
 
         //  3.  保存公司信息
-        corpManageService.saveOrUpdateCorp(
+        corpManager.saveOrUpdateCorp(
                 CorpConverter.corpAuthInfoVO2CorpVO(corpAuthInfo, timestamp)
         );
         //TODO 3.1 获取一次corpToken和corpJSAPIToken
-        corpManageService.getCorpTokenByCorpId(corpId);
-        corpManageService.getCorpJSAPITicketByCorpId(corpId);
+        corpManager.getCorpTokenByCorpId(corpId);
+        corpManager.getCorpJSAPITicketByCorpId(corpId);
 
         //  4.  保存corpApp的关联信息
         List<CorpAppVO> corpAppVOList = CorpAppConverter.corpAuthInfoVO2AppVOList(corpAuthInfo);
         for (CorpAppVO corpAppVO : corpAppVOList) {
-            corpAppManageService.saveOrUpdateCorpApp(corpAppVO);
+            corpAppManager.saveOrUpdateCorpApp(corpAppVO);
         }
 
         //  5.  根据可见范围获取部门
@@ -189,15 +187,15 @@ public class CorpBizServiceImpl implements CorpBizService {
             userCount = userCount + authUserList.size();
         }
         staffService.fetchAndSaveCorpStaffList(corpId, authUserList, timestamp);
-        corpManageService.saveOrUpdateCorpStatisticUserCount(corpId, userCount);
+        corpManager.saveOrUpdateCorpStatisticUserCount(corpId, userCount);
 
         //  7.  保存授权信息。处理授权方管理员，谁开通的日事清，就以谁作为创建者。
         CorpSuiteAuthVO corpSuiteAuthVO = CorpSuiteAuthConverter.corpAuthInfoVO2CorpSuiteAuthVO(suiteKey, corpAuthInfo);
-        corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
+        corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
     }
 
     private void postCorpOrgCreatedEvent(CorpAuthInfoVO corpAuthInfo, Long timestamp) {
-        SuiteVO suiteVO = suiteManageService.getSuite();
+        SuiteVO suiteVO = suiteManager.getSuite();
         String suiteKey = suiteVO.getSuiteKey();
         String corpId = corpAuthInfo.getAuthCorpInfo().getCorpId();
         CorpOrgCreatedEvent corpOrgCreatedEvent = new CorpOrgCreatedEvent();
@@ -208,7 +206,7 @@ public class CorpBizServiceImpl implements CorpBizService {
     }
 
     private void postCorpOrgChangedEvent(CorpAuthInfoVO corpAuthInfo, Long scopeVersion) {
-        SuiteVO suiteVO = suiteManageService.getSuite();
+        SuiteVO suiteVO = suiteManager.getSuite();
         String suiteKey = suiteVO.getSuiteKey();
         String corpId = corpAuthInfo.getAuthCorpInfo().getCorpId();
         CorpOrgChangedEvent corpOrgChangedEvent = new CorpOrgChangedEvent();

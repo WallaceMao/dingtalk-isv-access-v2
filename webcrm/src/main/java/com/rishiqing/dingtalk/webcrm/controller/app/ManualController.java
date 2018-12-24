@@ -1,16 +1,16 @@
 package com.rishiqing.dingtalk.webcrm.controller.app;
 
+import com.rishiqing.dingtalk.auth.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpSuiteAuthConverter;
-import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
+import com.rishiqing.dingtalk.manager.suite.CorpSuiteAuthManager;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,11 @@ public class ManualController {
     @Autowired
     private SuiteRequestHelper suiteRequestHelper;
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpManager corpManager;
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
     @Autowired
-    private CorpSuiteAuthManageService corpSuiteAuthManageService;
+    private CorpSuiteAuthManager corpSuiteAuthManager;
 
     @RequestMapping("/ping")
     @ResponseBody
@@ -69,17 +69,17 @@ public class ManualController {
             // 最大不超过50
             length = Math.min(length, 50L);
             for (long i = startId; i < startId + length; i++) {
-                CorpDO corpDO = corpManageService.getCorpById(i);
+                CorpDO corpDO = corpManager.getCorpById(i);
                 if (corpDO == null) {
                     bizLogger.warn("id not found: " + i);
                     continue;
                 }
-                SuiteVO suiteVO = suiteManageService.getSuite();
-                SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
+                SuiteVO suiteVO = suiteManager.getSuite();
+                SuiteTicketVO suiteTicketVO = suiteManager.getSuiteTicket();
                 CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, corpDO.getCorpId());
                 CorpSuiteAuthVO corpSuiteAuthVO = CorpSuiteAuthConverter.corpAuthInfoVO2CorpSuiteAuthVO(
                         suiteVO.getSuiteKey(), corpAuthInfoVO);
-                corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
+                corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(corpSuiteAuthVO);
             }
             return "success";
         } catch (Exception e) {

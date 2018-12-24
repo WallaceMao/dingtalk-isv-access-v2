@@ -2,12 +2,12 @@ package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
-import com.rishiqing.dingtalk.biz.service.util.StaffService;
+import com.rishiqing.dingtalk.biz.service.biz.impl.StaffService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpDepartmentManager;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -19,9 +19,9 @@ import java.util.Date;
  */
 public class UserDeptChangeSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
     @Autowired
-    private CorpDepartmentManageService corpDepartmentManageService;
+    private CorpDepartmentManager corpDepartmentManager;
     @Autowired
     private StaffService staffService;
     /**
@@ -55,7 +55,7 @@ public class UserDeptChangeSyncActionHandler implements SyncActionHandler {
         // 加人：如果corpId和userId在系统中原本不存在，那么就直接加人
         // 减人：如果corpId和userId在系统中存在，但是新的deptIdList全部都不在可见范围之内，那么就减人
         // 维持不变，如果corpId和userId在系统中存在，且deptIdList中至少有一个deptId在可见范围之内，那么就只更新deptIdList列表
-        CorpStaffVO dbStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        CorpStaffVO dbStaff = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, userId);
         if (dbStaff == null) {
             // 加人
             staffService.saveCorpStaffAndAddCount(corpStaffVO, new Date().getTime());
@@ -65,7 +65,7 @@ public class UserDeptChangeSyncActionHandler implements SyncActionHandler {
         }
         // boolean toDelete = true;
         // for (Long deptId: corpStaffVO.getDepartment()) {
-        //     CorpDepartmentVO corpDept = corpDepartmentManageService.getCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
+        //     CorpDepartmentVO corpDept = corpDepartmentManager.getCorpDepartmentByCorpIdAndDeptId(corpId, deptId);
         //     if (corpDept != null) {
         //         toDelete = false;
         //         break;

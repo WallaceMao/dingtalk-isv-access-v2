@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.dao.mapper.fail.CorpSuiteAuthFailDao">
+
+    <resultMap type="com.rishiqing.dingtalk.dao.model.fail.CorpSuiteAuthFailDO" id="corpSuiteAuthFailMap">
+        <id property="id" column="id" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="corpId" column="corp_id" />
+        <result property="failInfo" column="fail_info" />
+        <result property="authFailType" column="auth_fail_type" />
+        <result property="suitePushType" column="suite_push_type" />
+    </resultMap>
+
+    <sql id="select-all-fields">
+        id,
+        gmt_create,
+        gmt_modified,
+        suite_key,
+        corp_id,
+        fail_info,
+        auth_fail_type,
+        suite_push_type
+    </sql>
+
+    <insert id="saveOrUpdateCorpSuiteAuthFail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_suite_auth_fail (
+        gmt_create,
+        gmt_modified,
+        suite_key,
+        corp_id,
+        fail_info,
+        auth_fail_type,
+        suite_push_type
+        )VALUES(
+        now(),
+        now(),
+        #{suiteKey},
+        #{corpId},
+        #{failInfo},
+        #{authFailType},
+        #{suitePushType}
+        )ON DUPLICATE KEY UPDATE gmt_modified=now(),fail_info=#{failInfo}
+    </insert>
+
+    <delete id="deleteCorpSuiteAuthFailById">
+        DELETE FROM isv_corp_suite_auth_fail WHERE id=#{id}
+    </delete>
+
+    <select id="getCorpSuiteAuthFailList" resultMap="corpSuiteAuthFailMap">
+        SELECT <include refid="select-all-fields"/> FROM isv_corp_suite_auth_fail
+        LIMIT #{offset},#{limit}
+    </select>
+
+</mapper>

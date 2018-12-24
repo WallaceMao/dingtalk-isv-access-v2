@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.biz.schedule;
 
-import com.rishiqing.dingtalk.biz.service.util.SuiteService;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.dingtalk.biz.service.biz.impl.SuiteService;
+import com.rishiqing.common.log.LogFormatter;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;

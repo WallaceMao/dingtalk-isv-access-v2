@@ -1,10 +1,10 @@
 package com.rishiqing.dingtalk.web.controller.suite;
 
 import com.alibaba.fastjson.JSONObject;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.enumtype.SuitePushType;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteCallbackBizService;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteCallbackConverter;
 import com.rishiqing.dingtalk.web.util.crypto.DingTalkEncryptor;
@@ -27,7 +27,7 @@ public class SuiteCallbackController {
     private static final Logger bizLogger = LoggerFactory.getLogger(SuiteCallbackController.class);
 
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
     @Autowired
     private SuiteCallbackBizService suiteCallbackBizService;
 
@@ -58,7 +58,7 @@ public class SuiteCallbackController {
                 new LogFormatter.KeyValue("json", json)
         ));
         String successString = "success";
-        SuiteVO globalSuite = suiteManageService.getSuite();
+        SuiteVO globalSuite = suiteManager.getSuite();
         String suiteKey = globalSuite.getSuiteKey();
         try {
             //  调用钉钉的sdk进行解密操作

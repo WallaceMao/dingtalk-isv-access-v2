@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
-import com.rishiqing.dingtalk.biz.converter.fail.FailConverter;
+import com.rishiqing.dingtalk.converter.fail.FailConverter;
 import com.rishiqing.dingtalk.dao.mapper.fail.CorpOrgSyncFailDao;
 import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;

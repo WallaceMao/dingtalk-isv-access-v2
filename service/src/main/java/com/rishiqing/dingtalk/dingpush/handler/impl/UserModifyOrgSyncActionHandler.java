@@ -2,12 +2,11 @@ package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
-import com.rishiqing.dingtalk.biz.service.util.StaffService;
+import com.rishiqing.dingtalk.biz.service.biz.impl.StaffService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
-import com.rishiqing.self.api.service.RsqAccountBizService;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -20,7 +19,7 @@ public class UserModifyOrgSyncActionHandler implements SyncActionHandler {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
 
     /**
      * @param data
@@ -49,7 +48,7 @@ public class UserModifyOrgSyncActionHandler implements SyncActionHandler {
         CorpStaffVO corpStaffVO = SuiteDbCheckConverter.json2CorpStaff(json);
         corpStaffVO.setCorpId(corpId);
         // 这里要判断是不是userId是不是存在，如果不存在的话要走保存方法，如果存在的话走更新
-        CorpStaffVO dbStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        CorpStaffVO dbStaff = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, userId);
         if (dbStaff == null) {
             staffService.saveCorpStaffAndAddCount(corpStaffVO, new Date().getTime());
         } else {

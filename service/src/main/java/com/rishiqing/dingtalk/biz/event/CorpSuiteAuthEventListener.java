@@ -2,7 +2,7 @@ package com.rishiqing.dingtalk.biz.event;
 
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.event.EventListener;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;

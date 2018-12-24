@@ -66,11 +66,7 @@
         }
         // ajax方法
         function fetchPageData(event, num){
-            var isInit = !event;
-            var url = URL_LIST_PAGE;
-            if(!isInit){
-                url += "?" + combineParams({pageOffset: num - 1});
-            }
+            var url = URL_LIST_PAGE + "?" + combineParams({pageOffset: num - 1});
             $.ajax({
                 headers: {Authorization: checkAuth()},
                 method: "GET",
@@ -78,9 +74,7 @@
             }).done(function(json){
                 console.log(json);
                 renderPage(json.data);
-                if(isInit){
-                    renderPagination(json, fetchPageData);
-                }
+                renderPagination(json);
             });
         }
         function phoneCall(corpId) {
@@ -119,8 +113,9 @@
             $('#page-selection').bootpag({
                 total: Math.ceil(json.total / json.pageSize),
                 page: json.pageOffset + 1,
-                maxVisible: 10
-            }).on("page", cb);
+                maxVisible: 20,
+                href: "?pageOffset={{number}}"
+            });
         }
         // 初始化
         function init(){
@@ -128,7 +123,8 @@
                 window.location.href = LOGIN_PAGE;
                 return;
             }
-            fetchPageData();
+            var offset = getParameterByName('pageOffset') || "1";
+            fetchPageData(null, parseInt(offset));
         }
         init();
     </script>

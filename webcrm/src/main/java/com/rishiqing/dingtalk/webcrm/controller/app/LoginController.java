@@ -67,6 +67,7 @@ public class LoginController {
                     LogFormatter.getKV("username", username),
                     LogFormatter.getKV("password", password)
             ), e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
         }
     }

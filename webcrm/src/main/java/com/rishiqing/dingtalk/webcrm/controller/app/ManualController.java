@@ -67,7 +67,7 @@ public class ManualController {
         ));
         try {
             // 最大不超过50
-            length = Math.min(length, 50L);
+            length = Math.min(length, 100L);
             for (long i = startId; i < startId + length; i++) {
                 CorpDO corpDO = corpManager.getCorpById(i);
                 if (corpDO == null) {
@@ -79,9 +79,11 @@ public class ManualController {
                     SuiteTicketVO suiteTicketVO = suiteManager.getSuiteTicket();
                     CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, corpDO.getCorpId());
                     CorpSuiteAuthVO dbAuthVO = corpSuiteAuthManager.getCorpSuiteAuth(corpDO.getCorpId());
-                    if (dbAuthVO == null) {
-                        bizLogger.warn("corp auth VO not found: " + i);
+                    if (dbAuthVO != null && dbAuthVO.getAuthUserId() != null) {
                         continue;
+                    }
+                    if(dbAuthVO == null){
+                        dbAuthVO = CorpSuiteAuthConverter.corpAuthInfoVO2CorpSuiteAuthVO(suiteVO.getSuiteKey(), corpAuthInfoVO);
                     }
                     dbAuthVO.setAuthUserId(corpAuthInfoVO.getAuthUserInfo().getUserId());
                     corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(dbAuthVO);

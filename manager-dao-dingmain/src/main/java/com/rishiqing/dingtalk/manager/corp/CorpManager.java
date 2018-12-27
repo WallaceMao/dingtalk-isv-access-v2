@@ -7,6 +7,7 @@ import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -47,7 +48,7 @@ public interface CorpManager {
 
     CorpStatisticVO getCorpStatisticByCorpIdForUpdate(String corpId);
 
-    List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset);
+    List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset, Map<String, Object> clause);
 
     Long countCorp();
 

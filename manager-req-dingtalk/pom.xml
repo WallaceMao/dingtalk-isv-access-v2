@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding-isv-access-api</artifactId>
+            <artifactId>auth-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>

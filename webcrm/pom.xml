@@ -6,7 +6,7 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ding-isv-access-webcrm</artifactId>
+    <artifactId>auth-web-crm</artifactId>
     <packaging>war</packaging>
     <name>web crm for dingtalk</name>
     <url>https://www.rishiqing.com</url>
@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding-isv-access-service</artifactId>
+            <artifactId>auth-service-isv</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

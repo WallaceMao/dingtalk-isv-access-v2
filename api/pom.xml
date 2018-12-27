@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ding-isv-access-api</artifactId>
+    <artifactId>auth-api</artifactId>
     <packaging>jar</packaging>
 
     <name>api layer for dingtalk</name>

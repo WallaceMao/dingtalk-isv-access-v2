@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.webcrm.controller.app;
 
+import com.rishiqing.common.base.DateUtil;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
 import com.rishiqing.common.log.LogFormatter;
@@ -38,13 +39,19 @@ public class CorpController {
     public Map<String, Object> pageList(
             HttpServletRequest request,
             @RequestParam(value = "pageSize", required = false) Long pageSize,
-            @RequestParam(value = "pageOffset", required = false) Long pageOffset
+            @RequestParam(value = "pageOffset", required = false) Long pageOffset,
+            @RequestParam(value = "corpName", required = false) String corpName,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate
     ) {
         bizLogger.info(LogFormatter.format(
                 LogFormatter.LogEvent.START,
                 "/pageList",
                 LogFormatter.getKV("pageSize", pageSize),
-                LogFormatter.getKV("pageOffset", pageOffset)
+                LogFormatter.getKV("pageOffset", pageOffset),
+                LogFormatter.getKV("corpName", corpName),
+                LogFormatter.getKV("startDate", startDate),
+                LogFormatter.getKV("endDate", endDate)
         ));
         try{
             //TODO  这里需要根据权限获取用户信息.这里需要读取当前登录用户的信息，作为主叫方
@@ -54,7 +61,18 @@ public class CorpController {
             }
             pageSize = pageSize == null ? 10L : pageSize;
             pageOffset = pageOffset == null ? 0L : pageOffset;
-            List<CorpCountWithCreatorVO> dataList = corpQueryService.listPageCorpCount(pageSize, pageOffset * pageSize);
+            Map<String, Object> clause = new HashMap<>();
+            if (corpName != null) {
+                clause.put("corpName", corpName);
+            }
+            if (startDate != null) {
+                clause.put("startDate", DateUtil.format(startDate));
+            }
+            if (endDate != null) {
+                clause.put("endDate", DateUtil.format(endDate + DateUtil.MILLS_ONE_DAY));
+            }
+            List<CorpCountWithCreatorVO> dataList = corpQueryService.listPageCorpCount(
+                    pageSize, pageOffset * pageSize, clause);
             Long total = corpQueryService.getPageCorpTotal();
             Map<String, Object> map = new HashMap<>();
             map.put("errcode", 0);

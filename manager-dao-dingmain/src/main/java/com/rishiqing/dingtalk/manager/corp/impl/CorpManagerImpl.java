@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -226,8 +227,8 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
-    public List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset) {
-        return corpDao.listPageCorpWithCreator(pageSize, offset);
+    public List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset, Map<String, Object> clause) {
+        return corpDao.listPageCorpWithCreator(pageSize, offset, clause);
     }
 
     @Override

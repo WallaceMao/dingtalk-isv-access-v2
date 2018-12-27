@@ -6,7 +6,7 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ding-isv-access-service</artifactId>
+    <artifactId>auth-service-isv</artifactId>
     <packaging>jar</packaging>
     <name>service layer for dingtalk</name>
     <url>https://www.rishiqing.com</url>

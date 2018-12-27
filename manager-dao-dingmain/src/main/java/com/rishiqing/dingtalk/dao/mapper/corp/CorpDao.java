@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -62,7 +63,8 @@ public interface CorpDao {
      */
     List<CorpDO> listPageCorpWithCreator(
             @Param("size") Long size,
-            @Param("offset") Long offset
+            @Param("offset") Long offset,
+            @Param("clause") Map<String, Object> clause
     );
 
     Long countCorp();

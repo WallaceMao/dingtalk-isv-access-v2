@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -22,8 +23,8 @@ public class CorpQueryServiceImpl implements CorpQueryService {
     private CorpStaffManager corpStaffManager;
 
     @Override
-    public List<CorpCountWithCreatorVO> listPageCorpCount(Long pageSize, Long offset) {
-        List<CorpDO> doList = corpManager.listPageCorpWithCreator(pageSize, offset);
+    public List<CorpCountWithCreatorVO> listPageCorpCount(Long pageSize, Long offset, Map<String, Object> clause) {
+        List<CorpDO> doList = corpManager.listPageCorpWithCreator(pageSize, offset, clause);
         List<CorpCountWithCreatorVO> voList = new ArrayList<>(doList.size());
         for (CorpDO corpDO : doList) {
             String corpId = corpDO.getCorpId();

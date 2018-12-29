@@ -140,4 +140,21 @@
         FROM isv_corp_suite_auth
     </select>
 
+    <select id="getCorpListBetweenDate" resultMap="corpMap">
+        SELECT
+            a.id,
+            a.corp_id,
+            a.corp_name,
+            a.gmt_create,
+            b.user_id AS crt_user_id,
+            b.`name` AS crt_name
+        FROM
+            isv_corp a
+            LEFT JOIN isv_corp_staff b ON a.corp_id = b.corp_id
+        WHERE
+            a.gmt_create BETWEEN #{startDate}
+            AND #{endDate}
+        ORDER BY
+            a.gmt_create ASC
+    </select>
 </mapper>

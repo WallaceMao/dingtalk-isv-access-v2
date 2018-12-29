@@ -311,4 +311,9 @@ public class CorpManagerImpl implements CorpManager {
         corpLockDao.saveOrUpdateCorpLock(corpLock);
         return corpLock;
     }
+
+    @Override
+    public List<CorpDO> getCorpListBetweenDate(Date startDate, Date endDate) {
+        return corpDao.getCorpListBetweenDate(startDate,endDate);
+    }
 }

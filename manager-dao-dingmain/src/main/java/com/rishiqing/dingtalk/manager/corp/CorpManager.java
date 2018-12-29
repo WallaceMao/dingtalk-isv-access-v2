@@ -4,8 +4,10 @@ import com.rishiqing.dingtalk.constant.CorpLockType;
 import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -59,4 +61,8 @@ public interface CorpManager {
 
     @Transactional
     CorpLockDO releaseLock(String corpId, CorpLockType lockType);
+
+    List<CorpDO> getCorpListBetweenDate(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 }

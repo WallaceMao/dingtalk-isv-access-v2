@@ -9,6 +9,7 @@ import com.rishiqing.dingtalk.isv.api.service.biz.CorpQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +41,20 @@ public class CorpQueryServiceImpl implements CorpQueryService {
     @Override
     public Long getPageCorpTotal() {
         return corpManager.countCorpSuiteAuth();
+    }
+
+    @Override
+    public List<CorpCountWithCreatorVO> getCorpCountBetweenDate(Date startDate, Date endDate) {
+        List<CorpDO> doList = corpManager.getCorpListBetweenDate(startDate,endDate);
+        List<CorpCountWithCreatorVO> voList = new ArrayList<>(doList.size());
+        for (CorpDO corpDO : doList) {
+            String corpId = corpDO.getCorpId();
+            CorpCountWithCreatorVO corpVO = CorpConverter.corpDO2CorpCountWithCreatorVO(corpDO);
+            corpVO.setCorpCount(
+                    corpStaffManager.countCorpStaffByCorpId(corpId)
+            );
+            voList.add(corpVO);
+        }
+        return voList;
     }
 }

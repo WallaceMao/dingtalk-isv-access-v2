@@ -19,20 +19,24 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        System.out.println("进入拦截器preHandle");
         try {
-            String jwtToken = request.getHeader("Authorization");
+            String jwtToken = request.getHeader("token");
+            //System.out.println("jwtToken:"+jwtToken);
             // 检查是否为空
             if (StringUtils.isEmpty(jwtToken)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                System.out.println("jwtToken is empty");
                 return false;
             }
             CorpStaffVO staffVO = JwtUtil.check(jwtToken);
             if (staffVO == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                System.out.println("staffVO == null");
                 return false;
             }
             request.setAttribute("loginUser", staffVO);
-            //TODO 判断如果快要过期了，那么需要对token进行续期
+            //TODO 判断如果快要过期了，那么需要对token进行续期，看下方postHandle()方法
 
             return true;
         } catch (Exception e) {
@@ -40,4 +44,20 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
     }
+
+   /* @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        //判断如果快要过期了，那么需要对token进行续期
+        String token = request.getHeader("token");
+        //获得过期日期时间
+        Date expireDate = JwtUtil.getExpireDate(token);
+        //得到相差毫秒数
+        Long diff=System.currentTimeMillis()-expireDate.getTime();
+        if(diff>=1000*60*5L){
+            //5min，即将过期，开始续期返回新的token
+            CorpStaffVO corpStaffVO = JwtUtil.check(token);
+            String newToken = JwtUtil.sign(corpStaffVO);
+            response.addHeader("token",newToken);
+        }
+    }*/
 }

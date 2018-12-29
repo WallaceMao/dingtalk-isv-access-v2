@@ -32,7 +32,7 @@ insert into isv_staff_popup_config (gmt_create, gmt_modified, suite_key, popup_t
 1. 一个公司不要同时安装正式版和测试版，否则会发生冲突！
 2. 本地安装taobao sdk
 ```
-mvn install:install-file -Dfile=.\service\lib\taobao-sdk-java-auto_1479188381469-20181101.jar -DgroupId=com.dingtalk.open -DartifactId=taobao-sdk-java -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=.\service\lib\taobao-sdk-java-auto_1479188381469-20181204.jar -DgroupId=com.dingtalk.open -DartifactId=taobao-sdk-java -Dversion=auto_1479188381469-20181204 -Dpackaging=jar
 ```
 
 3. 配置阿里云定时任务

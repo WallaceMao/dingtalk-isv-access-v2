@@ -5,10 +5,12 @@ import com.rishiqing.dingtalk.webcrm.util.jwt.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -21,8 +23,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         System.out.println("进入拦截器preHandle");
         try {
-            String jwtToken = request.getHeader("token");
-            //System.out.println("jwtToken:"+jwtToken);
+            String jwtToken=StringUtils.isEmpty(request.getHeader("token"))?request.getParameter("token"):request.getHeader("token");
             // 检查是否为空
             if (StringUtils.isEmpty(jwtToken)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -37,7 +38,6 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             }
             request.setAttribute("loginUser", staffVO);
             //TODO 判断如果快要过期了，那么需要对token进行续期，看下方postHandle()方法
-
             return true;
         } catch (Exception e) {
             bizLogger.error("error interceptor", e);
@@ -45,10 +45,10 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-   /* @Override
+    @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //判断如果快要过期了，那么需要对token进行续期
-        String token = request.getHeader("token");
+        String token = StringUtils.isEmpty(request.getHeader("token"))?request.getParameter("token"):request.getHeader("token");
         //获得过期日期时间
         Date expireDate = JwtUtil.getExpireDate(token);
         //得到相差毫秒数
@@ -58,6 +58,8 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             CorpStaffVO corpStaffVO = JwtUtil.check(token);
             String newToken = JwtUtil.sign(corpStaffVO);
             response.addHeader("token",newToken);
+        }else{
+            response.addHeader("token",token);
         }
-    }*/
+    }
 }

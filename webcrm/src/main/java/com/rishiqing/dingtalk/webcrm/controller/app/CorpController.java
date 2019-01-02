@@ -8,7 +8,6 @@ import com.rishiqing.dingtalk.biz.http.HttpResultCode;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpCountWithCreatorVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpQueryService;
-import com.rishiqing.dingtalk.webcrm.util.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -85,10 +84,6 @@ public class CorpController {
             if (loginUser == null) {
                 return HttpResult.getFailure(HttpResultCode.SYS_ERROR.getErrCode(),HttpResultCode.SYS_ERROR.getErrMsg());
             }
-            //更新token放到响应头部
-            CorpStaffVO corpStaffVO = JwtUtil.check(token);
-            String newToken = JwtUtil.sign(corpStaffVO);
-            response.addHeader("token",newToken);
 
             pageSize = pageSize == null ? 10L : pageSize;
             pageNumber = pageNumber == null ? 1L : pageNumber;
@@ -106,7 +101,7 @@ public class CorpController {
             }
             List<CorpCountWithCreatorVO> dataList = corpQueryService.listPageCorpCount(
                     pageSize, (pageNumber-1L) * pageSize, clause);
-            Long total = corpQueryService.getPageCorpTotal();
+            Long total = corpQueryService.getPageCorpTotal(clause);
             Map<String, Object> map = new HashMap<>();
             /*map.put("errcode", 0);*/
             map.put("data", dataList);
@@ -126,17 +121,17 @@ public class CorpController {
         }
     }
 
-    @RequestMapping(value = "/export",method = RequestMethod.GET)
+    @RequestMapping(value = "/export",method = RequestMethod.GET,produces = "application/json")
     @ResponseBody
     @ApiOperation(value = "导出csv格式")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate",value = "开始日期",required = true),
             @ApiImplicitParam(name = "endDate",value = "结束日期",required = true)
     })
-    public Map<String, Object> exportCorpBetweenDate(@RequestParam(value = "startDate",required = true) Date startDate,
-                                                     @RequestParam(value = "endDate",required = true) Date endDate,
+    public Map<String, Object> exportCorpBetweenDate(@RequestParam(value = "startDate",required = true) Long startDate,
+                                                     @RequestParam(value = "endDate",required = true) Long endDate,
                                                      HttpServletResponse response,
-                                                     @RequestHeader(value = "token") String token){
+                                                     @RequestParam(value = "token",required = true) String token){
         bizLogger.info(LogFormatter.format(
                 LogFormatter.LogEvent.START,
                 "/export",
@@ -144,10 +139,11 @@ public class CorpController {
                 LogFormatter.getKV("endDate", endDate)
         ));
         try {
-            //更新token放到响应头部
+            System.out.println("导出");
+            /*//更新token放到响应头部
             CorpStaffVO corpStaffVO = JwtUtil.check(token);
             String newToken = JwtUtil.sign(corpStaffVO);
-            response.addHeader("token",newToken);
+            response.addHeader("token",newToken);*/
 
             List<CorpCountWithCreatorVO> corpCountBetweenDate = corpQueryService.getCorpCountBetweenDate(startDate,endDate);
             //写

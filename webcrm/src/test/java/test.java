@@ -2,7 +2,13 @@ import java.text.SimpleDateFormat;
 
 public class test {
     public static void main(String[] args) {
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            System.out.println(sdf.parse("2018-12-01").getTime());
+            System.out.println(System.currentTimeMillis());
+        }catch (Exception e){
+
+        }
 
         /*try {
             Date parse = sdf.parse("2018-12-21 16:20:57");

@@ -12,4 +12,10 @@
 
     <name>api layer for dingtalk</name>
     <url>https://www.rishiqing.com</url>
+    <dependencies>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+    </dependencies>
 </project>

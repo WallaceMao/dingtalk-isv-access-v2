@@ -237,8 +237,8 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
-    public Long countCorpSuiteAuth() {
-        return corpDao.countCorpSuiteAuth();
+    public Long countCorpSuiteAuth(Map<String, Object> clause) {
+        return corpDao.countCorpSuiteAuth(clause);
     }
 
     /**
@@ -310,5 +310,10 @@ public class CorpManagerImpl implements CorpManager {
         }
         corpLockDao.saveOrUpdateCorpLock(corpLock);
         return corpLock;
+    }
+
+    @Override
+    public List<CorpDO> listCorpBetweenDate(Date startDate, Date endDate) {
+        return corpDao.listCorpBetweenDate(startDate,endDate);
     }
 }

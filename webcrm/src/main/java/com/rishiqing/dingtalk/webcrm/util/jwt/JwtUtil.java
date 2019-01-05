@@ -44,4 +44,19 @@ public class JwtUtil {
         }
         return staffVO;
     }
+
+    /**
+     * 获得过期日期时间
+     * @param token
+     * @return
+     */
+    public static Date getExpireDate(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(JWT_ISSUER)
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+        Date expiresAt = jwt.getExpiresAt();
+        return expiresAt;
+    }
 }

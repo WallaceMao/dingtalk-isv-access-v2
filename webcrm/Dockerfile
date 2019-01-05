@@ -1,6 +1,6 @@
 FROM registry-vpc.cn-beijing.aliyuncs.com/rsq-public/tomcat:8.0.50-jre8
 
-LABEL name="dingtalk-isv-access-crm" \
+LABEL name="auth-web-crm" \
        description="customer management console for dingtalk" \
        maintainer="Wallace Mao" \
        org="workbei"
@@ -12,6 +12,6 @@ RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /
 ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
-ADD target/ding-isv-access-webcrm-*.war webapps/crm.war
+ADD target/auth-web-crm-*.war webapps/crm.war
 
 CMD ["catalina.sh", "run"]

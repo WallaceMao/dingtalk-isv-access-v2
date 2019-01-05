@@ -1,7 +1,6 @@
 package com.rishiqing.dingtalk.webcrm.util.io;
 
 import com.rishiqing.common.log.LogFormatter;
-import com.rishiqing.dingtalk.webcrm.controller.app.CorpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import java.io.IOException;
  * @create: 2019-01-05 10:39
  */
 public class ExportCsv {
-    private static final Logger bizLogger = LoggerFactory.getLogger(CorpController.class);
+    private static final Logger bizLogger = LoggerFactory.getLogger(ExportCsv.class);
 
     /**
      * io流输出Csv格式

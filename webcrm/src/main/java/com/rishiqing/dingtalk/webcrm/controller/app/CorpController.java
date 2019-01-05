@@ -1,8 +1,8 @@
 package com.rishiqing.dingtalk.webcrm.controller.app;
 
-import com.csvreader.CsvWriter;
 import com.rishiqing.common.base.DateUtil;
 import com.rishiqing.common.log.LogFormatter;
+import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpCountWithCreatorVO;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -136,29 +135,12 @@ public class CorpController {
                 LogFormatter.getKV("startDate", startDate),
                 LogFormatter.getKV("endDate", endDate)
         ));
-        CsvWriter csvWriter=null;
         try {
             List<CorpCountWithCreatorVO> corpCountBetweenDate = corpQueryService.listCorpBetweenDate(new Date(startDate), new Date(endDate));
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-            //写入临时文件
-            File tempFile = File.createTempFile("corp", ".csv");
-            csvWriter = new CsvWriter(tempFile.getCanonicalPath(), ',', Charset.forName("utf-8"));
-            //写入表头
-            String[] heads = {"id", "公司id", "公司名称", "创建人id", "创建人名称", "创建时间"};
-            csvWriter.writeRecord(heads);
-            //写内容
-            for (CorpCountWithCreatorVO corpCountWithCreatorVO : corpCountBetweenDate) {
-                csvWriter.write(corpCountWithCreatorVO.getId().toString());
-                csvWriter.write(corpCountWithCreatorVO.getCorpId());
-                csvWriter.write(corpCountWithCreatorVO.getCorpName());
-                csvWriter.write(corpCountWithCreatorVO.getCreatorUserId());
-                csvWriter.write(corpCountWithCreatorVO.getCreatorName());
-                csvWriter.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(corpCountWithCreatorVO.getGmtCreate()));
-                csvWriter.endRecord();
-            }
-            csvWriter.close();
-            //输出
-            ExportCsv.outPutCVS(response,tempFile);
+            //数据写入临时文件
+            File tempFile = CorpConverter.CorpCountWithCreatorVO2CsvWriter(corpCountBetweenDate);
+            //临时文件置入response输出
+            ExportCsv.outPutCVS(response, tempFile);
             //返回数据
             Map<String, Object> map = new HashMap<>();
             map.put("data", corpCountBetweenDate);

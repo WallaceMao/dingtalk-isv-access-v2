@@ -164,9 +164,10 @@
             c.auth_user_id AS crt_user_id,
             b.`name` AS crt_name
         FROM
-            isv_corp a
-            LEFT JOIN isv_corp_staff b ON a.corp_id = b.corp_id
-            LEFT JOIN isv_corp_suite_auth c ON b.user_id = c.auth_user_id
+            isv_corp_suite_auth c
+            LEFT JOIN isv_corp a ON a.corp_id = c.corp_id
+            LEFT JOIN isv_corp_staff b ON c.corp_id = b.corp_id
+            AND c.auth_user_id = b.user_id
         WHERE
             a.gmt_create BETWEEN #{startDate}
             AND #{endDate}

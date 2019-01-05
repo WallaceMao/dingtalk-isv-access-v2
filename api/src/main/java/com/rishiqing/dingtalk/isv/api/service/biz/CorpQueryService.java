@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.isv.api.service.biz;
 
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpCountWithCreatorVO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +15,6 @@ public interface CorpQueryService {
 
     Long getPageCorpTotal(Map<String, Object> clause);
 
-    List<CorpCountWithCreatorVO> getCorpCountBetweenDate(Long startDate,Long endDate);
+    List<CorpCountWithCreatorVO> listCorpBetweenDate(Date startDate, Date endDate);
+
 }

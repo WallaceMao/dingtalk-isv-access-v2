@@ -128,5 +128,10 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--csv-->
+        <dependency>
+            <groupId>net.sourceforge.javacsv</groupId>
+            <artifactId>javacsv</artifactId>
+        </dependency>
     </dependencies>
 </project>

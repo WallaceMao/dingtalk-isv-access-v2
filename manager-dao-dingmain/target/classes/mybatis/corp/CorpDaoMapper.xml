@@ -155,17 +155,18 @@
         </if>
     </select>
 
-    <select id="getCorpListBetweenDate" resultMap="corpMap">
+    <select id="listCorpBetweenDate" resultMap="corpMap">
         SELECT
             a.id,
             a.corp_id,
             a.corp_name,
             a.gmt_create,
-            b.user_id AS crt_user_id,
+            c.auth_user_id AS crt_user_id,
             b.`name` AS crt_name
         FROM
             isv_corp a
             LEFT JOIN isv_corp_staff b ON a.corp_id = b.corp_id
+            LEFT JOIN isv_corp_suite_auth c ON b.user_id = c.auth_user_id
         WHERE
             a.gmt_create BETWEEN #{startDate}
             AND #{endDate}

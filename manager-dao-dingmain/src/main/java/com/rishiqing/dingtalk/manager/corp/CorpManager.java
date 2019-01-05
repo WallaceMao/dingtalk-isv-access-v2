@@ -7,6 +7,7 @@ import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public interface CorpManager {
     @Transactional
     CorpLockDO releaseLock(String corpId, CorpLockType lockType);
 
-    List<CorpDO> getCorpListBetweenDate(
-            @Param("startDate") Long startDate,
-            @Param("endDate") Long endDate);
+    List<CorpDO> listCorpBetweenDate(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 }

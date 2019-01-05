@@ -9,6 +9,7 @@ import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +44,8 @@ public class CorpQueryServiceImpl implements CorpQueryService {
     }
 
     @Override
-    public List<CorpCountWithCreatorVO> getCorpCountBetweenDate(Long startDate, Long endDate) {
-        List<CorpDO> doList = corpManager.getCorpListBetweenDate(startDate,endDate);
+    public List<CorpCountWithCreatorVO> listCorpBetweenDate(Date startDate, Date endDate) {
+        List<CorpDO> doList = corpManager.listCorpBetweenDate(startDate,endDate);
         List<CorpCountWithCreatorVO> voList = new ArrayList<>(doList.size());
         for (CorpDO corpDO : doList) {
             String corpId = corpDO.getCorpId();
@@ -56,4 +57,6 @@ public class CorpQueryServiceImpl implements CorpQueryService {
         }
         return voList;
     }
+
+
 }

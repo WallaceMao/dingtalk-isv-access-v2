@@ -313,7 +313,7 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
-    public List<CorpDO> getCorpListBetweenDate(Long startDate, Long endDate) {
-        return corpDao.getCorpListBetweenDate(startDate,endDate);
+    public List<CorpDO> listCorpBetweenDate(Date startDate, Date endDate) {
+        return corpDao.listCorpBetweenDate(startDate,endDate);
     }
 }

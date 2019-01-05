@@ -4,6 +4,7 @@ import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ public interface CorpDao {
      * @param endDate
      * @return
      */
-    List<CorpDO> getCorpListBetweenDate(
-            @Param("startDate") Long startDate,
-            @Param("endDate") Long endDate);
+    List<CorpDO> listCorpBetweenDate(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 }

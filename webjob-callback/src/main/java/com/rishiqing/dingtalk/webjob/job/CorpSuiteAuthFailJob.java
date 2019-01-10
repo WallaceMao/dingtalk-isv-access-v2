@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.biz.schedule;
+package com.rishiqing.dingtalk.webjob.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;

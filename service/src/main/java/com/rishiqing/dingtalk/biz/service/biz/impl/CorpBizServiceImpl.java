@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
+import com.rishiqing.dingtalk.auth.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpAppConverter;
 import com.rishiqing.dingtalk.biz.converter.suite.CorpSuiteAuthConverter;
@@ -12,12 +13,10 @@ import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.*;
 import com.rishiqing.dingtalk.manager.corp.CorpManager;
-import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import com.rishiqing.dingtalk.manager.suite.AppManager;
 import com.rishiqing.dingtalk.manager.suite.CorpAppManager;
 import com.rishiqing.dingtalk.manager.suite.CorpSuiteAuthManager;
@@ -49,7 +48,7 @@ public class CorpBizServiceImpl implements CorpBizService {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private CorpStaffManager corpStaffManager;
+    private SuiteRequestHelper suiteRequestHelper;
     @Autowired
     private EventBus asyncCorpOrgCreatedEventBus;
     @Autowired
@@ -147,14 +146,23 @@ public class CorpBizServiceImpl implements CorpBizService {
             throw new BizRuntimeException("corpId is null, corpAuthInfo is: " + corpAuthInfo);
         }
 
+        // 首先，获取一次corpToken和corpJSAPIToken
+        corpManager.getCorpTokenByCorpId(corpId);
+        corpManager.getCorpJSAPITicketByCorpId(corpId);
+
         //  1. 如果corpAuthInfo中authInfo的授权信息不存在，那么重新获取授权信息
         if (corpAuthInfo.getAuthInfo() == null) {
-            //TODO  根据corpId获取authInfo，走钉钉的获取授权信息的接口
+            // 根据corpId获取authInfo，走钉钉的获取授权信息的接口
+            SuiteTicketVO suiteTicketVO = suiteManager.getSuiteTicket();
+            corpAuthInfo = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, corpId);
         }
 
         //  2. 如果corpAuthInfo中的authScope不存在，那么重新获取可见范围信息
         if (corpAuthInfo.getAuthScope() == null) {
-            //TODO  获取企业的可见范围
+            // 获取企业的可见范围
+            CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+            CorpAuthScopeInfoVO scopeInfoVO = suiteRequestHelper.getCorpAuthScopeInfo(suiteVO, corpTokenVO);
+            corpAuthInfo.setAuthScope(scopeInfoVO);
         }
 
         //  在这里corpAuthInfo是完整的包含可见范围和授权的企业信息的对象
@@ -163,9 +171,6 @@ public class CorpBizServiceImpl implements CorpBizService {
         corpManager.saveOrUpdateCorp(
                 CorpConverter.corpAuthInfoVO2CorpVO(corpAuthInfo, timestamp)
         );
-        //TODO 3.1 获取一次corpToken和corpJSAPIToken
-        corpManager.getCorpTokenByCorpId(corpId);
-        corpManager.getCorpJSAPITicketByCorpId(corpId);
 
         //  4.  保存corpApp的关联信息
         List<CorpAppVO> corpAppVOList = CorpAppConverter.corpAuthInfoVO2AppVOList(corpAuthInfo);

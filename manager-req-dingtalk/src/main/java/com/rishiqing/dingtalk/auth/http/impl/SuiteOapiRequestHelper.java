@@ -3,13 +3,11 @@ package com.rishiqing.dingtalk.auth.http.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.http.HttpRequestClient;
-import com.rishiqing.common.base.StringUtil;
 import com.rishiqing.dingtalk.auth.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.common.http.exception.HttpRequestException;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
@@ -17,8 +15,6 @@ import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 跟suite相关的http请求，使用Oapi的方式来请求
@@ -70,52 +66,13 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
         return corpJSTicketVO;
     }
 
-    /**
-     * 获取永久授权码
-     * @param suiteKey
-     * @param tmpAuthCode
-     * @param suiteAccessToken
-     * @return
-     */
-    @Override
-    public CorpSuiteAuthVO getPermanentCode(String suiteKey, String tmpAuthCode, String suiteAccessToken) {
-        String url = getOapiDomain() + "/service/get_permanent_code?suite_access_token=" + suiteAccessToken;
-        Map<String, Object> parmMap = new HashMap<String, Object>();
-        parmMap.put("tmp_auth_code", tmpAuthCode);
-        String str = httpRequestClient.httpPostJson(url, JSON.toJSONString(parmMap));
-        JSONObject jsonObject = JSON.parseObject(str);
-        Long errCode = jsonObject.getLong("errcode");
-        if(Long.valueOf(40078).equals(errCode)){
-            //  由于钉钉的的原因，企业授权时会同时推送多个tmp_auth_code，而tmp_auth_code使用过一次就会失效
-            //  因此在接受到多个tmp_auth_code做授权时，只能通过40078（不存在的临时授权码）的错误码判断
-            //  收到40078后，不能返回错误，否则钉钉还会继续发送tmp_auth_code，
-            //  而应该直接返回成功！
-
-            //  不存在的临时授权码,不再继续重试
-            return null;
-        }
-        if (!Long.valueOf(0).equals(errCode)) {
-            throw new HttpRequestException(errCode, str);
-        }
-        JSONObject corpObject = jsonObject.getJSONObject("auth_corp_info");
-        String chPcode = StringUtil.isEmpty(jsonObject.getString("ch_permanent_code"))?"":jsonObject.getString("ch_permanent_code");
-        String pCode = StringUtil.isEmpty(jsonObject.getString("permanent_code"))?"":jsonObject.getString("permanent_code");
-        String corpId = corpObject.getString("corpid");
-        CorpSuiteAuthVO corpSuiteAuthVO = new CorpSuiteAuthVO();
-        corpSuiteAuthVO.setSuiteKey(suiteKey);
-        corpSuiteAuthVO.setChPermanentCode(chPcode);
-        corpSuiteAuthVO.setPermanentCode(pCode);
-        corpSuiteAuthVO.setCorpId(corpId);
-        return corpSuiteAuthVO;
-    }
-
     @Override
     public CorpAuthInfoVO getCorpAuthInfo(SuiteVO suite, SuiteTicketVO suiteTicketVO, String corpId) {
         return null;
     }
 
     @Override
-    public CorpAuthScopeInfoVO getCorpAuthScopeInfo(SuiteVO suiteVO, SuiteTokenVO suiteTokenVO) {
+    public CorpAuthScopeInfoVO getCorpAuthScopeInfo(SuiteVO suiteVO, CorpTokenVO corpToken) {
         return null;
     }
 
@@ -149,34 +106,4 @@ public class SuiteOapiRequestHelper implements SuiteRequestHelper {
     public void removeCalleeList(SuiteTokenVO suiteTokenVO, String calleeList) {
 
     }
-
-//    /**
-//     * 获取企业的授权信息
-//     * @param suiteKey
-//     * @param corpId
-//     * @param suiteAccessToken
-//     * @return
-//     */
-//    public CorpAuthInfoVO getAuthInfo(String suiteKey, String corpId, String suiteAccessToken) {
-//        try {
-//            String url = getOapiDomain() + "/service/get_auth_info?suite_access_token=" + suiteAccessToken;
-//
-//            Map<String, Object> parmMap = new HashMap<String, Object>();
-//            parmMap.put("suite_key", suiteKey);
-//            parmMap.put("auth_corpid", corpId);
-//            String sr = httpRequestClient.httpPostJson(url, JSON.toJSONString(parmMap));
-//
-//            JSONObject jsonObject = JSON.parseObject(sr);
-//            Long errCode = jsonObject.getLong("errcode");
-//            if (Long.valueOf(0).equals(errCode)) {
-//                CorpAuthInfoVO corpAuthInfoVO = JSON.parseObject(sr,CorpAuthInfoVO.class);
-//                return ServiceResult.success(corpAuthInfoVO);
-//            }
-//            return ServiceResult.failure(ServiceResultCode.SYS_ERROR.getErrCode(), ServiceResultCode.SYS_ERROR.getErrMsg());
-//        } catch (Exception e) {
-//            bizLogger.error(LogFormatter.getKVLogData(LogFormatter.LogEvent.END,
-//                    LogFormatter.KeyValue.getNew("suiteAccessToken", suiteAccessToken)
-//            ), e);
-//            return ServiceResult.failure(ServiceResultCode.SYS_ERROR.getErrCode(), ServiceResultCode.SYS_ERROR.getErrMsg());
-//        }
 }

@@ -29,6 +29,8 @@ public class CorpSuiteAuthVO implements Serializable {
     private List<Long> scopeAuthedDeptIdList;
     // 授权的用户的id列表
     private List<String> scopeAuthedUserIdList;
+    //  临时授权码
+    private String tempAuthCode;
 
     public Long getId() {
         return id;
@@ -116,6 +118,14 @@ public class CorpSuiteAuthVO implements Serializable {
 
     public void setScopeAuthedUserIdList(List<String> scopeAuthedUserIdList) {
         this.scopeAuthedUserIdList = scopeAuthedUserIdList;
+    }
+
+    public String getTempAuthCode() {
+        return tempAuthCode;
+    }
+
+    public void setTempAuthCode(String tempAuthCode) {
+        this.tempAuthCode = tempAuthCode;
     }
 
     @Override

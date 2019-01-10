@@ -40,6 +40,15 @@
         <constructor-arg ref="asyncCorpSuiteAuthExecutor"/>
     </bean>
     <bean id="corpSuiteAuthEventListener" class="com.rishiqing.dingtalk.biz.event.CorpSuiteAuthEventListener"/>
+    <!--eventBus: corpSuite：企业授权变更的事件，只在传统回调的方式下使用，钉钉云环境下不使用该事件-->
+    <bean id="asyncCorpSuiteChangeExecutorFactory"
+          class="com.rishiqing.dingtalk.biz.event.AsyncCorpSuiteChangeEventExecutorFactory"/>
+    <bean id="asyncCorpSuiteChangeExecutor" factory-bean="asyncCorpSuiteChangeExecutorFactory"
+          factory-method="getExecutor"/>
+    <bean id="asyncCorpSuiteChangeEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncCorpSuiteChangeExecutor"/>
+    </bean>
+    <bean id="corpSuiteChangeEventListener" class="com.rishiqing.dingtalk.biz.event.CorpSuiteChangeEventListener"/>
     <!--eventBus: 新建时，同步到日事清的corpOrgCreated-->
     <bean id="asyncCorpOrgCreatedExecutorFactory"
           class="com.rishiqing.dingtalk.biz.event.AsyncRsqSuiteAuthPushEventExecutorFactory"/>
@@ -72,6 +81,7 @@
         <property name="eventListenerMap">
             <map>
                 <entry key-ref="asyncCorpSuiteAuthEventBus" value-ref="corpSuiteAuthEventListener"/>
+                <entry key-ref="asyncCorpSuiteChangeEventBus" value-ref="corpSuiteChangeEventListener"/>
                 <entry key-ref="asyncCorpOrgCreatedEventBus" value-ref="corpOrgCreatedEventListener"/>
                 <entry key-ref="asyncCorpOrgChangedEventBus" value-ref="corpOrgChangedEventListener"/>
                 <entry key-ref="asyncOrderChargeEventBus" value-ref="orderChargeEventListener"/>

@@ -176,6 +176,7 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
                 corpStaff.setAvatar(user.getAvatar());
                 corpStaff.setJobnumber(user.getJobnumber());
                 corpStaff.setExtattr((Map<String, String>) JSON.parse(user.getExtattr()));
+                corpStaff.setUnionId(user.getUnionid());
 
                 staffList.add(corpStaff);
             }

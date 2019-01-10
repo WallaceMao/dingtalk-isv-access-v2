@@ -9,16 +9,18 @@
     <packaging>pom</packaging>
     <version>2.0.0</version>
     <modules>
-        <module>common</module>
-        <module>service</module>
         <module>api</module>
-        <module>web</module>
-        <module>webjob</module>
-        <module>webcrm</module>
+        <module>common</module>
         <module>manager-req-rsq</module>
         <module>manager-req-dingtalk</module>
         <module>manager-dao-dingpush</module>
         <module>manager-dao-dingmain</module>
+        <module>service</module>
+        <module>web</module>
+        <module>web-callback</module>
+        <module>webjob</module>
+        <module>webjob-callback</module>
+        <module>webcrm</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

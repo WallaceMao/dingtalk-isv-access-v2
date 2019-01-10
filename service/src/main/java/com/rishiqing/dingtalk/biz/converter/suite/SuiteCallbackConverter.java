@@ -43,9 +43,8 @@ public class SuiteCallbackConverter {
         if(json.containsKey("AuthCorpId")){
             corpSuiteAuthVO.setCorpId(json.getString("AuthCorpId"));
         }
-        //  由于临时授权码和永久授权码的机制在钉钉中已经废弃，所以这里暂时将获取到的临时授权码以"tmp:xxxxx"的形式保存到permanentCode这个字段
         if(json.containsKey("AuthCode")){
-            corpSuiteAuthVO.setPermanentCode("tmp:" + json.getString("AuthCode"));
+            corpSuiteAuthVO.setTempAuthCode(json.getString("AuthCode"));
         }
         return corpSuiteAuthVO;
     }

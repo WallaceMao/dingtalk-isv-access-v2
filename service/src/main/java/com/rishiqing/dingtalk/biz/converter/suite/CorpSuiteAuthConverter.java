@@ -47,4 +47,15 @@ public class CorpSuiteAuthConverter {
 
         return corpSuite;
     }
+
+    public static CorpAuthInfoVO corpId2CorpAuthInfoVO(String corpId) {
+        if (corpId == null) {
+            return null;
+        }
+        CorpAuthInfoVO corpAuthInfo = new CorpAuthInfoVO();
+        CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
+        corpInfo.setCorpId(corpId);
+        corpAuthInfo.setAuthCorpInfo(corpInfo);
+        return corpAuthInfo;
+    }
 }

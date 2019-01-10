@@ -11,7 +11,6 @@ import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
@@ -26,18 +25,6 @@ import java.util.List;
  * Date: 2018-11-06 13:59
  */
 public class SuiteTopRequestHelper implements SuiteRequestHelper {
-    /**
-     * 新版的钉钉授权逻辑中，不再需要获取永久授权码，因此这个方法直接返回空
-     * @param suiteKey
-     * @param tmpAuthCode
-     * @param suiteAccessToken
-     * @return
-     */
-    @Override
-    public CorpSuiteAuthVO getPermanentCode(String suiteKey, String tmpAuthCode, String suiteAccessToken) {
-        return null;
-    }
-
     @Override
     public CorpAuthInfoVO getCorpAuthInfo(SuiteVO suite, SuiteTicketVO suiteTicketVO, String corpId) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_auth_info");
@@ -59,15 +46,15 @@ public class SuiteTopRequestHelper implements SuiteRequestHelper {
     }
 
     @Override
-    public CorpAuthScopeInfoVO getCorpAuthScopeInfo(SuiteVO suiteVO, SuiteTokenVO suiteTokenVO) {
-        String accessToken = suiteTokenVO.getSuiteToken();
+    public CorpAuthScopeInfoVO getCorpAuthScopeInfo(SuiteVO suiteVO, CorpTokenVO corpToken) {
+        String accessToken = corpToken.getCorpToken();
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/auth/scopes");
         OapiAuthScopesRequest request = new OapiAuthScopesRequest();
         request.setHttpMethod("GET");
         try {
             OapiAuthScopesResponse resp = client.execute(request, accessToken);
             if(resp.getErrcode() != 0L){
-                throw new BizRuntimeException("getSuiteToken error: " + resp.getErrcode() + ", " + resp.getErrmsg());
+                throw new BizRuntimeException("getCorpAuthScopeInfo error: " + resp.getErrcode() + ", " + resp.getErrmsg());
             }
             return this.convertToCorpAuthScopeInfo(resp);
 

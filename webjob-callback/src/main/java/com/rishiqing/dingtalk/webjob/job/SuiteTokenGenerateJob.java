@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.biz.schedule;
+package com.rishiqing.dingtalk.webjob.job;
 
 import com.rishiqing.dingtalk.biz.service.biz.impl.SuiteService;
 import com.rishiqing.common.log.LogFormatter;

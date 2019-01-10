@@ -38,9 +38,9 @@ public class CorpSuiteAuthConverter {
             CorpAuthScopeInfoVO authScope = corpAuthInfo.getAuthScope();
             CorpAuthScopeInfoVO.AuthOrgScopes scopes = authScope.getAuthOrgScopes();
             List<Long> deptIdList = scopes.getAuthedDept() == null
-                    ? new ArrayList<>() : scopes.getAuthedDept();
+                    ? new ArrayList<Long>() : scopes.getAuthedDept();
             List<String> userIdList = scopes.getAuthedUser() == null
-                    ? new ArrayList<>() : scopes.getAuthedUser();
+                    ? new ArrayList<String>() : scopes.getAuthedUser();
             corpSuite.setScopeAuthedDeptIdList(deptIdList);
             corpSuite.setScopeAuthedUserIdList(userIdList);
         }

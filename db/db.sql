@@ -710,3 +710,50 @@ CREATE TABLE `isv_corp_statistic`
   UNIQUE KEY `u_corp_statistic` (`corp_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='团队统计信息缓存表';
 
+# 2018-12-15
+# 新增企业授权部门和授权用户关联表
+CREATE TABLE `isv_corp_suite_auth_dept` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '企业corpid',
+  `suite_key` varchar(100) NOT NULL COMMENT '套件key',
+  `dept_id` varchar(64) NOT NULL COMMENT '企业部门的deptId',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_suite_dept` (`corp_id`, `dept_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='企业授权部门的记录表';
+
+CREATE TABLE `isv_corp_suite_auth_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '企业corpid',
+  `suite_key` varchar(100) NOT NULL COMMENT '套件key',
+  `user_id` varchar(128) NOT NULL COMMENT '企业授权用户的的userId',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_suite_dept` (`corp_id`, `user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='企业授权用户的记录表';
+
+# 修改索引，统一去掉suiteKey（暂不同步到日事清）
+ALTER TABLE `isv_corp_suite_jsapi_ticket`
+  DROP INDEX `u_suite_corp`,
+  ADD UNIQUE INDEX `u_suite_corp`(`corp_id`) USING BTREE;
+ALTER TABLE `isv_corp_token`
+  DROP INDEX `u_suite_corp`,
+  ADD UNIQUE INDEX `u_suite_corp`(`corp_id`) USING BTREE;
+ALTER TABLE `isv_corp_suite_jsapi_channel_ticket`
+  DROP INDEX `u_suite_corp`,
+  ADD UNIQUE INDEX `u_suite_corp`(`corp_id`) USING BTREE;
+ALTER TABLE `isv_corp_charge_status`
+  DROP INDEX `isv_corp_charge_status_unique_corp_id`,
+  ADD UNIQUE INDEX `isv_corp_charge_status_unique_corp_id`(`corp_id`) USING BTREE;
+ALTER TABLE `isv_staff_popup_log`
+  DROP INDEX `isv_staff_popup_log_unique_popup`,
+  ADD UNIQUE INDEX `isv_staff_popup_log_unique_popup`(`corp_id`, `user_id`, `popup_type`) USING BTREE;
+ALTER TABLE `isv_corp_suite_auth_fail`
+  DROP INDEX `u_c_s_f_p`,
+  ADD UNIQUE INDEX `u_c_s_f_p`(`corp_id`, `auth_fail_type`, `suite_push_type`) USING BTREE;
+ALTER TABLE `isv_corp_org_sync_fail`
+  DROP INDEX `u_c_s_f_p`,
+  ADD UNIQUE INDEX `u_c_s_f_p`(`corp_id`, `corp_fail_type`) USING BTREE;
+

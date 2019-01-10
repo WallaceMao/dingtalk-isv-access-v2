@@ -2,11 +2,11 @@ package com.rishiqing.dingtalk.web.controller.app;
 
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpJSAPITicketVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
+import com.rishiqing.dingtalk.manager.suite.CorpAppManager;
 import com.rishiqing.dingtalk.web.util.crypto.DingTalkJsApiSingnature;
 import com.rishiqing.dingtalk.web.util.crypto.Utils;
 import org.slf4j.Logger;
@@ -31,9 +31,9 @@ public class JsConfigController {
     private static final Logger bizLogger = LoggerFactory.getLogger(JsConfigController.class);
 
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpManager corpManager;
     @Autowired
-    private CorpAppManageService corpAppManageService;
+    private CorpAppManager corpAppManager;
     /**
      * jssdk api授权
      * @param url
@@ -59,8 +59,8 @@ public class JsConfigController {
             //  检查url合法性
             url = check(url);
 
-            CorpJSAPITicketVO jsapiTicketVO = corpManageService.getCorpJSAPITicketByCorpId(corpId);
-            CorpAppVO corpAppVO = corpAppManageService.getCorpAppByCorpIdAndAppId(corpId, appId);
+            CorpJSAPITicketVO jsapiTicketVO = corpManager.getCorpJSAPITicketByCorpId(corpId);
+            CorpAppVO corpAppVO = corpAppManager.getCorpAppByCorpIdAndAppId(corpId, appId);
             String nonce = Utils.getRandomStr(8);
             Long timeStamp = System.currentTimeMillis();
             String sign = DingTalkJsApiSingnature.getJsApiSingnature(url, nonce, timeStamp, jsapiTicketVO.getCorpJSAPITicket());

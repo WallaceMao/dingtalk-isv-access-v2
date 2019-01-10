@@ -2,6 +2,7 @@ package com.rishiqing.dingtalk.isv.api.model.suite;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -24,6 +25,12 @@ public class CorpSuiteAuthVO implements Serializable {
     private String chPermanentCode;
     //  开通应用的管理员的id
     private String authUserId;
+    // 授权的部门的id列表
+    private List<Long> scopeAuthedDeptIdList;
+    // 授权的用户的id列表
+    private List<String> scopeAuthedUserIdList;
+    //  临时授权码
+    private String tempAuthCode;
 
     public Long getId() {
         return id;
@@ -97,6 +104,30 @@ public class CorpSuiteAuthVO implements Serializable {
         this.authUserId = authUserId;
     }
 
+    public List<Long> getScopeAuthedDeptIdList() {
+        return scopeAuthedDeptIdList;
+    }
+
+    public void setScopeAuthedDeptIdList(List<Long> scopeAuthedDeptIdList) {
+        this.scopeAuthedDeptIdList = scopeAuthedDeptIdList;
+    }
+
+    public List<String> getScopeAuthedUserIdList() {
+        return scopeAuthedUserIdList;
+    }
+
+    public void setScopeAuthedUserIdList(List<String> scopeAuthedUserIdList) {
+        this.scopeAuthedUserIdList = scopeAuthedUserIdList;
+    }
+
+    public String getTempAuthCode() {
+        return tempAuthCode;
+    }
+
+    public void setTempAuthCode(String tempAuthCode) {
+        this.tempAuthCode = tempAuthCode;
+    }
+
     @Override
     public String toString() {
         return "CorpSuiteAuthVO{" +
@@ -109,6 +140,8 @@ public class CorpSuiteAuthVO implements Serializable {
                 ", codeType=" + codeType +
                 ", chPermanentCode='" + chPermanentCode + '\'' +
                 ", authUserId='" + authUserId + '\'' +
+                ", scopeAuthedDeptIdList=" + scopeAuthedDeptIdList +
+                ", scopeAuthedUserIdList=" + scopeAuthedUserIdList +
                 '}';
     }
 }

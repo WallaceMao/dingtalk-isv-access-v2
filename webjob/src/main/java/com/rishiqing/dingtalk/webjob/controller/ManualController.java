@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.webjob.controller;
 
 import com.rishiqing.dingtalk.biz.service.util.QueueService;
-import com.rishiqing.dingtalk.biz.service.util.SuiteService;
+import com.rishiqing.dingtalk.biz.service.biz.impl.SuiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

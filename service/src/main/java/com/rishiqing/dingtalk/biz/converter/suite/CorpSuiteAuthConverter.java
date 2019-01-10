@@ -1,42 +1,61 @@
 package com.rishiqing.dingtalk.biz.converter.suite;
 
+import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDeptDO;
+import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthUserDO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthDeptVO;
+import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthUserVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Wallace Mao
  * Date: 2018-11-03 20:28
  */
 public class CorpSuiteAuthConverter {
-    public static CorpSuiteAuthVO CorpSuiteAuthDO2CorpSuiteAuthVO(CorpSuiteAuthDO corpSuiteAuthDO){
-        if(null==corpSuiteAuthDO){
+    public static CorpSuiteAuthVO corpAuthInfoVO2CorpSuiteAuthVO(String suiteKey, CorpAuthInfoVO corpAuthInfo) {
+        if (corpAuthInfo == null
+                || corpAuthInfo.getAuthCorpInfo() == null
+                || corpAuthInfo.getAuthUserInfo() == null) {
             return null;
         }
-        CorpSuiteAuthVO corpSuiteAuthVO = new CorpSuiteAuthVO();
-        corpSuiteAuthVO.setId(corpSuiteAuthDO.getId());
-        corpSuiteAuthVO.setGmtCreate(corpSuiteAuthDO.getGmtCreate());
-        corpSuiteAuthVO.setGmtModified(corpSuiteAuthDO.getGmtModified());
-        corpSuiteAuthVO.setSuiteKey(corpSuiteAuthDO.getSuiteKey());
-        corpSuiteAuthVO.setCorpId(corpSuiteAuthDO.getCorpId());
-        corpSuiteAuthVO.setPermanentCode(corpSuiteAuthDO.getPermanentCode());
-        corpSuiteAuthVO.setChPermanentCode(corpSuiteAuthDO.getChPermanentCode());
-        corpSuiteAuthVO.setAuthUserId(corpSuiteAuthDO.getAuthUserId());
-        return corpSuiteAuthVO;
+        CorpAuthInfoVO.AuthUserInfo userInfo = corpAuthInfo.getAuthUserInfo();
+        CorpAuthInfoVO.AuthCorpInfo corpInfo = corpAuthInfo.getAuthCorpInfo();
+
+        CorpSuiteAuthVO corpSuite = new CorpSuiteAuthVO();
+        corpSuite.setSuiteKey(suiteKey);
+        corpSuite.setCorpId(corpInfo.getCorpId());
+        corpSuite.setAuthUserId(userInfo.getUserId());
+        corpSuite.setPermanentCode(corpAuthInfo.getPermanentCode());
+        corpSuite.setChPermanentCode(corpAuthInfo.getChPermanentCode());
+
+        if (corpAuthInfo.getAuthScope() != null
+                && corpAuthInfo.getAuthScope().getAuthOrgScopes() != null) {
+            CorpAuthScopeInfoVO authScope = corpAuthInfo.getAuthScope();
+            CorpAuthScopeInfoVO.AuthOrgScopes scopes = authScope.getAuthOrgScopes();
+            List<Long> deptIdList = scopes.getAuthedDept() == null
+                    ? new ArrayList<>() : scopes.getAuthedDept();
+            List<String> userIdList = scopes.getAuthedUser() == null
+                    ? new ArrayList<>() : scopes.getAuthedUser();
+            corpSuite.setScopeAuthedDeptIdList(deptIdList);
+            corpSuite.setScopeAuthedUserIdList(userIdList);
+        }
+
+        return corpSuite;
     }
 
-    public static CorpSuiteAuthDO CorpSuiteAuthVO2CorpSuiteAuthDO(CorpSuiteAuthVO corpSuiteAuthVO){
-        if(null==corpSuiteAuthVO){
+    public static CorpAuthInfoVO corpId2CorpAuthInfoVO(String corpId) {
+        if (corpId == null) {
             return null;
         }
-        CorpSuiteAuthDO corpSuiteAuthDO = new CorpSuiteAuthDO();
-        corpSuiteAuthDO.setId(corpSuiteAuthVO.getId());
-        corpSuiteAuthDO.setGmtCreate(corpSuiteAuthVO.getGmtCreate());
-        corpSuiteAuthDO.setGmtModified(corpSuiteAuthVO.getGmtModified());
-        corpSuiteAuthDO.setSuiteKey(corpSuiteAuthVO.getSuiteKey());
-        corpSuiteAuthDO.setCorpId(corpSuiteAuthVO.getCorpId());
-        corpSuiteAuthDO.setPermanentCode(corpSuiteAuthVO.getPermanentCode());
-        corpSuiteAuthDO.setChPermanentCode(corpSuiteAuthVO.getChPermanentCode());
-        corpSuiteAuthDO.setAuthUserId(corpSuiteAuthVO.getAuthUserId());
-        return corpSuiteAuthDO;
+        CorpAuthInfoVO corpAuthInfo = new CorpAuthInfoVO();
+        CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
+        corpInfo.setCorpId(corpId);
+        corpAuthInfo.setAuthCorpInfo(corpInfo);
+        return corpAuthInfo;
     }
 }

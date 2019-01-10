@@ -96,6 +96,12 @@ public class MessageConverter {
         //  对url做修正处理，暂时这样实现
         String newUrl = url.replace("backauth", "dingtalk/workbei");
         oaBody.setMessageUrl(newUrl);
+        //  pc端消息链接
+        if (json.containsKey("pc_message_url")) {
+            String pcMessageUrl = json.getString("pc_message_url");
+            String newPcMessageUrl = pcMessageUrl.replace("backauth", "dingtalk/workbei-pc");
+            oaBody.setPcMessageUrl(newPcMessageUrl);
+        }
 
         MessageBody.OABody.Head head = new MessageBody.OABody.Head();
         head.setText(app.getAppName());

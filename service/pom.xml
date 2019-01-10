@@ -1,43 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ding.isv.access</artifactId>
+        <artifactId>ding-isv-access</artifactId>
         <groupId>com.rishiqing.ding</groupId>
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ding.isv.access.service</artifactId>
+    <artifactId>auth-service-isv</artifactId>
     <packaging>jar</packaging>
     <name>service layer for dingtalk</name>
     <url>https://www.rishiqing.com</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding.isv.access.api</artifactId>
-            <version>2.0.0</version>
+            <artifactId>auth-manager-dao-dingmain</artifactId>
         </dependency>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding.isv.access.dao</artifactId>
-            <version>2.0.0</version>
+            <artifactId>auth-manager-dao-dingpush</artifactId>
         </dependency>
-
-        <!--taobao sdk-->
-        <!--<dependency>-->
-            <!--<groupId>com.dingtalk.open</groupId>-->
-            <!--<artifactId>taobao-sdk-java</artifactId>-->
-            <!--<version>1.0</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1479188381469-20181101.jar</systemPath>-->
-        <!--</dependency>-->
         <dependency>
-            <groupId>com.dingtalk.open</groupId>
-            <artifactId>taobao-sdk-java</artifactId>
+            <groupId>com.rishiqing.ding</groupId>
+            <artifactId>auth-manager-req-rsq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rishiqing.ding</groupId>
+            <artifactId>auth-manager-req-dingtalk</artifactId>
         </dependency>
 
         <dependency>
@@ -74,26 +63,6 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-        </dependency>
-
-        <!--quartz-->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
-        </dependency>
-        <!--quartz需要使用其中的XmlWebApplicationContext-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
         </dependency>
 
         <!--jms-->
@@ -144,16 +113,10 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--csv-->
+        <dependency>
+            <groupId>net.sourceforge.javacsv</groupId>
+            <artifactId>javacsv</artifactId>
+        </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!--<configuration>-->
-                    <!--<release>11</release>-->
-                <!--</configuration>-->
-            </plugin>
-        </plugins>
-    </build>
 </project>

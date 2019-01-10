@@ -30,4 +30,8 @@ public interface RsqAccountBizService {
     void removeRsqTeamStaff(CorpStaffVO corpStaffVO);
 
     void updateRsqTeamStaffSetAdmin(CorpStaffVO corpStaffVO);
+
+    void createRecursiveSubDepartmentByScopeVersion(CorpDepartmentVO departmentVO, Long scopeVersion);
+
+    void createCorpStaffByScopeVersion(String corpId, Long scopeVersion);
 }

@@ -3,9 +3,9 @@ package com.rishiqing.dingtalk.web.controller.app;
 import com.alibaba.fastjson.JSONArray;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.front.IdMapStaffVO;
-import com.rishiqing.dingtalk.isv.api.service.base.front.IdMapStaffManageService;
+import com.rishiqing.dingtalk.manager.front.IdMapStaffManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class IdMapController {
     private static final Logger bizLogger = LoggerFactory.getLogger(IdMapController.class);
     @Autowired
-    private IdMapStaffManageService idMapStaffManageService;
+    private IdMapStaffManager idMapStaffManager;
 
     @ResponseBody
     @RequestMapping(value = "/idmap/userid2rsqid", method = {RequestMethod.POST})
@@ -39,7 +39,7 @@ public class IdMapController {
                 new LogFormatter.KeyValue("json", json)
         ));
         try{
-            List<IdMapStaffVO> list = idMapStaffManageService.getRsqIdFromUserId(corpId, json.toArray(new String[]{}));
+            List<IdMapStaffVO> list = idMapStaffManager.getRsqIdFromUserId(corpId, json.toArray(new String[]{}));
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("result", list);
 
@@ -73,7 +73,7 @@ public class IdMapController {
             for(int i=0;i<objArray.length;i++){
                 idArray[i] = String.valueOf(objArray[i]);
             }
-            List<IdMapStaffVO> list = idMapStaffManageService.getUserIdFromRsqId(corpId, idArray);
+            List<IdMapStaffVO> list = idMapStaffManager.getUserIdFromRsqId(corpId, idArray);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("result", list);
 

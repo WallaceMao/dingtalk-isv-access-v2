@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置返回的数据类型-->
+    <!--<bean id="cnManager"-->
+          <!--class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">-->
+        <!--<property name="favorPathExtension" value="false" />-->
+        <!--<property name="ignoreAcceptHeader" value="true" />-->
+        <!--<property name="defaultContentType" value="application/json" />-->
+    <!--</bean>-->
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!--fastjson 作为message-converters有问题，先用jackson-->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            <!--<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />-->
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <mvc:annotation-driven />
+
+    <!--配置需要扫描的包-->
+    <context:component-scan base-package="com.rishiqing.dingtalk.webcrm.controller"/>
+
+    <mvc:resources mapping="/*.html" location="/" />
+    <mvc:resources mapping="/css/**" location="/css/" />
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/img/**" location="/img/" />
+    <!--swagger2-->
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <bean class="com.rishiqing.dingtalk.webcrm.util.swager.SwaggerConfig"></bean>
+    <!--拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/v3w/**"/>
+            <bean id="jwtInterceptor" class="com.rishiqing.dingtalk.webcrm.interceptor.JwtInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

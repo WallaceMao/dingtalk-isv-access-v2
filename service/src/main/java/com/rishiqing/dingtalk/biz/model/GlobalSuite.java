@@ -1,7 +1,7 @@
 package com.rishiqing.dingtalk.biz.model;
 
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class GlobalSuite {
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
 
     private SuiteVO suite;
 
     private void init(){
-        this.suite = suiteManageService.getSuite();
+        this.suite = suiteManager.getSuite();
     }
 
     public Long getId() {

@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
-import com.rishiqing.dingtalk.biz.converter.fail.FailConverter;
+import com.rishiqing.dingtalk.converter.fail.FailConverter;
 import com.rishiqing.dingtalk.dao.mapper.fail.CorpOrgSyncFailDao;
 import com.rishiqing.dingtalk.dao.model.fail.CorpOrgSyncFailDO;
 import com.rishiqing.dingtalk.isv.api.enumtype.AuthFailType;
@@ -9,6 +9,7 @@ import com.rishiqing.dingtalk.isv.api.enumtype.SuitePushType;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgCreatedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
+import com.rishiqing.dingtalk.isv.api.event.CorpSuiteChangeEvent;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpOrgSyncFailVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
@@ -40,6 +41,17 @@ public class FailBizServiceImpl implements FailBizService {
         corpSuiteAuthFailDO.setAuthFailType(AuthFailType.ACTIVE_CORP_APP_FAILE.getKey());
         corpSuiteAuthFailDO.setSuitePushType(SuitePushType.TMP_AUTH_CODE.getKey());
         corpSuiteAuthFailDO.setFailInfo(corpSuiteAuthEvent.getInfo());
+        corpSuiteAuthFailDao.saveOrUpdateCorpSuiteAuthFail(corpSuiteAuthFailDO);
+    }
+
+    @Override
+    public void saveCorpSuiteChangeFail(CorpSuiteChangeEvent corpSuiteChangeEvent) {
+        CorpSuiteAuthFailDO corpSuiteAuthFailDO = new CorpSuiteAuthFailDO();
+        corpSuiteAuthFailDO.setSuiteKey(corpSuiteChangeEvent.getSuiteKey());
+        corpSuiteAuthFailDO.setCorpId(corpSuiteChangeEvent.getCorpId());
+        corpSuiteAuthFailDO.setAuthFailType(AuthFailType.CHANGE_CORP_APP_FAIL.getKey());
+        corpSuiteAuthFailDO.setSuitePushType(SuitePushType.CHANGE_AUTH.getKey());
+        corpSuiteAuthFailDO.setFailInfo(corpSuiteChangeEvent.getInfo());
         corpSuiteAuthFailDao.saveOrUpdateCorpSuiteAuthFail(corpSuiteAuthFailDO);
     }
 

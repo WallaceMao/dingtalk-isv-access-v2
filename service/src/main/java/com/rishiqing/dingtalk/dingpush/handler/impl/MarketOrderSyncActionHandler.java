@@ -1,13 +1,11 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.eventbus.AsyncEventBus;
 import com.rishiqing.dingtalk.biz.converter.order.OrderConverter;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
-import com.rishiqing.dingtalk.isv.api.event.OrderChargeEvent;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
-import com.rishiqing.dingtalk.isv.api.service.base.order.OrderManageService;
+import com.rishiqing.dingtalk.manager.order.OrderManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class MarketOrderSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private OrderManageService orderManageService;
+    private OrderManager orderManager;
     @Autowired
     private CorpBizService corpBizService;
     /**
@@ -53,7 +51,7 @@ public class MarketOrderSyncActionHandler implements SyncActionHandler {
     public void handleSyncAction(OpenSyncBizDataVO data) {
         JSONObject jsonMessage = JSONObject.parseObject(data.getBizData());
         OrderEventVO orderEvent = OrderConverter.json2OrderEvent(jsonMessage);
-        orderManageService.saveOrUpdateOrderEvent(orderEvent);
+        orderManager.saveOrUpdateOrderEvent(orderEvent);
         corpBizService.chargeCorpApp(orderEvent);
     }
 }

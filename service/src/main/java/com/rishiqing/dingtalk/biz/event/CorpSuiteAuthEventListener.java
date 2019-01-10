@@ -2,7 +2,8 @@ package com.rishiqing.dingtalk.biz.event;
 
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
+import com.rishiqing.dingtalk.biz.converter.suite.CorpSuiteAuthConverter;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
 import com.rishiqing.dingtalk.isv.api.event.EventListener;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
@@ -11,6 +12,8 @@ import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -38,11 +41,8 @@ public class CorpSuiteAuthEventListener implements EventListener {
                     new LogFormatter.KeyValue("corpSuiteAuthEvent", corpSuiteAuthEvent)
             ));
             String corpId = corpSuiteAuthEvent.getCorpId();
-            CorpAuthInfoVO corpAuthInfo = new CorpAuthInfoVO();
-            CorpAuthInfoVO.AuthCorpInfo corpInfo = new CorpAuthInfoVO.AuthCorpInfo();
-            corpInfo.setCorpId(corpId);
-            corpAuthInfo.setAuthCorpInfo(corpInfo);
-            corpBizService.activateCorpApp(corpAuthInfo, 0L);
+            CorpAuthInfoVO corpAuthInfo = CorpSuiteAuthConverter.corpId2CorpAuthInfoVO(corpId);
+            corpBizService.activateCorpApp(corpAuthInfo, new Date().getTime());
         }catch (Exception e){
             //  加入失败job,失败任务会重试
             failBizService.saveCorpSuiteAuthFail(corpSuiteAuthEvent);

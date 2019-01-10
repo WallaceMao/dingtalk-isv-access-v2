@@ -1,12 +1,11 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
-import com.rishiqing.dingtalk.biz.http.MessageRequestHelper;
-import com.rishiqing.dingtalk.isv.api.model.message.MessageBody;
+import com.rishiqing.dingtalk.auth.http.MessageRequestHelper;
+import com.rishiqing.dingtalk.isv.api.model.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.message.MessageVO;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.MessageBizService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -14,6 +13,8 @@ import java.util.List;
  */
 public class MessageBizServiceImpl implements MessageBizService {
     private static final long BATCH_SEND_SIZE = 20L;
+    @Autowired
+    private CorpManager corpManager;
     @Autowired
     private MessageRequestHelper messageRequestHelper;
 
@@ -24,6 +25,7 @@ public class MessageBizServiceImpl implements MessageBizService {
     @Override
     public void sendCorpMessageAsync(MessageVO message) {
         //TODO 要修改为分批次发送
-        messageRequestHelper.sendCorpConversationAsync(message);
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(message.getCorpId());
+        messageRequestHelper.sendCorpConversationAsync(corpTokenVO.getCorpToken(), message);
     }
 }

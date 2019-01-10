@@ -3,7 +3,7 @@ package com.rishiqing.dingtalk.web.controller.app;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.front.PopupInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupConfigVO;
 import com.rishiqing.dingtalk.isv.api.model.front.StaffPopupLogVO;

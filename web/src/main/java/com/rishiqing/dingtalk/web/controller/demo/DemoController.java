@@ -4,8 +4,8 @@ import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.dingpush.handler.SuiteSyncActionManager;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpDepartmentManager;
+import com.rishiqing.dingtalk.manager.dingpush.OpenSyncBizDataManager;
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class DemoController {
     private static final Logger aliLogger = LoggerFactory.getLogger(DemoController.class);
 
     @Autowired
-    private OpenSyncBizDataManageService openSyncBizDataManageService;
+    private OpenSyncBizDataManager openSyncBizDataManager;
     @Autowired
     private SuiteSyncActionManager suiteSyncActionManager;
     @Autowired
@@ -41,7 +41,7 @@ public class DemoController {
     @ResponseBody
     public String syncAuth(){
         try {
-            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataListByStatus(0L);
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManager.getOpenSyncBizDataListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
                     suiteSyncActionManager.handleSyncData(data);
@@ -50,7 +50,7 @@ public class DemoController {
                     consoleLogger.error("syncAuth error: ", e);
                     data.setStatus(-1L);
                 }
-                openSyncBizDataManageService.updateStatus(data);
+                openSyncBizDataManager.updateStatus(data);
             }
             consoleLogger.info("this is consoleLogger from demoLogController=====:");
             return "success";
@@ -78,7 +78,7 @@ public class DemoController {
     @ResponseBody
     public String syncMediumAuth(){
         try {
-            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManager.getOpenSyncBizDataMediumListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
                     suiteSyncActionManager.handleSyncData(data);
@@ -87,7 +87,7 @@ public class DemoController {
                     consoleLogger.error("syncMediumAuth error: ", e);
                     data.setStatus(-1L);
                 }
-                openSyncBizDataManageService.updateMediumStatus(data);
+                openSyncBizDataManager.updateMediumStatus(data);
             }
             consoleLogger.info("this is consoleLogger from syncMediumAuth=====:");
             return "success";
@@ -98,13 +98,13 @@ public class DemoController {
     }
 
     @Autowired
-    private CorpDepartmentManageService corpDepartmentManageService;
+    private CorpDepartmentManager corpDepartmentManager;
     @RequestMapping("/test")
     @ResponseBody
     public Map<String, Object> test(
             @RequestParam("corpId") String corpId
     ){
-        CorpDepartmentVO corpDepartmentVO = corpDepartmentManageService.getTopCorpDepartmentByScopeVersion(corpId, 0L);
+        CorpDepartmentVO corpDepartmentVO = corpDepartmentManager.getTopCorpDepartmentByScopeVersion(corpId, 0L);
         Map<String, Object> result = new HashMap<>();
         result.put("listdd", corpDepartmentVO);
         return result;

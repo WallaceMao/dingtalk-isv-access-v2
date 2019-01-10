@@ -6,7 +6,7 @@ import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SuiteTicketSyncActionHandler implements SyncActionHandler{
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
 
     /**
      * @link https://open-doc.dingtalk.com/microapp/ln6dmh/troq7i
@@ -33,13 +33,13 @@ public class SuiteTicketSyncActionHandler implements SyncActionHandler{
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
         JSONObject json = JSONObject.parseObject(data.getBizData());
-        SuiteVO suiteVO = suiteManageService.getSuite();
+        SuiteVO suiteVO = suiteManager.getSuite();
         //  如果suiteId不一致，不做处理
         if(!suiteVO.getSuiteId().equals(data.getBizId())){
             return;
         }
         SuiteTicketVO suiteTicketVO = SuiteDbCheckConverter.json2SuiteTicket(json);
         suiteTicketVO.setSuiteKey(suiteVO.getSuiteKey());
-        suiteManageService.saveOrUpdateSuiteTicket(suiteTicketVO);
+        suiteManager.saveOrUpdateSuiteTicket(suiteTicketVO);
     }
 }

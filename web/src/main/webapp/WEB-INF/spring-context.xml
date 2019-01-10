@@ -24,9 +24,9 @@
     <!--</util:map>-->
 
     <!--service层的服务beans-->
-    <import resource="classpath:spring-beans.xml" />
+    <import resource="classpath:spring-service-dingmain.xml" />
     <import resource="classpath:spring-queue-ali.xml" />
-    <import resource="classpath:spring-dingpush.xml" />
+    <import resource="classpath:spring-service-dingpush.xml" />
 
     <!--web层需要用到的service-->
     <!--启动钉钉云推送的监听-->

@@ -13,6 +13,8 @@ public enum AuthFailType {
     GET_PERMANENT_CODE_FAILE("get_permanent_code_fail"),
     //  激活企业为应用失败
     ACTIVE_CORP_APP_FAILE("active_corp_app_fail"),
+    //  变更企业授权失败
+    CHANGE_CORP_APP_FAIL("change_corp_app_fail"),
     //  获取企业信息失败
     GET_CORP_INFO_FAILE("get_corp_info_fail"),
     //  注册企业回调地址失败

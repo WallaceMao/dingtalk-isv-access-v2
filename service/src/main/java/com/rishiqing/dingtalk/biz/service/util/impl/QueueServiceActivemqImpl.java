@@ -4,8 +4,8 @@ import com.rishiqing.dingtalk.biz.service.util.QueueService;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
@@ -19,9 +19,9 @@ import javax.jms.*;
  */
 public class QueueServiceActivemqImpl implements QueueService {
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpManager corpManager;
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
     @Autowired
     private JmsTemplate jmsTemplate;
     @Autowired
@@ -34,12 +34,12 @@ public class QueueServiceActivemqImpl implements QueueService {
      */
     @Override
     public void sendToGenerateTeamSolution(String corpId, String userId){
-        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
+        CorpVO corpVO = corpManager.getCorpByCorpId(corpId);
         CorpStaffVO staff;
         if(userId == null){
-            staff = corpManageService.findATeamCreator(corpId);
+            staff = corpManager.findATeamCreator(corpId);
         }else{
-            staff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+            staff = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, userId);
         }
         if(staff == null){
             throw new BizRuntimeException("no team solution creator found: " + corpId + ", userId: " + userId);
@@ -66,8 +66,8 @@ public class QueueServiceActivemqImpl implements QueueService {
      */
     @Override
     public void sendToGenerateStaffSolution(String corpId, String userId){
-        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        CorpStaffVO staff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        CorpVO corpVO = corpManager.getCorpByCorpId(corpId);
+        CorpStaffVO staff = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, userId);
         final String rsqCorpId = corpVO.getRsqId();
         final String rsqUserId = staff.getRsqUserId();
 

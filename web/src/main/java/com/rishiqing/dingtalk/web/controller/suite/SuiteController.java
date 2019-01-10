@@ -2,11 +2,11 @@ package com.rishiqing.dingtalk.web.controller.suite;
 
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.service.util.SuiteService;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.dingtalk.biz.service.biz.impl.SuiteService;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SuiteController {
     @Autowired
     private SuiteService suiteService;
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
 
     @ResponseBody
     @RequestMapping(value = "/suite/token/{suiteKey}", method = {RequestMethod.POST})
@@ -42,7 +42,7 @@ public class SuiteController {
                     "/suite/token/{suiteKey}",
                     new LogFormatter.KeyValue("suiteKey", passSuiteKey)
             ));
-            SuiteVO suiteVO = suiteManageService.getSuite();
+            SuiteVO suiteVO = suiteManager.getSuite();
             if(!passSuiteKey.equals(suiteVO.getSuiteKey())){
                 throw new BizRuntimeException("suiteKey not match: passSuiteKey: " + passSuiteKey + ", suiteKey: " + suiteVO.getSuiteKey());
             }

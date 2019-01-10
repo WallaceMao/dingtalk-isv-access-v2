@@ -12,14 +12,12 @@
         <property name="ignoreUnresolvablePlaceholders" value="true" />
         <property name="locations">
             <list>
-                <value>file:${user.home}/dingtalk/ddauth-config.properties</value>
-                <value>file:${user.home}/dingtalk/logback-config.properties</value>
+                <value>file:${user.home}/webcrm/ddauth-config.properties</value>
+                <value>file:${user.home}/webcrm/logback-config.properties</value>
             </list>
         </property>
     </bean>
 
     <!--service层的服务beans-->
-    <import resource="classpath:spring-beans.xml" />
-    <import resource="classpath:spring-queue-ali.xml" />
-    <import resource="classpath:spring-dingpush.xml" />
+    <import resource="classpath:spring-web-crm.xml" />
 </beans>

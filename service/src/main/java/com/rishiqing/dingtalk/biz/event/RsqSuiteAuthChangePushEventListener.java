@@ -4,8 +4,8 @@ import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
 import com.rishiqing.dingtalk.isv.api.event.EventListener;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpDepartmentManager;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.FailBizService;
 import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.slf4j.Logger;
@@ -22,9 +22,9 @@ public class RsqSuiteAuthChangePushEventListener implements EventListener {
     @Autowired
     private RsqAccountBizService rsqAccountBizService;
     @Autowired
-    private CorpDepartmentManageService corpDepartmentManageService;
+    private CorpDepartmentManager corpDepartmentManager;
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
     @Autowired
     private FailBizService failBizService;
 
@@ -37,8 +37,8 @@ public class RsqSuiteAuthChangePushEventListener implements EventListener {
             //  先将信息同步到日事清
             rsqAccountBizService.syncAllChanged(corpId);
             //  再将本地删除
-            corpDepartmentManageService.deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
-            corpStaffManageService.deleteCorpStaffByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
+            corpDepartmentManager.deleteCorpDepartmentByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
+            corpStaffManager.deleteCorpStaffByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
             // 最后，同步现有用户的管理员信息
             rsqAccountBizService.updateAllCorpAdmin(corpId, scopeVersion);
         }catch (Exception e){

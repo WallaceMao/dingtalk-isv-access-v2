@@ -48,7 +48,7 @@ public class CryptoUtil {
             byte[] encrypted = cipher.doFinal(value.getBytes());
             String base64String = Base64.encodeBase64URLSafeString(encrypted);
 
-            System.out.println("encrypted string: "
+            System.out.println("encrypted base: "
                     + base64String);
 
             return base64String;
@@ -77,7 +77,7 @@ public class CryptoUtil {
 
 //    public static void main(String[] args) {
 //        String str = new Date().getTime() + "--wxec002534a59ea2e7--002";
-//        System.out.println("origin string: " + str);
+//        System.out.println("origin base: " + str);
 //
 //        try {
 //            String encoded = encrypt(str);

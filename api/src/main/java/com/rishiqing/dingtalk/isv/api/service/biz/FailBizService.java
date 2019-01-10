@@ -3,6 +3,7 @@ package com.rishiqing.dingtalk.isv.api.service.biz;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgChangedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpOrgCreatedEvent;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
+import com.rishiqing.dingtalk.isv.api.event.CorpSuiteChangeEvent;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpOrgSyncFailVO;
 import com.rishiqing.dingtalk.isv.api.model.fail.CorpSuiteAuthFailVO;
 
@@ -15,6 +16,8 @@ import java.util.List;
  */
 public interface FailBizService {
     void saveCorpSuiteAuthFail(CorpSuiteAuthEvent corpSuiteAuthEvent);
+
+    void saveCorpSuiteChangeFail(CorpSuiteChangeEvent corpSuiteChangeEvent);
 
     void saveCorpOrgSyncFail(CorpOrgCreatedEvent corpOrgCreatedEvent);
 

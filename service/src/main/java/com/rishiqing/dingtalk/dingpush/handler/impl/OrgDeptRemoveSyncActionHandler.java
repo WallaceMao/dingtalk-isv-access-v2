@@ -1,11 +1,8 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
-import com.rishiqing.dingtalk.biz.service.util.DeptService;
+import com.rishiqing.dingtalk.biz.service.biz.impl.DeptService;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpDepartmentManageService;
-import com.rishiqing.self.api.service.RsqAccountBizService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

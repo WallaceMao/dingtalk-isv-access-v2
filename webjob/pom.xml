@@ -6,20 +6,16 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ding-isv-access-webjob</artifactId>
+    <artifactId>auth-web-job</artifactId>
     <packaging>war</packaging>
     <name>web job server for dingtalk</name>
     <url>https://www.rishiqing.com</url>
     <version>2.0.0</version>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.ding</groupId>
-            <artifactId>ding-isv-access-service</artifactId>
+            <artifactId>auth-service-isv</artifactId>
         </dependency>
 
         <!--spring-->

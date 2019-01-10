@@ -1,9 +1,9 @@
 package com.rishiqing.dingtalk.biz.service.util.impl;
 
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
-import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenGlobalLockManageService;
 import com.rishiqing.dingtalk.isv.api.service.util.OpenGlobalLockService;
+import com.rishiqing.dingtalk.manager.dingpush.OpenGlobalLockManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
     private static final String LOCK_STATUS_OPEN= "open";
     private static final String LOCK_STATUS_LOCKED= "locked";
     @Autowired
-    private OpenGlobalLockManageService openGlobalLockManageService;
+    private OpenGlobalLockManager openGlobalLockManager;
 
     /**
      * 请求锁，步骤如下：
@@ -35,9 +35,9 @@ public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManagerEx")
+    @Transactional(value = "transactionManagerDingpush")
     public OpenGlobalLockVO requireOpenGlobalLock(String lockKey){
-        OpenGlobalLockVO lock = openGlobalLockManageService.getOpenGlobalLockByLockKey(lockKey);
+        OpenGlobalLockVO lock = openGlobalLockManager.getOpenGlobalLockByLockKey(lockKey);
         if(lock == null){
             lock = saveDefaultLock(lockKey);
         }
@@ -51,26 +51,26 @@ public class OpenGlobalLockServiceImpl implements OpenGlobalLockService {
             return null;
         }
         lock.setStatus(LOCK_STATUS_LOCKED);
-        openGlobalLockManageService.updateStatus(lock);
+        openGlobalLockManager.updateStatus(lock);
         return lock;
     }
 
     @Override
-    @Transactional(value = "transactionManagerEx")
+    @Transactional(value = "transactionManagerDingpush")
     public void releaseOpenGlobalLock(String lockKey){
-        OpenGlobalLockVO lock = openGlobalLockManageService.getOpenGlobalLockByLockKey(lockKey);
+        OpenGlobalLockVO lock = openGlobalLockManager.getOpenGlobalLockByLockKey(lockKey);
         if(lock == null){
             return;
         }
         lock.setStatus(LOCK_STATUS_OPEN);
-        openGlobalLockManageService.updateStatus(lock);
+        openGlobalLockManager.updateStatus(lock);
     }
 
     private OpenGlobalLockVO saveDefaultLock(String lockKey){
         OpenGlobalLockVO lock = new OpenGlobalLockVO();
         lock.setLockKey(lockKey);
         lock.setStatus(LOCK_STATUS_OPEN);
-        openGlobalLockManageService.saveOrUpdateOpenGlobalLock(lock);
+        openGlobalLockManager.saveOrUpdateOpenGlobalLock(lock);
         return lock;
     }
 }

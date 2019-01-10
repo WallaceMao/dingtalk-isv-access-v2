@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.dingpush.handler.impl;
 
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
 import org.slf4j.Logger;

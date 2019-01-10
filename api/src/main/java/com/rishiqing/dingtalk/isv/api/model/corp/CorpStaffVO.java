@@ -1,5 +1,8 @@
 package com.rishiqing.dingtalk.isv.api.model.corp;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -9,30 +12,41 @@ import java.util.Map;
  * @author Wallace Mao
  * Date: 2018-11-03 15:16
  */
+@ApiModel(description = "isv存储的公司成员信息")
 public class CorpStaffVO implements Serializable {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
 
     //  公司id
+    @ApiModelProperty("公司id")
     private String corpId;
     //  用户id
+    @ApiModelProperty("用户id")
     private String userId;
     //  用户姓名
+    @ApiModelProperty("用户姓名")
     private String name;
     //  分机号（ISV不可见）
+    @ApiModelProperty("分机号")
     private String tel;
     //  办公地点（ISV不可见）
+    @ApiModelProperty("办公地点")
     private String workPlace;
     //  备注（ISV不可见）
+    @ApiModelProperty("备注")
     private String remark;
     //  手机号码（ISV不可见）
+    @ApiModelProperty("手机号码")
     private String mobile;
     //  员工的电子邮箱（ISV不可见）
+    @ApiModelProperty("员工的电子邮箱")
     private String email;
+    @ApiModelProperty("是否已经激活")
     //  是否已经激活, true表示已激活, false表示未激活
     private Boolean active;
     //  在对应的部门中的排序, Map结构的json字符串, key是部门的Id, value是人员在这个部门的排序值
+    @ApiModelProperty("在对应的部门中的排序")
     private Map<Long, Long> orderInDepts;
     //  是否为企业的管理员, true表示是, false表示不是
     private Boolean isAdmin;

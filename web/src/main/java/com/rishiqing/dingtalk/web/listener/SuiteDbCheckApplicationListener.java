@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.web.listener;
 
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

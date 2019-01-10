@@ -1,22 +1,18 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
 import com.google.common.eventbus.AsyncEventBus;
-import com.rishiqing.dingtalk.biz.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.isv.api.event.CorpSuiteAuthEvent;
+import com.rishiqing.dingtalk.isv.api.event.CorpSuiteChangeEvent;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthInfoVO;
-import com.rishiqing.dingtalk.isv.api.model.corp.CorpAuthScopeInfoVO;
 import com.rishiqing.dingtalk.isv.api.model.order.OrderEventVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTicketVO;
-import com.rishiqing.dingtalk.isv.api.model.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpSuiteAuthManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.SuiteManageService;
+import com.rishiqing.dingtalk.manager.suite.CorpSuiteAuthManager;
+import com.rishiqing.dingtalk.manager.suite.SuiteManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.CorpBizService;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteCallbackBizService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -24,15 +20,15 @@ import java.util.Date;
  */
 public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
     @Autowired
-    private SuiteManageService suiteManageService;
+    private SuiteManager suiteManager;
     @Autowired
     private CorpBizService corpBizService;
     @Autowired
-    private CorpSuiteAuthManageService corpSuiteAuthManageService;
+    private CorpSuiteAuthManager corpSuiteAuthManager;
     @Autowired
     private AsyncEventBus asyncCorpSuiteAuthEventBus;
     @Autowired
-    private SuiteRequestHelper suiteRequestHelper;
+    private AsyncEventBus asyncCorpSuiteChangeEventBus;
 
     /**
      * 接受到推送过来的suite ticket
@@ -40,7 +36,7 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
      */
     @Override
     public void receiveSuiteTicket(SuiteTicketVO suiteTicketVO){
-        suiteManageService.saveOrUpdateSuiteTicket(suiteTicketVO);
+        suiteManager.saveOrUpdateSuiteTicket(suiteTicketVO);
     }
 
     /**
@@ -49,10 +45,11 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
      */
     @Override
     public void receiveTmpAuthCode(CorpSuiteAuthVO corpSuiteAuth){
-        corpSuiteAuthManageService.saveOrUpdateCorpSuiteAuth(corpSuiteAuth);
+        corpSuiteAuthManager.saveOrUpdateCorpSuiteAuth(corpSuiteAuth);
 
         //  注意，这里使用的eventBus需要时异步逻辑,加速套件开通时间.
         CorpSuiteAuthEvent corpSuiteAuthEvent = new CorpSuiteAuthEvent();
+        corpSuiteAuthEvent.setSuiteKey(corpSuiteAuth.getSuiteKey());
         corpSuiteAuthEvent.setCorpId(corpSuiteAuth.getCorpId());
         corpSuiteAuthEvent.setPermanentCode(corpSuiteAuth.getPermanentCode());
         corpSuiteAuthEvent.setChPermanentCode(corpSuiteAuth.getChPermanentCode());
@@ -68,14 +65,11 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
      */
     @Override
     public void receiveChangeAuth(String authCorpId){
-        SuiteVO suiteVO = suiteManageService.getSuite();
-        SuiteTokenVO suiteTokenVO = suiteManageService.getSuiteToken();
-        SuiteTicketVO suiteTicketVO = suiteManageService.getSuiteTicket();
-        //  调用接口获取授权信息
-        CorpAuthInfoVO corpAuthInfoVO = suiteRequestHelper.getCorpAuthInfo(suiteVO, suiteTicketVO, authCorpId);
-        CorpAuthScopeInfoVO scopeInfoVO = suiteRequestHelper.getCorpAuthScopeInfo(suiteVO, suiteTokenVO);
-        corpAuthInfoVO.setAuthScope(scopeInfoVO);
-        corpBizService.changeCorpApp(corpAuthInfoVO, new Date().getTime());
+        SuiteVO suiteVO = suiteManager.getSuite();
+        CorpSuiteChangeEvent corpSuiteChangeEvent = new CorpSuiteChangeEvent();
+        corpSuiteChangeEvent.setSuiteKey(suiteVO.getSuiteKey());
+        corpSuiteChangeEvent.setCorpId(authCorpId);
+        asyncCorpSuiteChangeEventBus.post(corpSuiteChangeEvent);
     }
 
     /**

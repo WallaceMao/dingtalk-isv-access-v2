@@ -5,7 +5,7 @@ import com.rishiqing.dingtalk.biz.converter.suite.SuiteDbCheckConverter;
 import com.rishiqing.dingtalk.dingpush.handler.SyncActionHandler;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class OrgUpdateSyncActionHandler implements SyncActionHandler {
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpManager corpManager;
     /**
      subscribe_id  ： 套件suiteid加下划线0
      copp_id : 套件所属企业的corpid
@@ -29,7 +29,7 @@ public class OrgUpdateSyncActionHandler implements SyncActionHandler {
         JSONObject json = JSONObject.parseObject(data.getBizData());
         CorpVO corpVO = SuiteDbCheckConverter.json2Corp(json);
         corpVO.setScopeVersion(new Date().getTime());
-        corpManageService.saveOrUpdateCorp(corpVO);
+        corpManager.saveOrUpdateCorp(corpVO);
 
         //TODO  然后推送到日事清
     }

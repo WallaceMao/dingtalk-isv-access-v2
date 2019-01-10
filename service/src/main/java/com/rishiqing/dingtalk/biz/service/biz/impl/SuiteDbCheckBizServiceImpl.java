@@ -1,13 +1,13 @@
 package com.rishiqing.dingtalk.biz.service.biz.impl;
 
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.dingpush.handler.CorpSyncActionManager;
 import com.rishiqing.dingtalk.dingpush.handler.SuiteSyncActionManager;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenGlobalLockVO;
 import com.rishiqing.dingtalk.isv.api.model.dingpush.OpenSyncBizDataVO;
-import com.rishiqing.dingtalk.isv.api.service.base.dingpush.OpenSyncBizDataManageService;
 import com.rishiqing.dingtalk.isv.api.service.util.OpenGlobalLockService;
 import com.rishiqing.dingtalk.isv.api.service.biz.SuiteDbCheckBizService;
+import com.rishiqing.dingtalk.manager.dingpush.OpenSyncBizDataManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
     @Autowired
     private OpenGlobalLockService openGlobalLockService;
     @Autowired
-    private OpenSyncBizDataManageService openSyncBizDataManageService;
+    private OpenSyncBizDataManager openSyncBizDataManager;
     @Autowired
     private SuiteSyncActionManager suiteSyncActionManager;
     @Autowired
@@ -40,7 +40,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             return;
         }
         try{
-            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataListByStatus(0L);
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManager.getOpenSyncBizDataListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
                     suiteSyncActionManager.handleSyncData(data);
@@ -53,7 +53,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
                     ), e);
                     data.setStatus(-1L);
                 }
-                openSyncBizDataManageService.updateStatus(data);
+                openSyncBizDataManager.updateStatus(data);
             }
         }catch (Exception e){
             bizLogger.error(LogFormatter.format(
@@ -73,7 +73,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             return;
         }
         try{
-            List<OpenSyncBizDataVO> syncList = openSyncBizDataManageService.getOpenSyncBizDataMediumListByStatus(0L);
+            List<OpenSyncBizDataVO> syncList = openSyncBizDataManager.getOpenSyncBizDataMediumListByStatus(0L);
             for(OpenSyncBizDataVO data : syncList){
                 try {
                     corpSyncActionManager.handleSyncData(data);
@@ -86,7 +86,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
                     ), e);
                     data.setStatus(-1L);
                 }
-                openSyncBizDataManageService.updateMediumStatus(data);
+                openSyncBizDataManager.updateMediumStatus(data);
             }
         }catch (Exception e){
             bizLogger.error(LogFormatter.format(

@@ -3,10 +3,10 @@ package com.rishiqing.dingtalk.web.controller.suite;
 import com.rishiqing.dingtalk.biz.converter.corp.CorpStaffConverter;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.service.util.StaffService;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.dingtalk.biz.service.biz.impl.StaffService;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
-import com.rishiqing.dingtalk.isv.api.service.base.corp.CorpStaffManageService;
+import com.rishiqing.dingtalk.manager.corp.CorpStaffManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class CorpStaffLoginController {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private CorpStaffManageService corpStaffManageService;
+    private CorpStaffManager corpStaffManager;
 
     /**
      * 根据authCode获取用户信息
@@ -101,7 +101,7 @@ public class CorpStaffLoginController {
         try{
 
             //  直接读取数据库获取用户信息
-            CorpStaffVO staffVO = corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpId, userId);
+            CorpStaffVO staffVO = corpStaffManager.getCorpStaffByCorpIdAndUserId(corpId, userId);
 
             //  返回用户，只保留必要信息即可
             Map<String,Object> map = new HashMap<>();

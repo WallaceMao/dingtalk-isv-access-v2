@@ -2,17 +2,6 @@
 out/
 
 *.iml
-api/*.iml
-api/target/
-dao/*.iml
-dao/target/
-service/*.iml
-service/target/
-web/*.iml
-web/target/
-taskjob/*.iml
-taskjob/target/
-webjob/*.iml
-webjob/target/
-webcrm/*.iml
-webcrm/target/
+**/target
+
+rebel.xml

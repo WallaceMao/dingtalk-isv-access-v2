@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.dingtalk.biz.converter.message.MessageConverter;
 import com.rishiqing.dingtalk.biz.http.HttpResult;
 import com.rishiqing.dingtalk.biz.http.HttpResultCode;
-import com.rishiqing.dingtalk.biz.util.LogFormatter;
+import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpAppVO;
 import com.rishiqing.dingtalk.isv.api.model.message.MessageVO;
 import com.rishiqing.dingtalk.isv.api.model.suite.AppVO;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.AppManageService;
-import com.rishiqing.dingtalk.isv.api.service.base.suite.CorpAppManageService;
+import com.rishiqing.dingtalk.manager.suite.AppManager;
+import com.rishiqing.dingtalk.manager.suite.CorpAppManager;
 import com.rishiqing.dingtalk.isv.api.service.biz.MessageBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,9 @@ public class MessageController {
     @Autowired
     private MessageBizService messageBizService;
     @Autowired
-    private AppManageService appManageService;
+    private AppManager appManager;
     @Autowired
-    private CorpAppManageService corpAppManageService;
+    private CorpAppManager corpAppManager;
 
     /**
      * 该接口供前端直接调用。日事清后台调用的接口是sendNotification
@@ -58,7 +58,7 @@ public class MessageController {
                 new LogFormatter.KeyValue("json", json)
         ));
         try{
-            CorpAppVO corpApp = corpAppManageService.getCorpAppByCorpIdAndAppId(corpId, appId);
+            CorpAppVO corpApp = corpAppManager.getCorpAppByCorpIdAndAppId(corpId, appId);
             MessageVO messageVO = MessageConverter.json2MessageVO(corpId, corpApp.getAgentId(), json);
             messageBizService.sendCorpMessageAsync(messageVO);
 
@@ -119,8 +119,8 @@ public class MessageController {
             }
 
             final String RSQ_DEFAULT_MESSAGE_TYPE = "oa";
-            AppVO appVO = appManageService.getDefaultAppVO();
-            CorpAppVO corpApp = corpAppManageService.getCorpAppByCorpIdAndAppId(corpId, appVO.getAppId());
+            AppVO appVO = appManager.getDefaultAppVO();
+            CorpAppVO corpApp = corpAppManager.getCorpAppByCorpIdAndAppId(corpId, appVO.getAppId());
             MessageVO messageVO = MessageConverter.rsqJson2MessageVO(appVO, corpId, corpApp.getAgentId(), RSQ_DEFAULT_MESSAGE_TYPE, json);
             messageBizService.sendCorpMessageAsync(messageVO);
 

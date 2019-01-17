@@ -8,7 +8,7 @@
        http://activemq.apache.org/schema/core/activemq-core.xsd">
 
     <!--==========================activemq相关==============================-->
-    <bean id="queueService" class="com.rishiqing.dingtalk.biz.service.util.impl.QueueServiceActivemqImpl" />
+    <bean id="queueService" class="com.rishiqing.dingtalk.svc.service.util.impl.QueueServiceActivemqImpl" />
     <!--activemq-->
     <amq:connectionFactory id="amqConnectionFactory"
                            brokerURL="failover:(tcp://${amq.broker.url1},tcp://${amq.broker.url2})?randomize=false&amp;jms.useAsyncSend=true"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.fail.CorpOrgSyncFailDao">
+
+    <resultMap type="com.rishiqing.dingtalk.api.model.domain.fail.CorpOrgSyncFailDO" id="corpOrgSyncFailMap">
+        <id property="id" column="id" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="corpId" column="corp_id" />
+        <result property="failInfo" column="fail_info" />
+        <result property="corpFailType" column="corp_fail_type" />
+    </resultMap>
+
+    <sql id="select-all-fields">
+        id,
+        gmt_create,
+        gmt_modified,
+        suite_key,
+        corp_id,
+        fail_info,
+        corp_fail_type
+    </sql>
+
+    <insert id="saveOrUpdateCorpOrgSyncFail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_org_sync_fail (
+        gmt_create,
+        gmt_modified,
+        suite_key,
+        corp_id,
+        fail_info,
+        corp_fail_type
+        )VALUES(
+        now(),
+        now(),
+        #{suiteKey},
+        #{corpId},
+        #{failInfo},
+        #{corpFailType}
+        )ON DUPLICATE KEY UPDATE gmt_modified=now(),fail_info=#{failInfo}
+    </insert>
+
+    <delete id="deleteCorpOrgSyncFailById">
+        DELETE FROM isv_corp_org_sync_fail WHERE id=#{id}
+    </delete>
+
+    <select id="getCorpOrgSyncFailList" resultMap="corpOrgSyncFailMap">
+        SELECT <include refid="select-all-fields"/> FROM isv_corp_org_sync_fail
+        LIMIT #{offset},#{limit}
+    </select>
+
+</mapper>

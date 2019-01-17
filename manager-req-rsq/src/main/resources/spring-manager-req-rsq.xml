@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--http工具-->
+    <bean id="httpRequestClient" class="com.rishiqing.common.http.HttpRequestClient"/>
+    <bean id="rsqRequestHelper" class="com.rishiqing.dingtalk.req.rsq.auth.http.impl.RsqApiRequestHelper">
+        <property name="rsqDomain" value="${rsqapi.url.root}"/>
+        <property name="rsqUrlInternal" value="${rsqapi.url.internal.root}"/>
+        <property name="httpRequestClient" ref="httpRequestClient"/>
+    </bean>
+</beans>

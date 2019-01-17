@@ -5,7 +5,7 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!--==========================alimq相关==============================-->
-    <bean id="queueService" class="com.rishiqing.dingtalk.biz.service.util.impl.QueueServiceAlimqImpl" />
+    <bean id="queueService" class="com.rishiqing.dingtalk.svc.service.util.impl.QueueServiceAlimqImpl" />
 
     <util:map id="alimqSolutionConfig" key-type="java.lang.String" value-type="java.lang.String">
         <entry key="accessKey" value="${alimq.accessKey}" />

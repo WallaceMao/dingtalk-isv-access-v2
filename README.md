@@ -1,5 +1,42 @@
 # 功倍
 
+## 架构说明
+
+### web层
+
+#### 钉钉云的方式
+
+1. web：提供对外访问的接口，也包含listener，用来监听钉钉云推送的事件。
+2. webjob：提供定时刷新token的功能，由阿里云的scheduleX来触发。
+3. taskjob：未实现，规划中采用阿里云的scheduleX镜像来实现job。
+
+注：
+- 钉钉云的方式，钉钉会把所有事件直接插入到ding_cloud_push数据库中
+- web应用轮询ding_cloud_push数据库，处理回调事件。
+
+#### 回调的方式
+
+1. web-callback：提供对外访问的接口以及开通应用、变更授权、下单购买等套件级别的回调。
+2. webjob-callback：提供定时刷新token的功能，目前使用quartz来实现。
+3. web-callback-biz：提供业务事件回调（例如通讯录回调）的管理，实现业务事件的存储。不对业务事件做实际处理，业务回调事件的处理由web-biz-callback-listener来实现。
+4. web-callback-biz-listener：轮询业务回调事件队列（在数据库中存储有对列表），并将结果进行合并，插入到模拟自建的ding_cloud_push数据库中。
+
+注：
+- 回调的方式中，回调事件分两种情况处理：套件回调事件和业务回调事件。套件回调事件包括：开通应用、变更授权、下单购买等。业务回调事件包括：公司新增部门、修改部门、新增员工、修改员工等通讯录事件等。
+- 对于套件回调，由web-callback接收套件回调事件，直接进行处理。
+- 对于业务回调，由web-biz-callback应用接收到回调事件，然后迅速将回调事件插入到auth数据库中的isv_corp_callback_event中。然后由web-biz-callback-listener轮询isv_corp_callback_queue，将同一个公司的多个业务回调事件合并生成biz_data，插入到ding_cloud_push数据库中
+
+##### 启动方式
+
+1. 启动web-callback项目，并开启ngrok，使公网可访问web-callback项目
+2. 登录钉钉开放平台`https://open-dev.dingtalk.com`，推送应用的ticket到web-callback，并检查是否推送成功。
+3. 启动webjob-callback项目，刷新根据ticket获取最新的suite token。
+4. 如果需要调试业务回调，那么开启web-callback-biz、web-callback-biz-listener项目和web项目
+
+#### CRM
+
+1. webcrm：用来打钉钉电话的CRM系统
+
 ## 数据库
 
 1. 执行`db/db.sql`创建钉钉授权主库

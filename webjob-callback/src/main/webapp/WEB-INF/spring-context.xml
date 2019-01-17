@@ -11,6 +11,7 @@
             <list>
                 <value>file:${user.home}/dingtalk_rsq/ddauth-config.properties</value>
                 <value>file:${user.home}/dingtalk_rsq/logback-config.properties</value>
+                <value>file:${user.home}/dingtalk_rsq/quartz-config.properties</value>
             </list>
         </property>
     </bean>

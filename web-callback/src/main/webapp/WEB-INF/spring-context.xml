@@ -18,15 +18,42 @@
         </property>
     </bean>
 
-    <!--<util:map id="isvGlobal">-->
-        <!--<entry key="suiteKey" value="${isv.suite.key}" />-->
-        <!--<entry key="appId" value="${isv.app.id}" />-->
-    <!--</util:map>-->
+    <util:map id="globalConfig" key-type="java.lang.String" value-type="java.lang.String">
+        <entry key="dingtalkCorpCallback" value="${dingtalk.corp.callback}" />
+    </util:map>
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-service-dingmain.xml" />
     <import resource="classpath:spring-queue-amq.xml" />
 
-    <bean id="httpRequestHelper" class="com.rishiqing.dingtalk.web.util.http.HttpRequestHelper"/>
-    <bean id="bizRequestHelper" class="com.rishiqing.dingtalk.web.util.http.BizRequestHelper"/>
+    <!--eventBus-->
+    <bean id="suiteCallbackBizService" class="com.rishiqing.dingtalk.web.dingcallback.service.impl.SuiteCallbackBizServiceImpl"/>
+    <!--eventBus: corpSuite：企业授权开通的事件，只在传统回调的方式下使用，钉钉云环境下不使用该事件-->
+    <bean id="asyncCorpSuiteAuthExecutorFactory"
+          class="com.rishiqing.dingtalk.svc.event.AsyncCorpSuiteAuthEventExecutorFactory"/>
+    <bean id="asyncCorpSuiteAuthExecutor" factory-bean="asyncCorpSuiteAuthExecutorFactory"
+          factory-method="getExecutor"/>
+    <bean id="asyncCorpSuiteAuthEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncCorpSuiteAuthExecutor"/>
+    </bean>
+    <bean id="corpSuiteAuthEventListener" class="com.rishiqing.dingtalk.web.dingcallback.event.CorpSuiteAuthEventListener"/>
+    <!--eventBus: corpSuite：企业授权变更的事件，只在传统回调的方式下使用，钉钉云环境下不使用该事件-->
+    <bean id="asyncCorpSuiteChangeExecutorFactory"
+          class="com.rishiqing.dingtalk.svc.event.AsyncCorpSuiteChangeEventExecutorFactory"/>
+    <bean id="asyncCorpSuiteChangeExecutor" factory-bean="asyncCorpSuiteChangeExecutorFactory"
+          factory-method="getExecutor"/>
+    <bean id="asyncCorpSuiteChangeEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncCorpSuiteChangeExecutor"/>
+    </bean>
+    <bean id="corpSuiteChangeEventListener" class="com.rishiqing.dingtalk.web.dingcallback.event.CorpSuiteChangeEventListener"/>
+
+    <!--eventBus: 初始化-->
+    <bean id="callbackListenerInitService" class="com.rishiqing.dingtalk.web.dingcallback.event.CallbackListenerInitService" init-method="register">
+        <property name="eventListenerMap">
+            <map>
+                <entry key-ref="asyncCorpSuiteAuthEventBus" value-ref="corpSuiteAuthEventListener"/>
+                <entry key-ref="asyncCorpSuiteChangeEventBus" value-ref="corpSuiteChangeEventListener"/>
+            </map>
+        </property>
+    </bean>
 </beans>

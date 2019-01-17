@@ -99,42 +99,34 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
 
     @Override
     public CorpStaffVO getCorpStaff(String token, String corpId, String userId) {
-        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
-        OapiUserGetRequest req = new OapiUserGetRequest();
-        req.setUserid(userId);
-        req.setHttpMethod("GET");
-        try {
-            OapiUserGetResponse resp = client.execute(req, token);
-            CorpStaffVO corpStaff = new CorpStaffVO();
-            corpStaff.setCorpId(corpId);
-            corpStaff.setUserId(resp.getUserid());
-            corpStaff.setName(resp.getName());
-            corpStaff.setTel(resp.getTel());
-            corpStaff.setWorkPlace(resp.getWorkPlace());
-            corpStaff.setRemark(resp.getRemark());
-            corpStaff.setMobile(resp.getMobile());
-            corpStaff.setEmail(resp.getEmail());
-            corpStaff.setActive(resp.getActive());
-            corpStaff.setOrderInDepts(JSON.parseObject(resp.getOrderInDepts(), new TypeReference<Map<Long, Long>>() {
-            }));
-            corpStaff.setBoss(resp.getIsBoss());
-            corpStaff.setAdmin(resp.getIsAdmin());
-            corpStaff.setDingId(resp.getDingId());
-            corpStaff.setIsLeaderInDepts(JSON.parseObject(resp.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>() {
-            }));
-            corpStaff.setHide(resp.getIsHide());
-            corpStaff.setDepartment(resp.getDepartment());
-            corpStaff.setPosition(resp.getPosition());
-            corpStaff.setAvatar(resp.getAvatar());
-            corpStaff.setJobnumber(resp.getJobnumber());
-            corpStaff.setExtattr(JSON.parseObject(resp.getExtattr(), new TypeReference<Map<String, String>>() {
-            }));
-            corpStaff.setUnionId(resp.getUnionid());
+        OapiUserGetResponse resp = corpRequestCommonHelper.getCorpStaff(token, userId);
+        CorpStaffVO corpStaff = new CorpStaffVO();
+        corpStaff.setCorpId(corpId);
+        corpStaff.setUserId(resp.getUserid());
+        corpStaff.setName(resp.getName());
+        corpStaff.setTel(resp.getTel());
+        corpStaff.setWorkPlace(resp.getWorkPlace());
+        corpStaff.setRemark(resp.getRemark());
+        corpStaff.setMobile(resp.getMobile());
+        corpStaff.setEmail(resp.getEmail());
+        corpStaff.setActive(resp.getActive());
+        corpStaff.setOrderInDepts(JSON.parseObject(resp.getOrderInDepts(), new TypeReference<Map<Long, Long>>() {
+        }));
+        corpStaff.setBoss(resp.getIsBoss());
+        corpStaff.setAdmin(resp.getIsAdmin());
+        corpStaff.setDingId(resp.getDingId());
+        corpStaff.setIsLeaderInDepts(JSON.parseObject(resp.getIsLeaderInDepts(), new TypeReference<Map<Long, Boolean>>() {
+        }));
+        corpStaff.setHide(resp.getIsHide());
+        corpStaff.setDepartment(resp.getDepartment());
+        corpStaff.setPosition(resp.getPosition());
+        corpStaff.setAvatar(resp.getAvatar());
+        corpStaff.setJobnumber(resp.getJobnumber());
+        corpStaff.setExtattr(JSON.parseObject(resp.getExtattr(), new TypeReference<Map<String, String>>() {
+        }));
+        corpStaff.setUnionId(resp.getUnionid());
 
-            return corpStaff;
-        } catch (ApiException e) {
-            throw new BizRuntimeException(e);
-        }
+        return corpStaff;
     }
 
     @Override

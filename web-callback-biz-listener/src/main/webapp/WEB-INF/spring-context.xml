@@ -33,13 +33,40 @@
           class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.service.CallbackQueueCheckBizService"/>
     <bean id="callbackBizDataService"
           class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.service.CallbackBizDataService"/>
+    <bean id="orgDeptCreate2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgDeptCreate2DingPushDataConverter"/>
     <bean id="orgDeptModify2DingPushDataConverter"
           class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgDeptModify2DingPushDataConverter"/>
+    <bean id="orgDeptRemove2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgDeptRemove2DingPushDataConverter"/>
+    <bean id="userAddOrg2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.UserAddOrg2DingPushDataConverter"/>
+    <bean id="userModifyOrg2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.UserModifyOrg2DingPushDataConverter"/>
+    <bean id="userLeaveOrg2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.UserLeaveOrg2DingPushDataConverter"/>
+    <bean id="orgAdminAdd2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgAdminAdd2DingPushDataConverter"/>
+    <bean id="orgAdminRemove2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgAdminRemove2DingPushDataConverter"/>
+    <bean id="orgChange2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgChange2DingPushDataConverter"/>
+    <bean id="orgRemove2DingPushDataConverter"
+          class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.impl.OrgRemove2DingPushDataConverter"/>
     <bean id="callback2DingPushDataManager"
           class="com.rishiqing.dingtalk.web.dingcallbackbizlistener.push.Callback2DingPushDataManager">
         <property name="converterMap">
             <map>
+                <entry key="org_dept_create" value-ref="orgDeptCreate2DingPushDataConverter"/>
                 <entry key="org_dept_modify" value-ref="orgDeptModify2DingPushDataConverter"/>
+                <entry key="org_dept_remove" value-ref="orgDeptRemove2DingPushDataConverter"/>
+                <entry key="user_add_org" value-ref="userAddOrg2DingPushDataConverter"/>
+                <entry key="user_modify_org" value-ref="userModifyOrg2DingPushDataConverter"/>
+                <entry key="user_leave_org" value-ref="userLeaveOrg2DingPushDataConverter"/>
+                <entry key="org_admin_add" value-ref="orgAdminAdd2DingPushDataConverter"/>
+                <entry key="org_admin_remove" value-ref="orgAdminRemove2DingPushDataConverter"/>
+                <entry key="org_change" value-ref="orgChange2DingPushDataConverter"/>
+                <entry key="org_remove" value-ref="orgRemove2DingPushDataConverter"/>
             </map>
         </property>
     </bean>

@@ -5,6 +5,7 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.rishiqing.common.base.DateUtil;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.SuiteRequestCommonHelper;
 import com.rishiqing.dingtalk.req.dingtalk.auth.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpAuthInfoVO;
@@ -15,6 +16,7 @@ import com.rishiqing.dingtalk.api.model.vo.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.SuiteTokenVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.SuiteVO;
 import com.taobao.api.ApiException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,24 +27,24 @@ import java.util.List;
  * Date: 2018-11-06 13:59
  */
 public class SuiteTopRequestHelper implements SuiteRequestHelper {
+    private SuiteRequestCommonHelper suiteRequestCommonHelper;
+
+    @Autowired
+    public SuiteTopRequestHelper(SuiteRequestCommonHelper suiteRequestCommonHelper) {
+        this.suiteRequestCommonHelper = suiteRequestCommonHelper;
+    }
+
     @Override
     public CorpAuthInfoVO getCorpAuthInfo(SuiteVO suite, SuiteTicketVO suiteTicketVO, String corpId) {
-        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/service/get_auth_info");
-        OapiServiceGetAuthInfoRequest req = new OapiServiceGetAuthInfoRequest();
-        req.setAuthCorpid(corpId);
-        try {
-            OapiServiceGetAuthInfoResponse resp = client.execute(
-                    req,suite.getSuiteKey(),
-                    suite.getSuiteSecret(),
-                    suiteTicketVO.getSuiteTicket());
-            if(resp.getErrcode() != 0L){
-                throw new BizRuntimeException("getSuiteToken error: " + resp.getErrcode() + ", " + resp.getErrmsg());
-            }
-            return this.convertToCorpSuiteAuth(resp);
-
-        } catch (ApiException e) {
-            throw new BizRuntimeException(e);
+        OapiServiceGetAuthInfoResponse resp = suiteRequestCommonHelper.getCorpAuthInfo(
+                suite.getSuiteKey(),
+                suite.getSuiteSecret(),
+                suiteTicketVO.getSuiteTicket(),
+                corpId);
+        if(resp.getErrcode() != 0L){
+            throw new BizRuntimeException("getSuiteToken error: " + resp.getErrcode() + ", " + resp.getErrmsg());
         }
+        return this.convertToCorpSuiteAuth(resp);
     }
 
     @Override

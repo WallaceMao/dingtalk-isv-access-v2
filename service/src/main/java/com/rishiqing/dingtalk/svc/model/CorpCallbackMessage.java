@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 回调的事件
  * 注意，这里只枚举需要处理的tag，其他的tag不要在这里加上
  */
 public class CorpCallbackMessage {

@@ -8,5 +8,9 @@ import com.alibaba.fastjson.JSONObject;
  * Date: 2019-01-16 10:35
  */
 public interface CorpRequestJsonHelper {
-    JSONObject getCorpDepartment(String token, String corpId, Long deptId);
+    JSONObject getCorpDepartment(String token, Long deptId);
+
+    JSONObject getCorpStaff(String corpToken, String userId);
+
+    JSONObject getCorpInfo(String suiteKey, String suiteSecret, String suiteTicket, String corpId);
 }

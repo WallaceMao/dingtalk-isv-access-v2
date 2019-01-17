@@ -5,6 +5,7 @@
 
     <!--http工具-->
     <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.SuiteTopRequestHelper"/>
+    <bean id="suiteRequestCommonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.SuiteTopRequestCommonHelper"/>
     <bean id="corpRequestCommonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestCommonHelper"/>
     <bean id="corpRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestHelper"/>
     <bean id="corpRequestJsonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestJsonHelper"/>

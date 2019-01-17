@@ -13,12 +13,12 @@ import java.util.List;
  * @author Wallace Mao
  * Date: 2019-01-15 23:48
  */
-public class OrgDeptModify2DingPushDataConverter implements Callback2DingPushDataConverter {
+public class UserLeaveOrg2DingPushDataConverter implements Callback2DingPushDataConverter {
     @Autowired
     private CallbackBizDataService callbackBizDataService;
 
     @Override
     public List<OpenSyncBizDataDO> convert(CorpCallbackQueueDO callbackDO) {
-        return callbackBizDataService.convertDeptCallback(callbackDO, OpenSyncBizSyncAction.Tag.ORG_DEPT_MODIFY);
+        return callbackBizDataService.convertStaffCallback(callbackDO, OpenSyncBizSyncAction.Tag.USER_LEAVE_ORG);
     }
 }

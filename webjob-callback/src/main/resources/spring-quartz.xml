@@ -24,11 +24,17 @@
         <property name="queueCapacity" value="1000"/>
     </bean>
 
+    <!--钉钉授权主库-->
+    <bean id="dataSourceQuartz" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${jdbc.quartz.url}"/>
+        <property name="username" value="${jdbc.quartz.username}" />
+        <property name="password" value="${jdbc.quartz.password}" />
+    </bean>
+
     <!--只在job程序中配置计时任务-->
     <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
+        <property name="dataSource" ref="dataSourceQuartz"/>
         <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
         <property name="configLocation" value="classpath:quartz.properties"/>
         <property name="triggers">
@@ -43,7 +49,7 @@
 
     <!--定时更新Suite的token，每三十分钟执行一次-->
     <bean id="suiteTokenJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.rishiqing.dingtalk.webjob.job.SuiteTokenGenerateJob"/>
+        <property name="jobClass" value="com.rishiqing.dingtalk.web.dingcallbackjob.job.SuiteTokenGenerateJob"/>
         <property name="durability" value="true"/>
     </bean>
     <bean id="suiteTokenTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -53,7 +59,7 @@
 
     <!--如果有授权失败的公司，那么进行每分钟会进行重试-->
     <bean id="corpSuiteAuthFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.rishiqing.dingtalk.webjob.job.CorpSuiteAuthFailJob"/>
+        <property name="jobClass" value="com.rishiqing.dingtalk.web.dingcallbackjob.job.CorpSuiteAuthFailJob"/>
         <property name="durability" value="true"/>
     </bean>
     <bean id="corpSuiteAuthFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -63,7 +69,7 @@
 
     <!--TODO 如果公司同步到日事清发生了失败，那么会进行重试-->
     <bean id="rsqSuiteAuthPushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.rishiqing.dingtalk.webjob.job.RsqSuiteAuthPushFailJob"/>
+        <property name="jobClass" value="com.rishiqing.dingtalk.web.dingcallbackjob.job.RsqSuiteAuthPushFailJob"/>
         <property name="durability" value="true"/>
     </bean>
     <bean id="rsqSuiteAuthPushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -73,7 +79,7 @@
 
     <!--TODO 如果公司的组织结构变化同步到日事清发生了失败，那么也会进行重试-->
     <bean id="rsqCorpChangePushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.rishiqing.dingtalk.webjob.job.RsqCorpChangePushFailJob"/>
+        <property name="jobClass" value="com.rishiqing.dingtalk.web.dingcallbackjob.job.RsqCorpChangePushFailJob"/>
         <property name="durability" value="true"/>
     </bean>
     <bean id="rsqCorpChangePushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

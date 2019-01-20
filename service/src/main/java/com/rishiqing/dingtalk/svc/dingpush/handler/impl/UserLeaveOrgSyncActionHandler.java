@@ -1,0 +1,37 @@
+package com.rishiqing.dingtalk.svc.dingpush.handler.impl;
+
+import com.rishiqing.dingtalk.svc.service.biz.impl.StaffService;
+import com.rishiqing.dingtalk.svc.dingpush.handler.SyncActionHandler;
+import com.rishiqing.dingtalk.api.model.vo.dingpush.OpenSyncBizDataVO;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
+import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @author Wallace Mao
+ * Date: 2018-11-10 14:33
+ */
+public class UserLeaveOrgSyncActionHandler implements SyncActionHandler {
+    @Autowired
+    private CorpStaffManager corpStaffManager;
+    @Autowired
+    private StaffService staffService;
+    @Autowired
+    private RsqAccountBizService rsqAccountBizService;
+    /**
+     * @link https://open-doc.dingtalk.com/microapp/ln6dmh/troq7i
+    subscribe_id  ： 套件suiteid加下划线0
+    copp_id : 开通套件微应用的企业corpid
+    biz_id             ： 员工userId
+    biz_data         ：数据为如下两种 Json格式：
+    企业增加或修改员工，字段值来自于开放平台接口user/get 。
+    "syncAction": "user_leave_org"，表示企业删除员工
+     * @param data
+     */
+    @Override
+    public void handleSyncAction(OpenSyncBizDataVO data) {
+        String corpId = data.getCorpId();
+        String userId = data.getBizId();
+        staffService.deleteUserAndSubtractCount(corpId, userId);
+    }
+}

@@ -25,5 +25,5 @@
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-service-dingmain.xml"/>
-    <!--<import resource="classpath:spring-queue-amq.xml"/>-->
+    <import resource="classpath:spring-queue-amq.xml"/>
 </beans>

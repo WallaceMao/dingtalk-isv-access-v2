@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--http工具-->
+    <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.SuiteTopRequestHelper"/>
+    <bean id="suiteRequestCommonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.SuiteTopRequestCommonHelper"/>
+    <bean id="corpRequestCommonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestCommonHelper"/>
+    <bean id="corpRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestHelper"/>
+    <bean id="corpRequestJsonHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CorpTopRequestJsonHelper"/>
+    <bean id="messageRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.MessageTopRequestHelper"/>
+    <bean id="callbackRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.CallbackTopRequestHelper"/>
+</beans>

@@ -21,6 +21,8 @@
         <module>webjob</module>
         <module>webjob-callback</module>
         <module>webcrm</module>
+        <module>web-callback-biz</module>
+        <module>web-callback-biz-listener</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

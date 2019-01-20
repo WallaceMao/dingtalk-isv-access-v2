@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.SuiteDao">
+
+    <resultMap type="com.rishiqing.dingtalk.api.model.domain.suite.SuiteDO" id="suiteMap">
+        <id property="id" column="id" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+        <result property="suiteName" column="suite_name" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="suiteSecret" column="suite_secret" />
+        <result property="encodingAesKey" column="encoding_aes_key" />
+        <result property="token" column="token" />
+        <result property="eventReceiveUrl" column="event_receive_url" />
+        <result property="rsqAppName" column="rsq_app_name" />
+        <result property="rsqAppToken" column="rsq_app_token" />
+        <result property="suiteId" column="suite_id" />
+    </resultMap>
+
+    <sql id="select-all-fields">
+        id,
+        gmt_create,
+        gmt_modified,
+        suite_name,
+        suite_key,
+        suite_secret,
+        encoding_aes_key,
+        token,
+        event_receive_url,
+        rsq_app_name,
+        rsq_app_token,
+        suite_id
+    </sql>
+
+    <insert id="saveOrUpdateSuite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_suite (
+            gmt_create,
+            gmt_modified,
+            suite_name,
+            suite_key,
+            suite_secret,
+            encoding_aes_key,
+            token,
+            event_receive_url,
+            rsq_app_name,
+            rsq_app_token,
+            suite_id
+        ) VALUES (
+            now(),
+            now(),
+            #{suiteName},
+            #{suiteKey},
+            #{suiteSecret},
+            #{encodingAesKey},
+            #{token},
+            #{eventReceiveUrl},
+            #{rsqAppName},
+            #{rsqAppToken},
+            #{suiteId}
+        ) ON DUPLICATE KEY UPDATE gmt_modified=now(), rsq_app_name=#{rsqAppName}, rsq_app_token=#{rsqAppToken}
+    </insert>
+
+    <select id="getSuite" resultMap="suiteMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_suite LIMIT 1;
+    </select>
+</mapper>

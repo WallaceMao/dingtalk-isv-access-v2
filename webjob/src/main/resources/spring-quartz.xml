@@ -43,7 +43,7 @@
 
     <!--定时更新Suite的token，每三十分钟执行一次-->
     <bean id="suiteTokenJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass"  value="com.rishiqing.dingtalk.webjob.job.SuiteTokenGenerateJob"/>
+        <property name="jobClass"  value="SuiteTokenGenerateJob"/>
         <property name="durability" value="true" />
     </bean>
     <bean id="suiteTokenTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -53,7 +53,7 @@
 
     <!--如果有授权失败的公司，那么进行每分钟会进行重试-->
     <bean id="corpSuiteAuthFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass"  value="com.rishiqing.dingtalk.webjob.job.CorpSuiteAuthFailJob"/>
+        <property name="jobClass"  value="CorpSuiteAuthFailJob"/>
         <property name="durability" value="true" />
     </bean>
     <bean id="corpSuiteAuthFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -63,7 +63,7 @@
 
     <!--TODO 如果公司同步到日事清发生了失败，那么会进行重试-->
     <bean id="rsqSuiteAuthPushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass"  value="com.rishiqing.dingtalk.webjob.job.RsqSuiteAuthPushFailJob"/>
+        <property name="jobClass"  value="RsqSuiteAuthPushFailJob"/>
         <property name="durability" value="true" />
     </bean>
     <bean id="rsqSuiteAuthPushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -73,7 +73,7 @@
 
     <!--TODO 如果公司的组织结构变化同步到日事清发生了失败，那么也会进行重试-->
     <bean id="rsqCorpChangePushFailJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass"  value="com.rishiqing.dingtalk.webjob.job.RsqCorpChangePushFailJob"/>
+        <property name="jobClass"  value="RsqCorpChangePushFailJob"/>
         <property name="durability" value="true" />
     </bean>
     <bean id="rsqCorpChangePushFailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

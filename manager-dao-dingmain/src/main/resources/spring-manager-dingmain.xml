@@ -6,18 +6,22 @@
     <import resource="classpath:spring-dao-dingmain.xml"/>
 
     <!--基础manager-->
-    <bean id="suiteManager" class="com.rishiqing.dingtalk.manager.suite.impl.SuiteManagerImpl"/>
-    <bean id="appManager" class="com.rishiqing.dingtalk.manager.suite.impl.AppManagerImpl"/>
+    <bean id="suiteManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.SuiteManagerImpl"/>
+    <bean id="appManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.AppManagerImpl"/>
     <bean id="corpSuiteAuthManager"
-          class="com.rishiqing.dingtalk.manager.suite.impl.CorpSuiteAuthManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.CorpSuiteAuthManagerImpl"/>
     <bean id="corpAppManager"
-          class="com.rishiqing.dingtalk.manager.suite.impl.CorpAppManagerImpl"/>
-    <bean id="corpManager" class="com.rishiqing.dingtalk.manager.corp.impl.CorpManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.CorpAppManagerImpl"/>
+    <bean id="corpCallbackQueueManager"
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpCallbackQueueManagerImpl"/>
+    <bean id="corpManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpManagerImpl"/>
     <bean id="deptManager"
-          class="com.rishiqing.dingtalk.manager.corp.impl.CorpDepartmentManagerImpl"/>
-    <bean id="staffManager" class="com.rishiqing.dingtalk.manager.corp.impl.CorpStaffManagerImpl"/>
-    <bean id="orderManager" class="com.rishiqing.dingtalk.manager.order.impl.OrderManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpDepartmentManagerImpl"/>
+    <bean id="staffManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpStaffManagerImpl"/>
+    <bean id="orderManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.order.impl.OrderManagerImpl"/>
     <bean id="idMapStaffManager"
-          class="com.rishiqing.dingtalk.manager.front.impl.IdMapStaffManagerImpl"/>
-    <bean id="popupManager" class="com.rishiqing.dingtalk.manager.front.impl.PopupManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.front.impl.IdMapStaffManagerImpl"/>
+    <bean id="popupManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.front.impl.PopupManagerImpl"/>
+    <bean id="authGlobalLockManager"
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.AuthGlobalLockManagerImpl"/>
 </beans>

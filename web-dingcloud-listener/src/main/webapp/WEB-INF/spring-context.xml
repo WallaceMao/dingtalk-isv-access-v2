@@ -25,12 +25,12 @@
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-service-dingmain.xml" />
-    <import resource="classpath:spring-queue-ali.xml" />
+    <import resource="classpath:spring-queue-amq.xml" />
     <import resource="classpath:spring-service-dingpush.xml" />
 
     <!--web层需要用到的service-->
     <!--启动钉钉云推送的监听-->
-    <bean id="suiteDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloud.listener.SuiteDbCheckApplicationListener" />
+    <!--<bean id="suiteDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloud.listener.SuiteDbCheckApplicationListener" />-->
     <!--钉钉云推送组织架构变更信息的监控-->
-    <bean id="corpDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloud.listener.CorpDbCheckApplicationListener" />
+    <bean id="corpDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloudlistener.listener.CorpDbCheckApplicationListener" />
 </beans>

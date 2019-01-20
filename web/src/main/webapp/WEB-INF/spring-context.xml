@@ -25,7 +25,7 @@
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-service-dingmain.xml" />
-    <import resource="classpath:spring-queue-ali.xml" />
+    <import resource="classpath:spring-queue-${mq.type}.xml" />
     <import resource="classpath:spring-service-dingpush.xml" />
 
     <!--web层需要用到的service-->

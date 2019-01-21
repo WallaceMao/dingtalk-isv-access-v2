@@ -4,6 +4,7 @@ import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
+import com.rishiqing.dingtalk.web.dingcallback.service.CorpCallbackBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,22 @@ public class DemoController {
         Date end = new Date();
         consoleLogger.warn("consoleLogger--------------" + end);
         return "success：" + now + "---->" + end;
+    }
+
+    @Autowired
+    private CorpCallbackBizService corpCallbackBizService;
+
+    @RequestMapping("/updateCorpCallbackUrl")
+    @ResponseBody
+    public String updateCorpCallbackUrl(
+            @RequestParam("corpId") String corpId
+    ){
+        try {
+            corpCallbackBizService.saveOrUpdateCorpCallback(corpId);
+            return "success";
+        } catch (Exception e){
+            consoleLogger.error("error in updateCorpCallbackUrl", e);
+            return "error";
+        }
     }
 }

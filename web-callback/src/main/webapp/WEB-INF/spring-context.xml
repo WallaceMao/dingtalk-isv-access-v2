@@ -28,6 +28,7 @@
 
     <!--eventBus-->
     <bean id="suiteCallbackBizService" class="com.rishiqing.dingtalk.web.dingcallback.service.impl.SuiteCallbackBizServiceImpl"/>
+    <bean id="corpCallbackBizService" class="com.rishiqing.dingtalk.web.dingcallback.service.impl.CorpCallbackBizServiceImpl"/>
     <!--eventBus: corpSuite：企业授权开通的事件，只在传统回调的方式下使用，钉钉云环境下不使用该事件-->
     <bean id="asyncCorpSuiteAuthExecutorFactory"
           class="com.rishiqing.dingtalk.svc.event.AsyncCorpSuiteAuthEventExecutorFactory"/>

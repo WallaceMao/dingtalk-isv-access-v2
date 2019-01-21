@@ -1,5 +1,8 @@
 package com.rishiqing.dingtalk.web.dingcallback.controller.demo;
 
+import com.rishiqing.dingtalk.api.model.vo.order.OrderEventVO;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.order.OrderManager;
+import com.rishiqing.dingtalk.svc.service.biz.impl.ChargeBizService;
 import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
@@ -102,6 +105,27 @@ public class DemoController {
             return "success";
         } catch (Exception e){
             consoleLogger.error("error in updateCorpCallbackUrl", e);
+            return "error";
+        }
+    }
+
+    @Autowired
+    private OrderManager orderManager;
+    @Autowired
+    private ChargeBizService chargeBizService;
+
+    @RequestMapping("/doChargeFromEvent")
+    @ResponseBody
+    public String doChargeFromEvent(
+            @RequestParam("corpId") String corpId
+    ){
+        try {
+            OrderEventVO orderEventVO = orderManager.getOrderEventByCorpIdAndLatest(corpId);
+            //  充值
+            chargeBizService.charge(orderEventVO);
+            return "success";
+        } catch (Exception e){
+            consoleLogger.error("error in doChargeFromEvent", e);
             return "error";
         }
     }

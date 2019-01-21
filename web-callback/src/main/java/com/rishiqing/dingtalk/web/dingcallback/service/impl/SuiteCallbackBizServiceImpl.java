@@ -8,6 +8,7 @@ import com.rishiqing.dingtalk.api.model.vo.order.OrderEventVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.SuiteTicketVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.SuiteVO;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.order.OrderManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.suite.CorpSuiteAuthManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.suite.SuiteManager;
 import com.rishiqing.dingtalk.api.service.biz.CorpBizService;
@@ -21,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
     @Autowired
     private SuiteManager suiteManager;
+    @Autowired
+    private OrderManager orderManager;
     @Autowired
     private CorpBizService corpBizService;
     @Autowired
@@ -83,6 +86,7 @@ public class SuiteCallbackBizServiceImpl implements SuiteCallbackBizService {
 
     @Override
     public void receiveMarketBuy(OrderEventVO orderEvent){
-        corpBizService.prepareChargeCorpApp(orderEvent);
+        orderManager.saveOrUpdateOrderEvent(orderEvent);
+        corpBizService.chargeCorpApp(orderEvent);
     }
 }

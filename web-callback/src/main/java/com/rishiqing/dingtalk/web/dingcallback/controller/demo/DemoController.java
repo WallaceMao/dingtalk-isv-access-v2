@@ -1,13 +1,8 @@
 package com.rishiqing.dingtalk.web.dingcallback.controller.demo;
 
-import com.rishiqing.dingtalk.api.model.vo.order.OrderEventVO;
-import com.rishiqing.dingtalk.mgr.dingmain.manager.order.OrderManager;
-import com.rishiqing.dingtalk.svc.service.biz.impl.ChargeBizService;
 import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
-import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
-import com.rishiqing.dingtalk.web.dingcallback.service.CorpCallbackBizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +20,10 @@ import java.util.Map;
  * Date: 2018-10-31 20:56
  */
 @Controller
-@RequestMapping("/manual")
+@RequestMapping("/demo")
 public class DemoController {
     private static final Logger consoleLogger = LoggerFactory.getLogger(DemoController.class);
     private static final Logger aliLogger = LoggerFactory.getLogger(DemoController.class);
-
-    @Autowired
-    private RsqAccountBizService rsqAccountBizService;
 
     @RequestMapping("/rsqPush")
     @ResponseBody
@@ -90,43 +82,5 @@ public class DemoController {
         Date end = new Date();
         consoleLogger.warn("consoleLogger--------------" + end);
         return "success：" + now + "---->" + end;
-    }
-
-    @Autowired
-    private CorpCallbackBizService corpCallbackBizService;
-
-    @RequestMapping("/updateCorpCallbackUrl")
-    @ResponseBody
-    public String updateCorpCallbackUrl(
-            @RequestParam("corpId") String corpId
-    ){
-        try {
-            corpCallbackBizService.saveOrUpdateCorpCallback(corpId);
-            return "success";
-        } catch (Exception e){
-            consoleLogger.error("error in updateCorpCallbackUrl", e);
-            return "error";
-        }
-    }
-
-    @Autowired
-    private OrderManager orderManager;
-    @Autowired
-    private ChargeBizService chargeBizService;
-
-    @RequestMapping("/doChargeFromEvent")
-    @ResponseBody
-    public String doChargeFromEvent(
-            @RequestParam("corpId") String corpId
-    ){
-        try {
-            OrderEventVO orderEventVO = orderManager.getOrderEventByCorpIdAndLatest(corpId);
-            //  充值
-            chargeBizService.charge(orderEventVO);
-            return "success";
-        } catch (Exception e){
-            consoleLogger.error("error in doChargeFromEvent", e);
-            return "error";
-        }
     }
 }

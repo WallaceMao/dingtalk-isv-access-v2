@@ -251,11 +251,6 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
      */
     @Override
     public void createRsqTeamStaff(CorpStaffVO staffVO) {
-        //  如果staffVO的rsqUserId存在，则不重新发送请求创建
-        if (null != staffVO.getRsqUserId()) {
-            return;
-        }
-
         String userId = staffVO.getUserId();
         String corpId = staffVO.getCorpId();
         //  生成用户信息
@@ -412,7 +407,11 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     public void createCorpStaffByScopeVersion(String corpId, Long scopeVersion) {
         List<CorpStaffVO> list = corpStaffManager.getCorpStaffListByCorpIdAndScopeVersion(corpId, scopeVersion);
         for (CorpStaffVO staffVO : list) {
-            this.createRsqTeamStaff(staffVO);
+            if (null == staffVO.getRsqUserId()) {
+                this.createRsqTeamStaff(staffVO);
+            } else {
+                this.updateRsqTeamStaff(staffVO);
+            }
         }
     }
 
@@ -479,19 +478,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
                 corpId, scopeVersion
         );
         for (CorpDepartmentVO dept : list) {
-            //这地方要try catch出来，防止循环中有一个失败了，循环就不会继续进行了
-            try {
-                this.deleteRsqDepartment(dept);
-            } catch (Exception e) {
-                bizLogger.error(
-                        LogFormatter.format(
-                                LogFormatter.LogEvent.EXCEPTION,
-                                "delete deprecated corp department error",
-                                LogFormatter.getKV("corpId", corpId),
-                                LogFormatter.getKV("dept", dept)
-                        )
-                );
-            }
+            this.deleteRsqDepartment(dept);
         }
     }
 

@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 public class SuiteController {
-    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteCallbackController.class);
+    private static final Logger bizLogger = LoggerFactory.getLogger(SuiteController.class);
 
     @Autowired
     private SuiteService suiteService;

@@ -1,14 +1,19 @@
 package com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl;
 
+import com.rishiqing.dingtalk.mgr.dingmain.constant.ManagerDaoDingmainConstant;
 import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.CorpDepartmentConverter;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp.CorpDepartmentDao;
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpDepartmentDO;
-import com.rishiqing.dingtalk.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.rishiqing.dingtalk.mgr.dingmain.constant.ManagerDaoDingmainConstant.SYS_LIMIT_LIST_DEPARTMENT_MAX;
 
 /**
  * @author Wallace Mao
@@ -101,49 +106,45 @@ public class CorpDepartmentManagerImpl implements CorpDepartmentManager {
     }
 
     /**
-     * 获取一个公司中的所有部门中的最顶层的部门
+     * 获取一个公司中的所有部门中的最顶层的部门，逻辑如下：
+     * 1.  如果没有任何部门，那么说明用户在可见范围内没有选择任何部门
+     * 2.  如果有id为1的部门，那么说明给用户选择的是全员可见（或者在部分成员可见中选择的是顶层的公司）
+     * 3.  如果用户选择的可见范围只是公司的部门属性结构中的一个子集，那么读取出所有parentId为null的部门作为顶级部门
      * @param corpId
      * @param scopeVersion
      * @return
      */
     @Override
-    public CorpDepartmentVO getTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion){
+    public List<CorpDepartmentVO> listTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion){
         List<CorpDepartmentDO> deptDOList = corpDepartmentDao.getCorpDepartmentListByCorpIdAndScopeVersionLimit(
                 corpId, scopeVersion, 1L);
         //  如果找不到部门，说明该公司没有部门，那么顶层部门为空
         if(deptDOList == null || deptDOList.size() == 0){
             return null;
         }
+        List<CorpDepartmentVO> voList = new ArrayList<>();
         CorpDepartmentDO rootDept = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
-                corpId, 1L, scopeVersion);
+                corpId, ManagerDaoDingmainConstant.DEPT_ID_ROOT, scopeVersion);
         //  根据钉钉的约定，公司的根部门的id为1，那么如果能找到根部门，那么直接将根部门作为顶层部门返回
         if(rootDept != null){
-            return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(rootDept);
+            voList.add(CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(rootDept));
+            return voList;
         }
-        //  最复杂的情况，如果用户选择的可见范围只是公司的部门属性结构中的一个子集，那么就只能从一个部门开始迭代查找
-        CorpDepartmentDO currentDept = deptDOList.get(0);
-        final int LOOP_LIMIT = 50;  //  对循环做限制
-        int i = 0;
-        //  什么情况下currentDept就是topDepartment呢？
-        //  1  currentDept.getParentId()为null。
-        //  2  currentDept的parentId存在，但是获取不到值
-        while (true){
-            //  如果parentId为空，那么跳出循环，currentDept就是topDept
-            if(currentDept.getParentId() == null){
-                break;
-            }
-            CorpDepartmentDO parentDept  = corpDepartmentDao.getCorpDepartmentByCorpIdAndDeptIdAndScopeVersion(
-                    corpId, currentDept.getParentId(), scopeVersion);
-            //  如果parentDept为空，那么跳出循环，currentDpet就是topDept
-            if(parentDept == null){
-                break;
-            }
-            currentDept = parentDept;
-            //  如果达到循环上限，那么抛出异常
-            if(i++ >= LOOP_LIMIT){
-                throw new BizRuntimeException("getTopCorpDepartment reach max loop limit, corpId: " + corpId + ", loop times: " + i);
+        //  最复杂的情况，如果用户选择的可见范围只是公司的部门属性结构中的一个子集，那么读取出所有parentId为null的部门作为顶级部门
+        deptDOList = corpDepartmentDao.getCorpDepartmentListByCorpIdAndScopeVersionLimit(
+                corpId, scopeVersion, SYS_LIMIT_LIST_DEPARTMENT_MAX);
+        //  以deptId作为key值，保存在deptIdMap里
+        Map<Long, CorpDepartmentDO> deptIdMap = new HashMap<>(deptDOList.size());
+        for (CorpDepartmentDO deptDO : deptDOList) {
+            deptIdMap.put(deptDO.getDeptId(), deptDO);
+        }
+        //  便利deptIdMap，如果一个dept的parentId不在deptId中，那么说明这个dept就添加到顶级部门列表
+        for (Map.Entry<Long, CorpDepartmentDO> entry : deptIdMap.entrySet()) {
+            CorpDepartmentDO deptDO = entry.getValue();
+            if (deptIdMap.get(deptDO.getParentId()) == null) {
+                voList.add(CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(deptDO));
             }
         }
-        return CorpDepartmentConverter.corpDepartmentDO2CorpDepartmentVO(currentDept);
+        return voList;
     }
 }

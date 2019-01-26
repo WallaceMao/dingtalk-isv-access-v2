@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:spring-dao-dingmain.xml"/>
+    <import resource="classpath:spring-manager-req-dingtalk.xml"/>
 
     <!--基础manager-->
     <bean id="suiteManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.SuiteManagerImpl"/>

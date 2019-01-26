@@ -35,7 +35,7 @@ public interface CorpDepartmentManager {
     List<CorpDepartmentVO> getCorpDepartmentListByCorpIdAndParentIdAndScopeVersion(
             String corpId, Long deptId, Long scopeVersion);
 
-    CorpDepartmentVO getTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion);
+    List<CorpDepartmentVO> listTopCorpDepartmentByScopeVersion(String corpId, Long scopeVersion);
 
     void deleteCorpDepartmentByCorpIdAndDeptId(String corpId, Long deptId);
 }

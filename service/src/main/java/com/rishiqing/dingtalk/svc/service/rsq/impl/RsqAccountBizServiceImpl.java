@@ -123,9 +123,11 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
         //  a. 包含deptId为1的部门，即全公司的部门已经获取到。这种情况
         //  b. 不包含deptId为1的部门，但是是全公司部门的一个子集
         //  c. 不包含任何部门。当用户开通时选择仅管理员可见会出现这种情况
-        CorpDepartmentVO topDept = corpDepartmentManager.getTopCorpDepartmentByScopeVersion(corpId, scopeVersion);
-        if (topDept != null) {
-            this.createRecursiveSubDepartmentByScopeVersion(topDept, scopeVersion);
+        List<CorpDepartmentVO> topDeptList = corpDepartmentManager.listTopCorpDepartmentByScopeVersion(corpId, scopeVersion);
+        if (topDeptList != null) {
+            for (CorpDepartmentVO topDept : topDeptList) {
+                this.createRecursiveSubDepartmentByScopeVersion(topDept, scopeVersion);
+            }
         }
 
         //  3  新建企业部门成员

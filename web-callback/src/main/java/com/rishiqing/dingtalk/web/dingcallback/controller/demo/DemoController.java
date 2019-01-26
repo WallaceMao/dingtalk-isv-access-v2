@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +47,7 @@ public class DemoController {
     public Map<String, Object> test(
             @RequestParam("corpId") String corpId
     ){
-        CorpDepartmentVO corpDepartmentVO = corpDepartmentManager.getTopCorpDepartmentByScopeVersion(corpId, 0L);
+        List<CorpDepartmentVO> corpDepartmentVO = corpDepartmentManager.listTopCorpDepartmentByScopeVersion(corpId, 0L);
         Map<String, Object> result = new HashMap<>();
         result.put("listdd", corpDepartmentVO);
         return result;

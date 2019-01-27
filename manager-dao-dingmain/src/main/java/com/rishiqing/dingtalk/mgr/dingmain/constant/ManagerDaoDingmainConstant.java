@@ -8,5 +8,5 @@ public class ManagerDaoDingmainConstant {
     //  钉钉中根部门的deptId固定为1
     public static Long DEPT_ID_ROOT = 1L;
     //  获取部门的时候，最大的数量
-    public static Long SYS_LIMIT_LIST_DEPARTMENT_MAX = 1000L;
+    public static Long SYS_LIMIT_LIST_DEPARTMENT_MAX = 3000L;
 }

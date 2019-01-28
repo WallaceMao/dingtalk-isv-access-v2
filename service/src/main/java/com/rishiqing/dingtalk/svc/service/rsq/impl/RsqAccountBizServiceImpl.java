@@ -190,10 +190,10 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     @Override
     public void createRsqDepartment(CorpDepartmentVO departmentVO) {
         String corpId = departmentVO.getCorpId();
-        //  如果departmentVO的rsqId存在，则不重新创建部门
-        if (null != departmentVO.getRsqId()) {
-            return;
-        }
+        // //  如果departmentVO的rsqId存在，则不重新创建部门
+        // if (null != departmentVO.getRsqId()) {
+        //     return;
+        // }
 
         CorpVO corpVO = corpManager.getCorpByCorpId(corpId);
 

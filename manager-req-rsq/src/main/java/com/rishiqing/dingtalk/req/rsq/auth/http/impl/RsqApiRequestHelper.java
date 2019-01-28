@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.http.HttpRequestClient;
 import com.rishiqing.common.http.exception.HttpRequestException;
 import com.rishiqing.common.http.util.HttpPathUtil;
+import com.rishiqing.dingtalk.api.constant.SystemConstant;
 import com.rishiqing.dingtalk.req.rsq.auth.converter.RsqCorpConverter;
 import com.rishiqing.dingtalk.req.rsq.auth.converter.RsqDepartmentConverter;
 import com.rishiqing.dingtalk.req.rsq.auth.converter.RsqUserConverter;
@@ -35,9 +36,8 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
     private static final String URL_DELETE_DEPARTMENT = "/api/v3w/tokenAuth/department/{outerId}";
     private static final String URL_CREATE_USER = "/api/v3w/tokenAuth/user";
     private static final String URL_UPDATE_USER = "/api/v3w/tokenAuth/user/{outerId}";
-    private static final String URL_UPDATE_USER_SET_ADMIN = "/api/v3w/tokenAuth/user/{outerId}/admin/{isAdmin}";
+    private static final String URL_UPDATE_USER_SET_ADMIN = "/api/v3w/tokenAuth/user/{outerId}/admin/{admin}";
     private static final String URL_UPDATE_USER_REMOVE_TEAM = "/api/v3w/tokenAuth/user/{outerId}/team/null";
-    private static final Long rootDeptId = 1L;
 
     private HttpRequestClient httpRequestClient;
     private String rsqDomain;
@@ -115,8 +115,8 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
         params.put("outerCombineId", generateOuterCombineId(departmentVO));
         params.put("displayOrder", departmentVO.getOrder());
         params.put("outerParentCombineId", generateOuterCombineId(departmentVO.getCorpId(), departmentVO.getParentId()));
-        if (departmentVO.getParentId() == null || departmentVO.getParentId().equals(rootDeptId)) {
-            params.put("isTop", true);
+        if (SystemConstant.DINGTALK_DEPARTMENT_ROOT_ID.equals(departmentVO.getDeptId())) {
+            params.put("top", true);
         }
 
         String sr = httpRequestClient.httpPostJson(url,
@@ -145,8 +145,8 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
         params.put("name", departmentVO.getName());
 
         params.put("outerParentCombineId", generateOuterCombineId(departmentVO.getCorpId(), departmentVO.getParentId()));
-        if (departmentVO.getParentId() == null || departmentVO.getParentId().equals(rootDeptId)) {
-            params.put("isTop", true);
+        if (SystemConstant.DINGTALK_DEPARTMENT_ROOT_ID.equals(departmentVO.getDeptId())) {
+            params.put("top", true);
         }
 
         params.put("displayOrder", departmentVO.getOrder());
@@ -273,7 +273,7 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
     public RsqUser setUserAdmin(SuiteVO suiteVO, CorpStaffVO staffVO) {
         Map<String, Object> pathParams = new HashMap<>();
         pathParams.put("outerId", generateOuterCombineId(staffVO));
-        pathParams.put("isAdmin", staffVO.getAdmin());
+        pathParams.put("admin", staffVO.getAdmin());
         String url = this.rsqUrlInternal + HttpPathUtil.replacePathVariable(URL_UPDATE_USER_SET_ADMIN, pathParams);
 
         String sr = httpRequestClient.httpPutJson(url, "", generateHeaderMap(suiteVO));

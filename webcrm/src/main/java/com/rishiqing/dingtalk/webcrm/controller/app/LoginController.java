@@ -14,7 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -37,15 +40,15 @@ public class LoginController {
     @ResponseBody
     @ApiOperation(value = "登陆方法")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "corpId", value = "公司id", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "corpId", value = "公司id", required = true, dataType = "String",example = "123"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String",example = "123"),
             @ApiImplicitParam(name = "password", value = "密码", required = false, dataType = "String")
     })
     public Map<String, Object> login(
             HttpServletResponse response,
-            @RequestParam("corpId") String corpId,
-            @RequestParam("username") String username,
-            @RequestParam("password") String password
+            @RequestParam(value = "corpId",required = true) String corpId,
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "password",required = true) String password
     ) {
         bizLogger.info(LogFormatter.format(
                 LogFormatter.LogEvent.START,
@@ -63,7 +66,6 @@ public class LoginController {
             //token放到头部
             String token = JwtUtil.sign(staffVO);
             response.addHeader("token",token);
-
             Map<String, Object> map = new HashMap<>();
             /*map.put("errcode", 0);*/
             return HttpResult.getSuccess(null);

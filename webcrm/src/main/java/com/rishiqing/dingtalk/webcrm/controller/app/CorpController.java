@@ -122,8 +122,8 @@ public class CorpController {
     @ResponseBody
     @ApiOperation(value = "导出csv格式")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true)
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true,dataType = "Long",example = "1483200000000"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true,dataType = "Long",example = "1546272000000")
     })
     public Map<String, Object> exportCorpBetweenDate(@RequestParam(value = "startDate", required = true) Long startDate,
                                                      @RequestParam(value = "endDate", required = true) Long endDate,

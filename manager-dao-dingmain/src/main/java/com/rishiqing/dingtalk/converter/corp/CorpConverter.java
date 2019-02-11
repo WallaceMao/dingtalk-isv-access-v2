@@ -61,7 +61,6 @@ public class CorpConverter {
         corpVO.setCorpId(corpDO.getCorpId());
         corpVO.setCorpLogoUrl(corpDO.getCorpLogoUrl());
         corpVO.setRsqId(corpDO.getRsqId());
-
         if (corpDO.getCreator() != null) {
             CorpStaffDO creatorDO = corpDO.getCreator();
             corpVO.setCreatorId(creatorDO.getId());

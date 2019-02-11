@@ -161,7 +161,6 @@
             a.corp_id,
             a.industry,
             a.corp_name,
-            count( d.user_id ) AS countStaffNum,
             a.gmt_create,
             c.auth_user_id AS crt_user_id,
             b.`name` AS crt_name
@@ -170,18 +169,9 @@
             LEFT JOIN isv_corp a ON a.corp_id = c.corp_id
             LEFT JOIN isv_corp_staff b ON c.corp_id = b.corp_id
             AND c.auth_user_id = b.user_id
-            LEFT JOIN isv_corp_staff d ON c.corp_id = d.corp_id
         WHERE
             a.gmt_create BETWEEN #{startDate}
             AND #{endDate}
-        GROUP BY
-            a.id,
-            a.corp_id,
-            a.industry,
-            a.corp_name,
-            a.gmt_create,
-            c.auth_user_id,
-            b.`name`
         ORDER BY
             a.gmt_create ASC
     </select>

@@ -23,8 +23,6 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan(basePackages="com.rishiqing.dingtalk.webcrm.controller.app")
 public class SwaggerConfig {
-
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

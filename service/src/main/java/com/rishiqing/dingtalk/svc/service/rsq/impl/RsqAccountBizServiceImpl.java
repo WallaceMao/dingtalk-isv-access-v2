@@ -108,9 +108,11 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     public void updateAllCorpAdmin(String corpId, Long scopeVersion) {
         List<CorpStaffVO> list = corpStaffManager.getCorpStaffListByCorpIdAndIsAdminAndScopeVersion(
                 corpId, true, scopeVersion);
-        for (CorpStaffVO staffVO : list) {
-            this.updateRsqTeamAdmin(staffVO);
-        }
+        SuiteVO suiteVO = suiteManager.getSuite();
+        rsqRequestHelper.setBatchTeamUserAdmin(suiteVO, corpId, list);
+        // for (CorpStaffVO staffVO : list) {
+        //     this.updateRsqTeamAdmin(staffVO);
+        // }
     }
 
     private void syncCreated(CorpVO corp) {

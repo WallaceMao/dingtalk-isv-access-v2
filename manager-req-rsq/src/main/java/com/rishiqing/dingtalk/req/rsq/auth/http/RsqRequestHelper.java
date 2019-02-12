@@ -10,6 +10,8 @@ import com.rishiqing.dingtalk.api.model.rsq.RsqCorp;
 import com.rishiqing.dingtalk.api.model.rsq.RsqDepartment;
 import com.rishiqing.dingtalk.api.model.rsq.RsqUser;
 
+import java.util.List;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-07 21:18
@@ -28,6 +30,8 @@ public interface RsqRequestHelper {
     RsqUser updateUser(SuiteVO suiteVO, CorpStaffVO staffVO);
 
     RsqUser setUserAdmin(SuiteVO suiteVO, CorpStaffVO staffVO);
+
+    void setBatchTeamUserAdmin(SuiteVO suiteVO, String corpId, List<CorpStaffVO> adminList);
 
     void removeUser(SuiteVO suiteVO, CorpStaffVO staffVO);
 

@@ -6,4 +6,4 @@
 2. 将接收到的event插入到事件队列中
 
 ## ngrok使用
-windows: `ngrok -subdomain=dev6 -config=ngrok.cfg 8082`
+windows: `ngrok -subdomain=dev100 -config=ngrok.cfg 8082`

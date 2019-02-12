@@ -25,6 +25,8 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.rishiqing.dingtalk.api.constant.SystemConstant.DINGTALK_CLIENT;
+
 /**
  * 与日事清服务器发送公司和账号创建请求的helper
  * Created by Wallace on 2016/11/19.
@@ -37,6 +39,7 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
     private static final String URL_CREATE_USER = "/api/v3w/tokenAuth/user";
     private static final String URL_UPDATE_USER = "/api/v3w/tokenAuth/user/{outerId}";
     private static final String URL_UPDATE_USER_SET_ADMIN = "/api/v3w/tokenAuth/user/{outerId}/admin/{admin}";
+    private static final String URL_UPDATE_TEAM_ADMIN = "/api/v3w/tokenAuth/client/${client}/team/{outerId}/admin";
     private static final String URL_UPDATE_USER_REMOVE_TEAM = "/api/v3w/tokenAuth/user/{outerId}/team/null";
 
     private HttpRequestClient httpRequestClient;
@@ -284,6 +287,34 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
         }
 
         return RsqUserConverter.JSON2RsqUser(jsonObject);
+    }
+
+    /**
+     * 批量修改团队的管理员
+     *
+     * @param suiteVO
+     * @param corpId
+     * @param adminList
+     * @return
+     */
+    @Override
+    public void setBatchTeamUserAdmin(SuiteVO suiteVO, String corpId, List<CorpStaffVO> adminList) {
+        Map<String, Object> pathParams = new HashMap<>();
+        pathParams.put("client", DINGTALK_CLIENT);
+        pathParams.put("outerId", corpId);
+        String url = this.rsqUrlInternal + HttpPathUtil.replacePathVariable(URL_UPDATE_TEAM_ADMIN, pathParams);
+
+        List<String> outerCombineIdList = new ArrayList<>(adminList.size());
+        for (CorpStaffVO corpStaffVO : adminList) {
+            outerCombineIdList.add(generateOuterCombineId(corpStaffVO));
+        }
+
+        String sr = httpRequestClient.httpPutJson(url, JSON.toJSONString(outerCombineIdList), generateHeaderMap(suiteVO));
+        JSONObject jsonObject = JSON.parseObject(sr);
+
+        if (jsonObject.containsKey("errcode") && 0 != jsonObject.getLong("errcode")) {
+            throw new HttpRequestException("setBatchTeamUserAdmin error: " + sr);
+        }
     }
 
     /**

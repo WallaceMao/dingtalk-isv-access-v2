@@ -6,4 +6,5 @@ package com.rishiqing.dingtalk.api.constant;
  */
 public class SystemConstant {
     public static final Long DINGTALK_DEPARTMENT_ROOT_ID = 1L;
+    public static final String DINGTALK_CLIENT = "dingtalk";
 }

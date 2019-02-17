@@ -43,11 +43,9 @@ public class ChargeBizService {
 
         // 读取corp
         CorpVO corp = corpManager.getCorpByCorpId(corpId);
-        if(corp == null){
-            throw new BizRuntimeException("corp not found: " + orderEventVO);
-        }
-        if(corp.getRsqId() == null){
-            throw new BizRuntimeException("corp rsqId not found: " + orderEventVO);
+        //  当充值时，如果公司还没有同步成功，那么就先不作处理
+        if (corp == null || corp.getRsqId() == null) {
+            return;
         }
 
         rsqAccountBizService.doRsqCharge(orderStatus);

@@ -370,7 +370,7 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
 
     private String parseFormat(Long mills) {
         Date date = new Date(mills);
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dt.format(date);
     }
 

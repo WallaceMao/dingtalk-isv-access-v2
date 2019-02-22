@@ -1,5 +1,6 @@
 package com.rishiqing.dingtalk.auth.http.impl;
 
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.http.HttpRequestClient;
@@ -8,6 +9,7 @@ import com.rishiqing.common.http.util.HttpPathUtil;
 import com.rishiqing.dingtalk.auth.converter.RsqCorpConverter;
 import com.rishiqing.dingtalk.auth.converter.RsqDepartmentConverter;
 import com.rishiqing.dingtalk.auth.converter.RsqUserConverter;
+import com.rishiqing.dingtalk.auth.http.RsqRequestHelper;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpVO;
@@ -17,7 +19,6 @@ import com.rishiqing.dingtalk.isv.api.model.suite.SuiteVO;
 import com.rishiqing.self.api.model.RsqCorp;
 import com.rishiqing.self.api.model.RsqDepartment;
 import com.rishiqing.self.api.model.RsqUser;
-import com.rishiqing.dingtalk.auth.http.RsqRequestHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

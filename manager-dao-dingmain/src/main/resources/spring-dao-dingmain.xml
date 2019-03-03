@@ -45,4 +45,40 @@
 
     <!--标注@Transactional的类和方法具有事务性-->
     <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!--****************************以下为功倍数据源配置**************************************************-->
+
+    <!--功倍主库-->
+    <bean id="workBeiDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="${jdbc.workbei.url}"/>
+        <property name="username" value="${jdbc.workbei.username}" />
+        <property name="password" value="${jdbc.workbei.password}" />
+    </bean>
+
+    <!--数据源和配置文件-->
+    <bean id="workbeiSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="workBeiDataSource" />
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:mybatis/workbei/*Mapper.xml</value>
+            </array>
+        </property>
+        <property name="configLocation" value="classpath:mybatis-config-dingmain.xml" />
+    </bean>
+
+    <!--配置dao-->
+    <bean id="workbeiMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="workbeiSqlSessionFactory" />
+        <property name="basePackage" value="com.rishiqing.dingtalk.dao.workbei" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository" />
+    </bean>
+
+    <!--配置事务-->
+    <bean id="workbeiDataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="workBeiDataSource" />
+    </bean>
+
+    <!--标注@Transactional的类和方法具有事务性-->
+    <tx:annotation-driven transaction-manager="workbeiDataSourceTransactionManager" />
 </beans>

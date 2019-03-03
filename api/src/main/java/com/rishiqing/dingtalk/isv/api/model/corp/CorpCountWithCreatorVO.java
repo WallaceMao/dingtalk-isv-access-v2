@@ -31,6 +31,7 @@ public class CorpCountWithCreatorVO implements Serializable {
     private Boolean creatorIsBoss;
     private String creatorAvatar;
     private String creatorRsqUserId;
+    private String activeLevel;
 
     public Long getId() {
         return id;
@@ -160,6 +161,14 @@ public class CorpCountWithCreatorVO implements Serializable {
         this.creatorRsqUserId = creatorRsqUserId;
     }
 
+    public String getActiveLevel() {
+        return activeLevel;
+    }
+
+    public void setActiveLevel(String activeLevel) {
+        this.activeLevel = activeLevel;
+    }
+
     @Override
     public String toString() {
         return "CorpCountWithCreatorVO{" +
@@ -179,6 +188,7 @@ public class CorpCountWithCreatorVO implements Serializable {
                 ", creatorIsBoss=" + creatorIsBoss +
                 ", creatorAvatar='" + creatorAvatar + '\'' +
                 ", creatorRsqUserId='" + creatorRsqUserId + '\'' +
+                ", activeLevel='" + activeLevel + '\'' +
                 '}';
     }
 }

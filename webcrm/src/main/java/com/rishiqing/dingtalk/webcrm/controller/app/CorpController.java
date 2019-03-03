@@ -57,6 +57,18 @@ public class CorpController {
         webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(simpleDateFormat, true));
     }
 
+    /**
+     * 分页查询企业信息
+     * @param request
+     * @param pageSize
+     * @param pageNumber
+     * @param corpName
+     * @param startDate
+     * @param endDate
+     * @param token
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> pageList(

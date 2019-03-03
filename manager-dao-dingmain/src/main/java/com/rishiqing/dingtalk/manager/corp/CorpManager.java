@@ -3,6 +3,7 @@ package com.rishiqing.dingtalk.manager.corp;
 import com.rishiqing.dingtalk.constant.CorpLockType;
 import com.rishiqing.dingtalk.dao.model.corp.CorpDO;
 import com.rishiqing.dingtalk.dao.model.corp.CorpLockDO;
+import com.rishiqing.dingtalk.dao.model.workbei.TeamDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,8 @@ public interface CorpManager {
     CorpStatisticVO getCorpStatisticByCorpIdForUpdate(String corpId);
 
     List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset, Map<String, Object> clause);
+
+    List<TeamDO> listTeamWithActiveUserPercent(List<Long> teamIdList);
 
     Long countCorp();
 

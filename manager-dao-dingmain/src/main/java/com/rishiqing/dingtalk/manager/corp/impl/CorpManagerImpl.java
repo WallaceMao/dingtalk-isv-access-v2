@@ -9,10 +9,12 @@ import com.rishiqing.dingtalk.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.dao.mapper.suite.CorpSuiteAuthDao;
 import com.rishiqing.dingtalk.dao.mapper.suite.SuiteDao;
 import com.rishiqing.dingtalk.dao.mapper.suite.SuiteTicketDao;
+import com.rishiqing.dingtalk.dao.workbei.TeamDao;
 import com.rishiqing.dingtalk.dao.model.corp.*;
 import com.rishiqing.dingtalk.dao.model.suite.CorpSuiteAuthDO;
 import com.rishiqing.dingtalk.dao.model.suite.SuiteDO;
 import com.rishiqing.dingtalk.dao.model.suite.SuiteTicketDO;
+import com.rishiqing.dingtalk.dao.model.workbei.TeamDO;
 import com.rishiqing.dingtalk.isv.api.model.corp.*;
 import com.rishiqing.dingtalk.manager.corp.CorpManager;
 import org.slf4j.Logger;
@@ -56,7 +58,8 @@ public class CorpManagerImpl implements CorpManager {
     private CorpStatisticDao corpStatisticDao;
     @Autowired
     private SuiteRequestHelper suiteTopRequestHelper;
-
+    @Autowired
+    private TeamDao teamDao;
     @Override
     public void saveOrUpdateCorp(CorpVO corpVO){
         corpDao.saveOrUpdateCorp(
@@ -229,6 +232,10 @@ public class CorpManagerImpl implements CorpManager {
     @Override
     public List<CorpDO> listPageCorpWithCreator(Long pageSize, Long offset, Map<String, Object> clause) {
         return corpDao.listPageCorpWithCreator(pageSize, offset, clause);
+    }
+
+    public List<TeamDO> listTeamWithActiveUserPercent(List<Long> teamIdList){
+        return teamDao.getTeamActiveUserPercent(teamIdList);
     }
 
     @Override

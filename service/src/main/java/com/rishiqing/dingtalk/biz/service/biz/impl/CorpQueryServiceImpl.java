@@ -49,7 +49,7 @@ public class CorpQueryServiceImpl implements CorpQueryService {
                     if (activeUserPercent >= 50) {
                         corpCountWithCreatorVO.setActiveLevel("活跃");
                     } else if (activeUserPercent > 0 && activeUserPercent < 50) {
-                        corpCountWithCreatorVO.setActiveLevel("中度活跃");
+                        corpCountWithCreatorVO.setActiveLevel("半活跃");
                     } else {
                         corpCountWithCreatorVO.setActiveLevel("死亡");
                     }

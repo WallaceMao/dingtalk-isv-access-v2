@@ -37,13 +37,17 @@ public class CorpQueryServiceImpl implements CorpQueryService {
             );
             voList.add(corpVO);
             //teamId=rsqId
-            teamIdList.add(Long.parseLong(corpDO.getRsqId()));
+            //rsqId可能为null
+            String rsqId = corpDO.getRsqId();
+            if (rsqId == null) continue;
+            teamIdList.add(Long.parseLong(rsqId));
         }
         //查询对应企业活跃度
         List<TeamDO> teamDOS = corpManager.listTeamWithActiveUserPercent(teamIdList);
         //遍历VO添加企业用户活跃度信息
         for (CorpCountWithCreatorVO corpCountWithCreatorVO : voList) {
             for (TeamDO teamDO : teamDOS) {
+                //rsqId可能为null
                 String rsqId = corpCountWithCreatorVO.getRsqId();
                 if (rsqId == null) continue;
                 if (teamDO.getTeamId() == Long.parseLong(rsqId)) {

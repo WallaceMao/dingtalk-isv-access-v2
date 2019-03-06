@@ -44,7 +44,9 @@ public class CorpQueryServiceImpl implements CorpQueryService {
         //遍历VO添加企业用户活跃度信息
         for (CorpCountWithCreatorVO corpCountWithCreatorVO : voList) {
             for (TeamDO teamDO : teamDOS) {
-                if (teamDO.getTeamId() == Long.parseLong(corpCountWithCreatorVO.getRsqId())) {
+                String rsqId = corpCountWithCreatorVO.getRsqId();
+                if (rsqId == null) continue;
+                if (teamDO.getTeamId() == Long.parseLong(rsqId)) {
                     Long activeUserPercent = teamDO.getActiveUserPercent();
                     if (activeUserPercent >= 50) {
                         corpCountWithCreatorVO.setActiveLevel("活跃");

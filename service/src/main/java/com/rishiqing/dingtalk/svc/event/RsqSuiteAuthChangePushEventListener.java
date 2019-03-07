@@ -32,6 +32,7 @@ public class RsqSuiteAuthChangePushEventListener implements EventListener {
     @AllowConcurrentEvents //  event并行执行
     public void listenCorpOrgChangedEvent(CorpOrgChangedEvent corpOrgChangedEvent) {
         try{
+            bizLogger.info("------------corpOrgChangedEvent: " + corpOrgChangedEvent);
             String corpId = corpOrgChangedEvent.getCorpId();
             Long scopeVersion = corpOrgChangedEvent.getScopeVersion();
             //  先将信息同步到日事清

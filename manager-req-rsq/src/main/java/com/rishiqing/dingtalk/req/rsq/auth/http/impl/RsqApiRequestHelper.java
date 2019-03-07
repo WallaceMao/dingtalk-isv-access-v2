@@ -39,7 +39,7 @@ public class RsqApiRequestHelper implements RsqRequestHelper {
     private static final String URL_CREATE_USER = "/api/v3w/tokenAuth/user";
     private static final String URL_UPDATE_USER = "/api/v3w/tokenAuth/user/{outerId}";
     private static final String URL_UPDATE_USER_SET_ADMIN = "/api/v3w/tokenAuth/user/{outerId}/admin/{admin}";
-    private static final String URL_UPDATE_TEAM_ADMIN = "/api/v3w/tokenAuth/client/${client}/team/{outerId}/admin";
+    private static final String URL_UPDATE_TEAM_ADMIN = "/api/v3w/tokenAuth/client/{client}/team/{outerId}/admin";
     private static final String URL_UPDATE_USER_REMOVE_TEAM = "/api/v3w/tokenAuth/user/{outerId}/team/null";
 
     private HttpRequestClient httpRequestClient;

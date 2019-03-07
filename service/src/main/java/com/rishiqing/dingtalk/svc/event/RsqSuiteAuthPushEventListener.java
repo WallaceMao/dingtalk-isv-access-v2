@@ -33,6 +33,7 @@ public class RsqSuiteAuthPushEventListener implements EventListener {
     @AllowConcurrentEvents //  event并行执行
     public void listenCorpOrgSyncEvent(CorpOrgCreatedEvent corpOrgCreatedEvent) {
         try{
+            bizLogger.info("-------------------corpOrgCreatedEvent: " + corpOrgCreatedEvent);
             String corpId = corpOrgCreatedEvent.getCorpId();
             Long scopeVersion = corpOrgCreatedEvent.getScopeVersion();
             rsqAccountBizService.syncAllCreated(corpId);
@@ -41,7 +42,9 @@ public class RsqSuiteAuthPushEventListener implements EventListener {
             corpStaffManager.deleteCorpStaffByCorpIdAndScopeVersionLessThan(corpId, scopeVersion);
             // 最后，同步现有用户的管理员信息
             rsqAccountBizService.updateAllCorpAdmin(corpId, scopeVersion);
+            bizLogger.info("-------------------corpOrgCreatedEvent----end: " + corpOrgCreatedEvent);
         }catch (Exception e){
+            bizLogger.error("-------------------exception----end: " + corpOrgCreatedEvent);
             //  加入失败job,失败任务会重试
             failBizService.saveCorpOrgSyncFail(corpOrgCreatedEvent);
             bizLogger.error(LogFormatter.format(

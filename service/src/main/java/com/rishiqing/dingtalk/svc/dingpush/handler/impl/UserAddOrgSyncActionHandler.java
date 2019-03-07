@@ -34,6 +34,10 @@ public class UserAddOrgSyncActionHandler implements SyncActionHandler {
     @Override
     public void handleSyncAction(OpenSyncBizDataVO data) {
         JSONObject json = JSONObject.parseObject(data.getBizData());
+        // 如果errcode不为0，例如50002，说明请求的员工userid不在授权范围内，那么不需要操作直接返回
+        if (json.containsKey("errcode") && json.getLong("errcode") > 0) {
+            return;
+        }
         String corpId = data.getCorpId();
         CorpStaffVO corpStaffVO = SuiteDbCheckConverter.json2CorpStaff(json);
         corpStaffVO.setCorpId(corpId);

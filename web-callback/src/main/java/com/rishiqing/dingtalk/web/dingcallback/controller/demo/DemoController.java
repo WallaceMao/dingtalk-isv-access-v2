@@ -1,5 +1,9 @@
 package com.rishiqing.dingtalk.web.dingcallback.controller.demo;
 
+import com.google.common.eventbus.EventBus;
+import com.rishiqing.dingtalk.api.event.CorpOrgChangedEvent;
+import com.rishiqing.dingtalk.api.event.CorpOrgCreatedEvent;
+import com.rishiqing.dingtalk.api.model.vo.suite.SuiteVO;
 import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
@@ -25,6 +29,11 @@ import java.util.Map;
 public class DemoController {
     private static final Logger consoleLogger = LoggerFactory.getLogger(DemoController.class);
     private static final Logger aliLogger = LoggerFactory.getLogger(DemoController.class);
+
+    @Autowired
+    private EventBus asyncCorpOrgCreatedEventBus;
+    @Autowired
+    private EventBus asyncCorpOrgChangedEventBus;
 
     @RequestMapping("/rsqPush")
     @ResponseBody
@@ -83,5 +92,27 @@ public class DemoController {
         Date end = new Date();
         consoleLogger.warn("consoleLogger--------------" + end);
         return "success：" + now + "---->" + end;
+    }
+
+    @RequestMapping("/postCreated")
+    @ResponseBody
+    public String postCreated(){
+        CorpOrgCreatedEvent corpOrgCreatedEvent = new CorpOrgCreatedEvent();
+        corpOrgCreatedEvent.setSuiteKey("aaaa");
+        corpOrgCreatedEvent.setCorpId("bbbb");
+        corpOrgCreatedEvent.setScopeVersion(9999L);
+        asyncCorpOrgCreatedEventBus.post(corpOrgCreatedEvent);
+        return "success：" + new Date();
+    }
+
+    @RequestMapping("/postChanged")
+    @ResponseBody
+    public String postChanged(){
+        CorpOrgChangedEvent corpOrgChangedEvent = new CorpOrgChangedEvent();
+        corpOrgChangedEvent.setSuiteKey("xxxxx");
+        corpOrgChangedEvent.setCorpId("yyyyy");
+        corpOrgChangedEvent.setScopeVersion(99L);
+        asyncCorpOrgChangedEventBus.post(corpOrgChangedEvent);
+        return "success：" + new Date();
     }
 }

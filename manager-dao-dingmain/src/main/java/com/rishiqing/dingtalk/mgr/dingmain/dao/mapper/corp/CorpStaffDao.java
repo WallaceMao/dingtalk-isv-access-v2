@@ -154,6 +154,11 @@ public interface CorpStaffDao {
     Long countCorpStaffByCorpId(
             @Param("corpId") String corpId);
 
+    List<String> listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(
+            @Param("corpId") String corpId,
+            @Param("isAdmin") Boolean isAdmin,
+            @Param("limit") Long limit);
+
 //    /**
 //     * 根据staff的rsqId获取到userId
 //     * @param rsqIds

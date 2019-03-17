@@ -3,14 +3,16 @@ package com.rishiqing.dingtalk.req.dingtalk.auth.http.impl;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
+import com.dingtalk.api.request.OapiMessageCorpconversationGetsendprogressRequest;
+import com.dingtalk.api.request.OapiMessageCorpconversationGetsendresultRequest;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
+import com.dingtalk.api.response.OapiMessageCorpconversationGetsendprogressResponse;
+import com.dingtalk.api.response.OapiMessageCorpconversationGetsendresultResponse;
 import com.rishiqing.common.base.StringUtil;
+import com.rishiqing.dingtalk.api.model.vo.message.*;
 import com.rishiqing.dingtalk.req.dingtalk.auth.http.MessageRequestHelper;
 import com.rishiqing.dingtalk.api.enumtype.MessageType;
 import com.rishiqing.dingtalk.api.exception.BizRuntimeException;
-import com.rishiqing.dingtalk.api.model.vo.message.MessageBody;
-import com.rishiqing.dingtalk.api.model.vo.message.MessageResultVO;
-import com.rishiqing.dingtalk.api.model.vo.message.MessageVO;
 import com.taobao.api.ApiException;
 
 import java.util.ArrayList;
@@ -45,6 +47,46 @@ public class MessageTopRequestHelper implements MessageRequestHelper {
             MessageResultVO result = new MessageResultVO();
             result.setTaskId(resp.getTaskId());
             return result;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public AsyncSendProgressVO queryMessageSendProgress(String corpToken, Long agentId, Long taskId) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/message/corpconversation/getsendprogress");
+        OapiMessageCorpconversationGetsendprogressRequest request  = new OapiMessageCorpconversationGetsendprogressRequest();
+        request.setAgentId(agentId);
+        request.setTaskId(taskId);
+        try {
+            OapiMessageCorpconversationGetsendprogressResponse response = client.execute(request, corpToken);
+            OapiMessageCorpconversationGetsendprogressResponse.AsyncSendProgress progress = response.getProgress();
+            AsyncSendProgressVO progressVO = new AsyncSendProgressVO();
+            progressVO.setProgressInPercent(progress.getProgressInPercent());
+            progressVO.setStatus(progress.getStatus());
+            return progressVO;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
+    public AsyncSendResultVO queryMessageSendResult(String corpToken, Long agentId, Long taskId) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/message/corpconversation/getsendresult");
+        OapiMessageCorpconversationGetsendresultRequest request  = new OapiMessageCorpconversationGetsendresultRequest();
+        request.setAgentId(agentId);
+        request.setTaskId(taskId);
+        try {
+            OapiMessageCorpconversationGetsendresultResponse response = client.execute(request, corpToken);
+            OapiMessageCorpconversationGetsendresultResponse.AsyncSendResult sendResult = response.getSendResult();
+            AsyncSendResultVO resultVO = new AsyncSendResultVO();
+            resultVO.setFailedUserIdList(sendResult.getFailedUserIdList());
+            resultVO.setForbiddenUserIdList(sendResult.getForbiddenUserIdList());
+            resultVO.setInvalidUserIdList(sendResult.getInvalidUserIdList());
+            resultVO.setReadUserIdList(sendResult.getReadUserIdList());
+            resultVO.setUnreadUserIdList(sendResult.getUnreadUserIdList());
+            resultVO.setInvalidDeptIdList(sendResult.getInvalidDeptIdList());
+            return resultVO;
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
         }

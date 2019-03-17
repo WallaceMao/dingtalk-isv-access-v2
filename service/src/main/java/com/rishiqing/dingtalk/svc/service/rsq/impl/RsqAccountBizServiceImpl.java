@@ -52,7 +52,7 @@ public class RsqAccountBizServiceImpl implements RsqAccountBizService {
     private OrderManager orderManager;
     @Autowired
     private RsqRequestHelper rsqRequestHelper;
-    @Autowired
+    @Autowired(required = false)
     private QueueService queueService;
 
     @Autowired

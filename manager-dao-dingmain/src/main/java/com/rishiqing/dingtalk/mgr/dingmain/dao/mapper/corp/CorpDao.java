@@ -82,4 +82,8 @@ public interface CorpDao {
     List<CorpDO> listCorpBetweenDate(
             @Param("startDate") Date startDate,
             @Param("endDate") Date endDate);
+
+    List<String> listCorpCorpIdByGmtCreateBetween(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 }

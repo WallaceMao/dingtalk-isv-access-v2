@@ -40,4 +40,6 @@ public interface CorpStaffManager {
     List<CorpStaffVO> listCorpStaffByCorpIdAndDepartment(String corpId, Long deptId);
 
     Long countCorpStaffByCorpId(String corpId);
+
+    List<String> listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(String corpId, Boolean isAdmin, Long limit);
 }

@@ -125,4 +125,9 @@ public class CorpStaffManagerImpl implements CorpStaffManager {
         return corpStaffDao.countCorpStaffByCorpId(corpId);
     }
 
+    @Override
+    public List<String> listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(String corpId, Boolean isAdmin, Long limit) {
+        return corpStaffDao.listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(corpId, isAdmin, limit);
+    }
+
 }

@@ -1,6 +1,6 @@
-钉钉云推送的事件：
+# 钉钉云推送的事件：
 
-部门相关：
+## 部门相关：
 deptId：92589595
 在可见范围之外创建部门：
 {"errcode":50004,"syncAction":"org_dept_create","errmsg":"请求的部门id不在授权范围内"}
@@ -21,8 +21,6 @@ deptId：92809032
 如果部门有成员：在钉钉中不允许删除
 如果部门有子部门，那么会级联删除
 
--------------------
-**暂时不实现，等后续实现**
 在可见范围外移动部门：
 deptId：92469982
 {"errcode":50004,"syncAction":"org_dept_modify","errmsg":"请求的部门id不在授权范围内"}
@@ -51,8 +49,7 @@ deptId：92469982
 可见范围内修改部门名称：
 {"errcode":0,"userPermits":"","userPerimits":"","syncAction":"org_dept_modify","outerDept":false,"errmsg":"ok","deptManagerUseridList":"","parentid":87007170,"groupContainSubDept":false,"outerPermitUsers":"","outerPermitDepts":"","deptPerimits":"","createDeptGroup":true,"name":"后台组（临时）","id":92715374,"autoAddUser":true,"deptHiding":false,"deptPermits":"","order":92715374}
 
-------------
-成员接口：
+## 成员接口：
 
 可见范围之外新增成员：
 {"errcode":50002,"syncAction":"user_add_org","errmsg":"请求的员工userid不在授权范围内"}
@@ -86,15 +83,13 @@ deptId：92469982
 当用户出现这种推送事件时，可能用户是不存在的！
 {"errcode":0,"unionid":"l5HP6ZjTOjii2CsIRbXXTUAiEiE","syncAction":"user_modify_org","userid":"15450072077226545","isLeaderInDepts":"{67057527:false}","isBoss":false,"isSenior":false,"hiredDate":1544976000000,"department":[67057527],"orderInDepts":"{67057527:176372614058705512}","dingId":"$:LWCP_v1:$5KoaYrqdTVa5HFoUvSfEaCvGdj7XxWO2","errmsg":"ok","active":true,"avatar":"","isAdmin":false,"isHide":false,"name":"杨柳青"}
 
-----------
-公司信息
+## 公司信息
 修改公司信息：
 {"errcode":0,"corpid":"dingb3a4951a0f510b2f35c2f4657eb6378f","auth_level":0,"syncAction":"org_update","errmsg":"ok","industry":"硬件设施服务","is_authenticated":false,"corp_name":"Google走走走","corp_logo_url":""}
 同时会修改顶级部门：
 {"errcode":50004,"syncAction":"org_dept_modify","errmsg":"请求的部门id不在授权范围内"}
 
---------
-角色
+## 角色
 新增角色：
 {"role_name":"测试角色","role_id":385618074,"group_id":363155532,"group_name":"岗位","syncAction":"org_role_add"}
 
@@ -124,3 +119,10 @@ deptId：92469982
 
 可见范围内移除子管理员：
 {"errcode":0,"unionid":"jGmG9yGL93YOWSIN1rumiPQiEiE","syncAction":"user_role_change","userid":"10335200371148696","isLeaderInDepts":"{87007170:false}","isBoss":false,"isSenior":false,"department":[87007170],"orderInDepts":"{87007170:176373066313505512}","dingId":"$:LWCP_v1:$geyR6MC6f9A5B+m9JYXwvg==","errmsg":"ok","active":true,"avatar":"https://static.dingtalk.com/media/lADPDgQ9qYZ5d0NJOg_58_73.jpg","isAdmin":false,"isHide":false,"jobnumber":"","name":"赵旭","position":""}
+
+## 当做移除可见范围操作时，如果操作对象有比较复杂的关联
+可见范围中含有父子部门，将父部门移除可见范围时
+？？？猜测{"errcode":50004,"syncAction":"org_dept_modify","errmsg":"请求的部门id不在授权范围内"}
+
+可见范围中含有部门和部门成员，将部门移除可见范围时
+？？？

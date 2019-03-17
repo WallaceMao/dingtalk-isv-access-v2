@@ -23,7 +23,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @EnableWebMvc
-@ComponentScan(basePackages="com.rishiqing.dingtalk.webcrm.controller.app")
+@ComponentScan(basePackages="com.rishiqing.dingtalk.web.webcrm.controller.app")
 @Profile("dev")
 public class SwaggerConfig {
 

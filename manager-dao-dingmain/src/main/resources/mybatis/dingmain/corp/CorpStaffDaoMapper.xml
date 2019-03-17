@@ -284,6 +284,12 @@
         WHERE corp_id=#{corpId}
         ]]>
     </select>
+    <select id="listCorpStaffUserIdByCorpIdAndIsAdminWithLimit" resultType="java.lang.String">
+        SELECT user_id FROM isv_corp_staff
+        <![CDATA[
+        WHERE corp_id=#{corpId} AND is_admin=#{isAdmin} LIMIT #{limit}
+        ]]>
+    </select>
 
     <select id="listCorpStaffByCorpIdAndDepartmentLike" resultMap="corpStaffMap">
         SELECT

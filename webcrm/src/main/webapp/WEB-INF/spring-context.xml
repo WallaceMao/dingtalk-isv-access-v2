@@ -19,7 +19,7 @@
     </bean>
 
     <!--service层的服务beans-->
-    <import resource="classpath:spring-web-crm.xml"/>
+    <import resource="classpath:spring-service-dingmain.xml" />
 
-    <bean class="com.rishiqing.dingtalk.web.webcrm.util.swager.SwaggerConfig"/>
+    <!--<bean class="com.rishiqing.dingtalk.web.webcrm.util.swager.SwaggerConfig"/>-->
 </beans>

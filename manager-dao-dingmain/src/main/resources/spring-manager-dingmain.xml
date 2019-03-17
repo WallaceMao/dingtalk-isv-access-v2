@@ -16,6 +16,7 @@
     <bean id="corpCallbackQueueManager"
           class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpCallbackQueueManagerImpl"/>
     <bean id="corpManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpManagerImpl"/>
+    <bean id="corpMessageManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpMessageManagerImpl"/>
     <bean id="deptManager"
           class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpDepartmentManagerImpl"/>
     <bean id="staffManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl.CorpStaffManagerImpl"/>

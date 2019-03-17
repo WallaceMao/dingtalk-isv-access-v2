@@ -27,12 +27,8 @@ import java.util.List;
  * Date: 2018-11-06 13:59
  */
 public class SuiteTopRequestHelper implements SuiteRequestHelper {
-    private SuiteRequestCommonHelper suiteRequestCommonHelper;
-
     @Autowired
-    public SuiteTopRequestHelper(SuiteRequestCommonHelper suiteRequestCommonHelper) {
-        this.suiteRequestCommonHelper = suiteRequestCommonHelper;
-    }
+    private SuiteRequestCommonHelper suiteRequestCommonHelper;
 
     @Override
     public CorpAuthInfoVO getCorpAuthInfo(SuiteVO suite, SuiteTicketVO suiteTicketVO, String corpId) {

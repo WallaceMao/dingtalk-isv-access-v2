@@ -84,6 +84,11 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
+    public List<String> listCorpCorpIdByCreateTimeBetween(Date startDate, Date endDate) {
+        return corpDao.listCorpCorpIdByGmtCreateBetween(startDate, endDate);
+    }
+
+    @Override
     public void updateRsqInfo(CorpVO corpVO) {
         corpDao.updateCorpRsqInfo(
                 CorpConverter.CorpVO2CorpDO(corpVO)

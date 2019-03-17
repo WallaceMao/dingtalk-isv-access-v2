@@ -32,7 +32,7 @@ public class StaffService {
     private CorpManager corpManager;
     @Autowired
     private RsqAccountBizService rsqAccountBizService;
-    @Autowired
+    @Autowired(required = false)
     private QueueService queueService;
 
     /**

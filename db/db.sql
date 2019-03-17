@@ -608,3 +608,19 @@ CREATE TABLE `isv_auth_global_lock`  (
                                    UNIQUE KEY `uk_auth_global_lock` (`lock_key`) USING BTREE
 );
 
+# 消息发送记录表
+CREATE TABLE `isv_corp_message_publish_log` (
+                                          `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                          `gmt_create` datetime NOT NULL COMMENT '创建时间',
+                                          `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+                                          `message` varchar(2048) NOT NULL COMMENT '发送的消息内容',
+                                          `corp_id` varchar(128) NOT NULL COMMENT '企业corpid',
+                                          `agent_id` bigint(20) NOT NULL COMMENT '应用id',
+                                          `user_id_list` varchar(1024) NULL COMMENT '用户id列表',
+                                          `dept_id_list` varchar(1024) NULL COMMENT '用户id列表',
+                                          `to_all_user` varchar(1) NULL COMMENT '是否给所有用户发',
+                                          `task_id` bigint(20) NOT NULL COMMENT '异步发送的taskId',
+                                          PRIMARY KEY (`id`),
+                                          UNIQUE KEY `u_corp_message_task` (`task_id`),
+                                          INDEX `i_corp_message_corp_id`(`corp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='发送消息通知的记录';

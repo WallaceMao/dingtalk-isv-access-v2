@@ -24,12 +24,8 @@ import java.util.Map;
  * Date: 2018-11-07 13:45
  */
 public class CorpTopRequestHelper implements CorpRequestHelper {
-    private CorpRequestCommonHelper corpRequestCommonHelper;
-
     @Autowired
-    public CorpTopRequestHelper(CorpRequestCommonHelper corpRequestCommonHelper) {
-        this.corpRequestCommonHelper = corpRequestCommonHelper;
-    }
+    private CorpRequestCommonHelper corpRequestCommonHelper;
 
     /**
      * 获取部门详情

@@ -17,14 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2019-01-16 10:36
  */
 public class CorpTopRequestJsonHelper implements CorpRequestJsonHelper {
-    private CorpRequestCommonHelper corpRequestCommonHelper;
-    private SuiteRequestCommonHelper suiteRequestCommonHelper;
-
     @Autowired
-    public CorpTopRequestJsonHelper(CorpRequestCommonHelper corpRequestCommonHelper, SuiteRequestCommonHelper suiteRequestCommonHelper) {
-        this.corpRequestCommonHelper = corpRequestCommonHelper;
-        this.suiteRequestCommonHelper = suiteRequestCommonHelper;
-    }
+    private CorpRequestCommonHelper corpRequestCommonHelper;
+    @Autowired
+    private SuiteRequestCommonHelper suiteRequestCommonHelper;
 
     @Override
     public JSONObject getCorpDepartment(String token, Long deptId) {

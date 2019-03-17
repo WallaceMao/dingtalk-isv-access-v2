@@ -24,6 +24,8 @@ public interface CorpManager {
 
     CorpVO getCorpByCorpId(String corpId);
 
+    List<String> listCorpCorpIdByCreateTimeBetween(Date startDate, Date endDate);
+
     void updateRsqInfo(CorpVO corpVO);
 
     CorpTokenVO getCorpTokenByCorpId(String corpId);

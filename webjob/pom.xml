@@ -96,4 +96,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>web-${project.version}</finalName>
+    </build>
 </project>

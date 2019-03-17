@@ -6,7 +6,7 @@
     <import resource="classpath:spring-manager-dingmain.xml"/>
 
     <!--业务相关的service-->
-    <bean id="phoneCallBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.PhoneCallBizServiceImpl"/>
-    <bean id="corpQueryService" class="com.rishiqing.dingtalk.biz.service.biz.impl.CorpQueryServiceImpl"/>
-    <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.auth.http.impl.SuiteTopRequestHelper"/>
+    <bean id="phoneCallBizService" class="com.rishiqing.dingtalk.svc.service.biz.impl.PhoneCallBizServiceImpl"/>
+    <bean id="corpQueryService" class="com.rishiqing.dingtalk.svc.service.biz.impl.CorpQueryServiceImpl"/>
+    <bean id="suiteRequestHelper" class="com.rishiqing.dingtalk.req.dingtalk.auth.http.impl.SuiteTopRequestHelper"/>
 </beans>

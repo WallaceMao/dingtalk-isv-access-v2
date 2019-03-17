@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.front.IdMapStaffDao">
+
+    <resultMap type="com.rishiqing.dingtalk.api.model.domain.front.IdMapStaffDO" id="idMapStaffMap">
+        <result property="userId" column="user_id"></result>
+        <result property="rsqUserId" column="rsq_user_id"></result>
+        <result property="emplId" column="user_id"></result>
+        <result property="avatar" column="avatar"></result>
+        <result property="name" column="name"></result>
+    </resultMap>
+
+    <select id="getUserIdFromRsqId" resultMap="idMapStaffMap">
+        SELECT user_id, rsq_user_id, avatar, `name`  FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND rsq_user_id IN
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(rsq_user_id,
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <select id="getRsqIdFromUserId" resultMap="idMapStaffMap">
+        SELECT user_id, rsq_user_id, avatar, `name` FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND user_id IN
+        <foreach collection="userIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(user_id,
+        <foreach collection="userIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
+</mapper>

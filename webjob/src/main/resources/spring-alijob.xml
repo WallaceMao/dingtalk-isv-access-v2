@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="aliSuiteTokenGenerateJob" class="com.rishiqing.dingtalk.webjob.job.AliSuiteTokenGenerateJob"/>
+    <bean id="aliSuiteTokenGenerateJob" class="com.rishiqing.dingtalk.web.webjob.job.AliSuiteTokenGenerateJob"/>
     <bean id="schedulerXClient" class="com.alibaba.edas.schedulerx.SchedulerXClient" init-method="init">
         <property name="groupId">
             <value>${alijob.groupId}</value>

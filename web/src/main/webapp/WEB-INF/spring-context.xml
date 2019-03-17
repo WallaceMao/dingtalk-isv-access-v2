@@ -30,7 +30,7 @@
 
     <!--web层需要用到的service-->
     <!--启动钉钉云推送的监听-->
-    <bean id="suiteDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.listener.SuiteDbCheckApplicationListener" />
+    <bean id="suiteDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloud.listener.SuiteDbCheckApplicationListener" />
     <!--钉钉云推送组织架构变更信息的监控-->
-    <bean id="corpDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.listener.CorpDbCheckApplicationListener" />
+    <bean id="corpDbCheckApplicationListener" class="com.rishiqing.dingtalk.web.dingcloud.listener.CorpDbCheckApplicationListener" />
 </beans>

@@ -7,7 +7,7 @@
     <import resource="classpath:spring-dao-dingpush.xml"/>
 
     <bean id="openGlobalLockManager"
-          class="com.rishiqing.dingtalk.manager.dingpush.impl.OpenGlobalLockManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingpush.manager.impl.OpenGlobalLockManagerImpl"/>
     <bean id="openSyncBizDataManager"
-          class="com.rishiqing.dingtalk.manager.dingpush.impl.OpenSyncBizDataManagerImpl"/>
+          class="com.rishiqing.dingtalk.mgr.dingpush.manager.impl.OpenSyncBizDataManagerImpl"/>
 </beans>

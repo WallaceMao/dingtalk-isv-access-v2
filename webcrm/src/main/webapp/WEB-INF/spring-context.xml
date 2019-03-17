@@ -9,7 +9,7 @@
 
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
         <property name="locations">
             <list>
                 <value>file:${user.home}/webcrm/ddauth-config.properties</value>
@@ -19,5 +19,7 @@
     </bean>
 
     <!--service层的服务beans-->
-    <import resource="classpath:spring-web-crm.xml" />
+    <import resource="classpath:spring-service-dingmain.xml" />
+
+    <!--<bean class="com.rishiqing.dingtalk.web.webcrm.util.swager.SwaggerConfig"/>-->
 </beans>

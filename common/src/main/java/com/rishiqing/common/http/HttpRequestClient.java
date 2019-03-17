@@ -26,8 +26,8 @@ public class HttpRequestClient {
     private static final Logger bizLogger = LoggerFactory.getLogger(HttpRequestClient.class);
 
     private Integer connectionRequestTimeout = 10000;
-    private Integer socketTimeOut = 5000;
-    private Integer connectTimeout = 5000;
+    private Integer socketTimeOut = 10000;
+    private Integer connectTimeout = 10000;
 
     public Integer getConnectionRequestTimeout() {
         return connectionRequestTimeout;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.dao.workbei.TeamDao">
+    <resultMap id="teamMap" type="com.rishiqing.dingtalk.dao.model.workbei.TeamDO">
+        <id property="teamId" column="team_id"></id>
+        <result property="activeUserPercent" column="activeUserPercent"></result>
+    </resultMap>
+    <select id="getTeamActiveUserPercent" resultMap="teamMap">
+        SELECT
+          auc.team_id,
+          ROUND(auc.active_user_count * 100 / uc.user_count,0)  AS activeUserPercent
+        FROM
+        (
+            SELECT
+            team_id,
+            COUNT(1) as active_user_count
+            FROM(
+                SELECT
+                team_id,
+                u.id
+                FROM
+                `user` u,
+                user_login ul
+                <where>
+                <if test="teamIdList!=null and teamIdList.size!=0">
+                    u.team_id in
+                    <foreach collection="teamIdList" item="teamId" separator="," open="(" close=") AND">
+                        #{teamId}
+                    </foreach>
+                </if>
+                    u.id = ul.user_id
+                </where>
+
+                GROUP BY
+                ul.user_id,team_id
+                HAVING
+                DATEDIFF(now(), MAX(ul.login_date)) <![CDATA[ <= ]]> 7
+            ) t
+            GROUP BY t.team_id
+        ) auc,
+        (
+            SELECT
+            team_id,
+            count(id) AS user_count
+            FROM
+            `user`
+            <where>
+                <if test="teamIdList!=null and teamIdList.size!=0">
+                    team_id in
+                    <foreach collection="teamIdList" item="teamId" separator="," open="(" close=")">
+                        #{teamId}
+                    </foreach>
+                </if>
+            </where>
+            GROUP BY team_id
+        ) uc
+        WHERE auc.team_id=uc.team_id
+    </select>
+</mapper>

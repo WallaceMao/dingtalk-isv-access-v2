@@ -9,6 +9,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rishiqing.dingtalk.isv.api.model.corp.CorpStaffVO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -58,5 +60,21 @@ public class JwtUtil {
         DecodedJWT jwt = verifier.verify(token);
         Date expiresAt = jwt.getExpiresAt();
         return expiresAt;
+    }
+
+    /**
+     * Date(String) to Long测试用
+     * @param args
+     */
+    public static void main(String[] args) {
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date parse = simpleDateFormat.parse("2017-01-01");
+            Date parse2 = simpleDateFormat.parse("2019-01-01");
+            System.out.println(parse.getTime());
+            System.out.println(parse2.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

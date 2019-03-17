@@ -40,13 +40,15 @@ public class CorpConverter {
         File tempFile = File.createTempFile("corp", ".csv");
         csvWriter = new CsvWriter(tempFile.getCanonicalPath(), ',', Charset.forName("utf-8"));
         //写入表头
-        String[] heads = {"id", "公司id", "公司名称", "创建人id", "创建人名称", "创建时间"};
+        String[] heads = {"id", "公司id", "行业", "公司名称", "公司人数", "创建人id", "创建人名称", "创建时间"};
         csvWriter.writeRecord(heads);
         //写内容
         for (CorpCountWithCreatorVO corpCountWithCreatorVO : corpCountWithCreatorVOList) {
             csvWriter.write(corpCountWithCreatorVO.getId().toString());
             csvWriter.write(corpCountWithCreatorVO.getCorpId());
+            csvWriter.write(corpCountWithCreatorVO.getIndustry());
             csvWriter.write(corpCountWithCreatorVO.getCorpName());
+            csvWriter.write(corpCountWithCreatorVO.getCorpCount().toString());
             csvWriter.write(corpCountWithCreatorVO.getCreatorUserId());
             csvWriter.write(corpCountWithCreatorVO.getCreatorName());
             csvWriter.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(corpCountWithCreatorVO.getGmtCreate()));

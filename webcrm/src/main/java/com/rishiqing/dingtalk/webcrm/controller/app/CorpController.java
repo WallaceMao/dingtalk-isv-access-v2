@@ -57,6 +57,18 @@ public class CorpController {
         webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(simpleDateFormat, true));
     }
 
+    /**
+     * 分页查询企业信息
+     * @param request
+     * @param pageSize
+     * @param pageNumber
+     * @param corpName
+     * @param startDate
+     * @param endDate
+     * @param token
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> pageList(
@@ -122,8 +134,8 @@ public class CorpController {
     @ResponseBody
     @ApiOperation(value = "导出csv格式")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true)
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true,dataType = "Long",example = "1483200000000"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true,dataType = "Long",example = "1546272000000")
     })
     public Map<String, Object> exportCorpBetweenDate(@RequestParam(value = "startDate", required = true) Long startDate,
                                                      @RequestParam(value = "endDate", required = true) Long endDate,

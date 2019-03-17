@@ -34,6 +34,10 @@
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/js/**" location="/js/" />
     <mvc:resources mapping="/img/**" location="/img/" />
+    <!--钉钉版本的CRM生成的是ROOT.war，所以需要对路径做特殊处理-->
+    <mvc:resources mapping="/crm/css/**" location="/css/" />
+    <mvc:resources mapping="/crm/js/**" location="/js/" />
+    <mvc:resources mapping="/crm/img/**" location="/img/" />
     <!--swagger2-->
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>

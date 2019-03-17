@@ -24,7 +24,7 @@ import java.util.Map;
  * Date: 2019-03-14 10:29
  */
 @RestController
-@RequestMapping("/v3w/message")
+@RequestMapping(value = {"/v3w/message", "/crm/v3w/message"})
 public class MessagePublishController {
     private static final Logger bizLogger = LoggerFactory.getLogger(MessagePublishController.class);
 

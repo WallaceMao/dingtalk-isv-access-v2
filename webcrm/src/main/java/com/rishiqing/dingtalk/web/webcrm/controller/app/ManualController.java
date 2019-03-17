@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Wallace Mao
  * Date: 2018-12-18 21:59
  */
-@RequestMapping("/manual")
+@RequestMapping(value = {"/manual", "/crm/manual"})
 @Controller
 public class ManualController {
     private static final Logger bizLogger = LoggerFactory.getLogger(ManualController.class);

@@ -25,7 +25,7 @@ import java.util.Map;
  * Date: 2018-12-13 17:50
  * @link https://open-doc.dingtalk.com/docs/api.htm?spm=a219a.7395905.0.0.36224a97i7LvL2&apiId=29003#
  */
-@RequestMapping("/v3w/isv")
+@RequestMapping(value = {"/v3w/isv", "/crm/v3w/isv"})
 @Controller
 public class PhoneCallController {
     private static final Logger bizLogger = LoggerFactory.getLogger(PhoneCallController.class);

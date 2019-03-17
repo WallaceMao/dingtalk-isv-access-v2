@@ -36,7 +36,7 @@ import java.util.Map;
  * @author Wallace Mao
  * Date: 2018-12-13 17:51
  */
-@RequestMapping("/v3w/corp")
+@RequestMapping(value = {"/v3w/corp", "/crm/v3w/corp"})
 @Controller
 @Api(tags = "企业")
 public class CorpController {

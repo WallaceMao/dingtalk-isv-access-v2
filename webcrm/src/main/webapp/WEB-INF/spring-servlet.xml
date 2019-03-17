@@ -45,6 +45,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/v3w/**"/>
+            <mvc:mapping path="/crm/v3w/**"/>
             <bean id="jwtInterceptor" class="com.rishiqing.dingtalk.web.webcrm.interceptor.JwtInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

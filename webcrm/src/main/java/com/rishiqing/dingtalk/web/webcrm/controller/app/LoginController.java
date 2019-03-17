@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Wallace Mao
  * Date: 2018-12-18 17:44
  */
-@RequestMapping("/auth")
+@RequestMapping(value = {"/auth", "/crm/auth"})
 @Controller
 @Api(tags = "登陆")
 public class LoginController {

@@ -18,6 +18,8 @@ import com.rishiqing.dingtalk.api.model.vo.message.MessageVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.api.service.biz.MessageBizService;
 import com.rishiqing.dingtalk.svc.converter.message.MessageConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -28,6 +30,8 @@ import java.util.List;
  * Date: 2018-11-08 15:17
  */
 public class MessageBizServiceImpl implements MessageBizService {
+    private static final Logger bizLogger = LoggerFactory.getLogger(MessageBizServiceImpl.class);
+
     private static final long BATCH_SEND_SIZE = 20L;
     @Autowired
     private AppManager appManager;
@@ -57,22 +61,26 @@ public class MessageBizServiceImpl implements MessageBizService {
     public void publishMessageToAllAdmin(Date scopeDateStart, Date scopeDateEnd, JSONObject message) {
         List<String> corpIdList = corpManager.listCorpCorpIdByCreateTimeBetween(scopeDateStart, scopeDateEnd);
         for (String corpId : corpIdList) {
-            CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
-            CorpAppVO corpAppVO = corpAppManager.getCorpAppByCorpIdAndAppId(
-                    corpId, appManager.getDefaultAppVO().getAppId());
-            Long agentId = corpAppVO.getAgentId();
-            MessageVO messageVO = MessageConverter.json2MessageVO(corpId, agentId, message);
+            try {
+                CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+                CorpAppVO corpAppVO = corpAppManager.getCorpAppByCorpIdAndAppId(
+                        corpId, appManager.getDefaultAppVO().getAppId());
+                Long agentId = corpAppVO.getAgentId();
+                MessageVO messageVO = MessageConverter.json2MessageVO(corpId, agentId, message);
 
-            //  获取到公司的管理员列表，给前20个管理员发送通知
-            List<String> adminUserIdList = corpStaffManager.listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(corpId, true, BATCH_SEND_SIZE);
-            messageVO.setUserIdList(adminUserIdList);
+                //  获取到公司的管理员列表，给前20个管理员发送通知
+                List<String> adminUserIdList = corpStaffManager.listCorpStaffUserIdByCorpIdAndIsAdminWithLimit(corpId, true, BATCH_SEND_SIZE);
+                messageVO.setUserIdList(adminUserIdList);
 
-            MessageResultVO result = messageRequestHelper.sendCorpConversationAsync(corpTokenVO.getCorpToken(), messageVO);
-            CorpMessagePublishLogDO log = CorpMessagePublishLogDO.build(corpId, agentId, message.toJSONString());
-            log.setUserIdList(JSON.toJSONString(adminUserIdList));
-            log.setTaskId(result.getTaskId());
+                MessageResultVO result = messageRequestHelper.sendCorpConversationAsync(corpTokenVO.getCorpToken(), messageVO);
+                CorpMessagePublishLogDO log = CorpMessagePublishLogDO.build(corpId, agentId, message.toJSONString());
+                log.setUserIdList(JSON.toJSONString(adminUserIdList));
+                log.setTaskId(result.getTaskId());
 
-            corpMessageManager.saveOrUpdateCorpMessagePublishLog(log);
+                corpMessageManager.saveOrUpdateCorpMessagePublishLog(log);
+            } catch (Exception e) {
+                bizLogger.error("post message exception", e);
+            }
         }
     }
 

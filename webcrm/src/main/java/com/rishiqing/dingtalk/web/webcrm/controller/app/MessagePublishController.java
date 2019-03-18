@@ -33,16 +33,17 @@ public class MessagePublishController {
 
     @PostMapping("/publish/teamsAdmins")
     public Map publishMessageToTeamsAdmins(
-            @RequestBody JSONObject json
+            @RequestBody String jsonString
     ) {
         bizLogger.info(LogFormatter.format(
                 LogFormatter.LogEvent.START,
                 "/publishMessageToTeamsAdmins",
-                new LogFormatter.KeyValue("json", json)
+                new LogFormatter.KeyValue("jsonString", jsonString)
         ));
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map<String, Object> map = new HashMap<>();
         try {
+            JSONObject json = JSON.parseObject(jsonString);
             Date startDate = parser.parse(json.getString("scopeDateStart"));
             Date endDate = parser.parse(json.getString("scopeDateEnd"));
             JSONObject msg = json.getJSONObject("message");

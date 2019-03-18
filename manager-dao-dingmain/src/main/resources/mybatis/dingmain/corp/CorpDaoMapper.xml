@@ -178,7 +178,7 @@
 
     <select id="listCorpCorpIdByGmtCreateBetween" resultType="java.lang.String">
         SELECT
-        id
+        corp_id
         FROM isv_corp
         <![CDATA[
 			WHERE gmt_create BETWEEN #{startDate} AND #{endDate}

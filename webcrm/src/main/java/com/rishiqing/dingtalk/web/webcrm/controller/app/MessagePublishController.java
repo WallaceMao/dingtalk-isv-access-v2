@@ -47,8 +47,9 @@ public class MessagePublishController {
             Date startDate = parser.parse(json.getString("scopeDateStart"));
             Date endDate = parser.parse(json.getString("scopeDateEnd"));
             JSONObject msg = json.getJSONObject("message");
-            messageBizService.publishMessageToAllAdmin(startDate, endDate, msg);
+            Map publishResultMap = messageBizService.publishMessageToAllAdmin(startDate, endDate, msg);
             map.put("errcode", 0);
+            map.put("data", publishResultMap);
         } catch (ParseException e) {
             bizLogger.error("format error: ", e);
             map.put("errcode", 1);

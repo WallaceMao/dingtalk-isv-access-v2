@@ -11,7 +11,6 @@ import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpMessageManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.suite.AppManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.suite.CorpAppManager;
-import com.rishiqing.dingtalk.mgr.dingmain.manager.suite.SuiteManager;
 import com.rishiqing.dingtalk.req.dingtalk.auth.http.MessageRequestHelper;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.api.model.vo.message.MessageVO;
@@ -23,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -58,8 +59,11 @@ public class MessageBizServiceImpl implements MessageBizService {
     }
 
     @Override
-    public void publishMessageToAllAdmin(Date scopeDateStart, Date scopeDateEnd, JSONObject message) {
+    public Map publishMessageToAllAdmin(Date scopeDateStart, Date scopeDateEnd, JSONObject message) {
         List<String> corpIdList = corpManager.listCorpCorpIdByCreateTimeBetween(scopeDateStart, scopeDateEnd);
+        Map<String, Object> resultMap = new HashMap<>();
+        long successCount = 0;
+        long failCount = 0;
         for (String corpId : corpIdList) {
             try {
                 CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
@@ -78,10 +82,15 @@ public class MessageBizServiceImpl implements MessageBizService {
                 log.setTaskId(result.getTaskId());
 
                 corpMessageManager.saveOrUpdateCorpMessagePublishLog(log);
+                successCount++;
             } catch (Exception e) {
+                failCount++;
                 bizLogger.error("post message exception", e);
             }
         }
+        resultMap.put("successCount", successCount);
+        resultMap.put("failCount", failCount);
+        return resultMap;
     }
 
     @Override

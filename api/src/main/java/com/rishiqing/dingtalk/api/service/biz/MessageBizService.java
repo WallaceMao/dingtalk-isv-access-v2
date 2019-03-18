@@ -6,6 +6,7 @@ import com.rishiqing.dingtalk.api.model.vo.message.AsyncSendResultVO;
 import com.rishiqing.dingtalk.api.model.vo.message.MessageVO;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -14,7 +15,7 @@ import java.util.Date;
 public interface MessageBizService {
     void sendCorpMessageAsync(MessageVO message);
 
-    void publishMessageToAllAdmin(Date scopeDateStart, Date scopeDateEnd, JSONObject message);
+    Map publishMessageToAllAdmin(Date scopeDateStart, Date scopeDateEnd, JSONObject message);
 
     AsyncSendProgressVO queryLatestPublishMessageProgress(String corpId);
 

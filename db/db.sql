@@ -619,7 +619,7 @@ CREATE TABLE `isv_corp_message_publish_log` (
                                           `user_id_list` varchar(1024) NULL COMMENT '用户id列表',
                                           `dept_id_list` varchar(1024) NULL COMMENT '用户id列表',
                                           `to_all_user` varchar(1) NULL COMMENT '是否给所有用户发',
-                                          `task_id` bigint(20) NOT NULL COMMENT '异步发送的taskId',
+                                          `task_id` bigint(20) NULL COMMENT '异步发送的taskId',
                                           PRIMARY KEY (`id`),
                                           UNIQUE KEY `u_corp_message_task` (`task_id`),
                                           INDEX `i_corp_message_corp_id`(`corp_id`)

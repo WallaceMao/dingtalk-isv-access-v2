@@ -53,6 +53,9 @@ public class MessageConverter {
         }
         JSONObject msgContent = json.getJSONObject("msgcontent");
         MessageBody messageBody = parseMessageBody(type, msgContent);
+        if (messageBody != null) {
+            messageBody.setMessageType(type);
+        }
 
         message.setMessageBody(messageBody);
 
@@ -178,7 +181,7 @@ public class MessageConverter {
             case ACTION_CARD:
                 return parseActionCardBody(json);
             default:
-                return null;
+                throw new IllegalArgumentException("parseMessageBody type invalid, " + type + ", json: " + json);
         }
     }
 

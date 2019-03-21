@@ -4,55 +4,56 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="classpath:spring-manager-dingmain.xml"/>
     <import resource="classpath:spring-manager-dingpush.xml"/>
 
-    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.biz.service.util.impl.OpenGlobalLockServiceImpl"/>
+    <bean id="openGlobalLockBizService" class="com.rishiqing.dingtalk.svc.service.util.impl.OpenGlobalLockServiceImpl"/>
     <bean id="openSyncBizDataBizService"
-          class="com.rishiqing.dingtalk.biz.service.biz.impl.OpenSyncBizDataBizServiceImpl"/>
-    <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.biz.service.biz.impl.SuiteDbCheckBizServiceImpl"/>
+          class="com.rishiqing.dingtalk.svc.service.biz.impl.OpenSyncBizDataBizServiceImpl"/>
+    <bean id="suiteDbCheckBizService" class="com.rishiqing.dingtalk.svc.service.biz.impl.SuiteDbCheckBizServiceImpl"/>
 
     <!--相关的用来处理钉钉推送过来的消息的处理器-->
     <!--suite级别-->
     <bean id="suiteTicketSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.SuiteTicketSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.SuiteTicketSyncActionHandler"/>
     <bean id="orgSuiteAuthSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteAuthSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgSuiteAuthSyncActionHandler"/>
     <bean id="orgSuiteChangeSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteChangeSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgSuiteChangeSyncActionHandler"/>
     <bean id="orgSuiteRelieveSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgSuiteRelieveSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgSuiteRelieveSyncActionHandler"/>
     <bean id="orgMicroAppRestoreSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppRestoreSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgMicroAppRestoreSyncActionHandler"/>
     <bean id="orgMicroAppStopSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppStopSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgMicroAppStopSyncActionHandler"/>
     <bean id="orgMicroAppRemoveSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgMicroAppRemoveSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgMicroAppRemoveSyncActionHandler"/>
     <bean id="marketOrderSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.MarketOrderSyncActionHandler"/>
     <bean id="marketOrderCancelSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.MarketOrderCancelSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.MarketOrderCancelSyncActionHandler"/>
     <!--corp级别-->
     <bean id="userAddOrgSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.UserAddOrgSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.UserAddOrgSyncActionHandler"/>
     <bean id="userModifyOrgSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.UserModifyOrgSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.UserModifyOrgSyncActionHandler"/>
     <bean id="userDeptChangeSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.UserDeptChangeSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.UserDeptChangeSyncActionHandler"/>
     <bean id="userLeaveOrgSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.UserLeaveOrgSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.UserLeaveOrgSyncActionHandler"/>
     <bean id="orgDeptCreateSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptCreateSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgDeptCreateSyncActionHandler"/>
     <bean id="orgDeptModifySyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptModifySyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgDeptModifySyncActionHandler"/>
     <bean id="orgDeptRemoveSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgDeptRemoveSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgDeptRemoveSyncActionHandler"/>
     <bean id="orgUpdateSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgUpdateSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgUpdateSyncActionHandler"/>
     <bean id="orgRemoveSyncActionHandler"
-          class="com.rishiqing.dingtalk.dingpush.handler.impl.OrgRemoveSyncActionHandler"/>
-    <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.dingpush.handler.impl.DefaultSyncActionHandler"/>
+          class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgRemoveSyncActionHandler"/>
+    <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.DefaultSyncActionHandler"/>
     <!--用来处理套件级别的SyncAction-->
-    <bean id="suiteSyncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.SuiteSyncActionManager">
+    <bean id="suiteSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.handler.SuiteSyncActionManager">
         <property name="syncActionMap">
             <map>
                 <entry key="suite_ticket" value-ref="suiteTicketSyncActionHandler"/>
@@ -68,7 +69,7 @@
         </property>
     </bean>
     <!--用来处理公司级别的SyncAction，优先级相对较低-->
-    <bean id="corpSyncActionManager" class="com.rishiqing.dingtalk.dingpush.handler.CorpSyncActionManager">
+    <bean id="corpSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.handler.CorpSyncActionManager">
         <property name="syncActionMap">
             <map>
                 <entry key="user_add_org" value-ref="userAddOrgSyncActionHandler"/>

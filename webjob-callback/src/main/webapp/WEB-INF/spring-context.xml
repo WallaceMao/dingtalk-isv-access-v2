@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>file:${user.home}/dingtalk_rsq/ddauth-config.properties</value>
+                <value>file:${user.home}/dingtalk_rsq/logback-config.properties</value>
+                <value>file:${user.home}/dingtalk_rsq/quartz-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--service层的服务beans-->
+    <import resource="classpath:spring-service-dingmain.xml"/>
+    <import resource="classpath:spring-queue-amq.xml"/>
+    <!--web层-->
+    <import resource="classpath:spring-quartz.xml"/>
+</beans>

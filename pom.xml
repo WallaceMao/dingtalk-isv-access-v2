@@ -9,16 +9,21 @@
     <packaging>pom</packaging>
     <version>2.0.0</version>
     <modules>
-        <module>common</module>
-        <module>service</module>
         <module>api</module>
-        <module>web</module>
-        <module>webjob</module>
-        <module>webcrm</module>
+        <module>common</module>
         <module>manager-req-rsq</module>
         <module>manager-req-dingtalk</module>
         <module>manager-dao-dingpush</module>
         <module>manager-dao-dingmain</module>
+        <module>service</module>
+        <module>web</module>
+        <module>web-callback</module>
+        <module>webjob</module>
+        <module>webjob-callback</module>
+        <module>webcrm</module>
+        <module>web-callback-biz</module>
+        <module>web-callback-biz-listener</module>
+        <module>web-dingcloud-listener</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -249,7 +254,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.51</version>
+                <version>1.2.55</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -317,20 +322,6 @@
                 <artifactId>taobao-sdk-java</artifactId>
                 <version>auto_1479188381469-20181204</version>
             </dependency>
-
-            <!--test-->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-                <scope>test</scope>
-            </dependency>
             <!--swager2.0-->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -346,6 +337,40 @@
                 <groupId>net.sourceforge.javacsv</groupId>
                 <artifactId>javacsv</artifactId>
                 <version>2.0</version>
+            </dependency>
+            <!--test-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.4</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.11.1</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>2.4.0</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -382,21 +407,16 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.1</version>
-                    <configuration>
-                        <argLine>
-                            --illegal-access=permit
-                        </argLine>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>2.22.1</version>
-                    <configuration>
-                        <argLine>
-                            --illegal-access=permit
-                        </argLine>
-                    </configuration>
+                    <!--<configuration>-->
+                        <!--<argLine>-->
+                            <!--&#45;&#45;illegal-access=permit-->
+                        <!--</argLine>-->
+                    <!--</configuration>-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

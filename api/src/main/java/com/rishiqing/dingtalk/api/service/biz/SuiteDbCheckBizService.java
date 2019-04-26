@@ -8,4 +8,6 @@ public interface SuiteDbCheckBizService {
     void checkDingPushEvent();
 
     void checkDingMediumPushEvent();
+
+    Boolean isStaffCountAboveThreshold(String corpId);
 }

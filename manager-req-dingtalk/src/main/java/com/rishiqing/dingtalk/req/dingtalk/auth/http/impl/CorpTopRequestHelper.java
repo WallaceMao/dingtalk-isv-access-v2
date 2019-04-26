@@ -194,4 +194,25 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             throw new BizRuntimeException(e);
         }
     }
+
+    /**
+     * 注意：
+     * 企业人数：企业真实人数，非企业授权可使用应用的人数
+     * @param token
+     * @param onlyActive 0：包含未激活钉钉的人员数量 1：不包含未激活钉钉的人员数量
+     * @return
+     */
+    @Override
+    public Long getCorpStaffCount(String token, Long onlyActive) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_org_user_count");
+        OapiUserGetOrgUserCountRequest request = new OapiUserGetOrgUserCountRequest();
+        request.setOnlyActive(onlyActive);
+        request.setHttpMethod("GET");
+        try {
+            OapiUserGetOrgUserCountResponse response = client.execute(request, token);
+            return response.getCount();
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
 }

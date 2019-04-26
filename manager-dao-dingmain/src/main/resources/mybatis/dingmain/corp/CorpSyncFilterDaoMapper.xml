@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp.CorpSyncFilterDao">
+    <insert id="saveOrUpdateCorpSyncFilter">
+        INSERT INTO `isv_corp_sync_filter` (
+            `gmt_create`,
+            `gmt_modified`,
+            `corp_id`,
+            `count`,
+            `status`
+        )
+        VALUES
+            (
+            NOW(),
+            NOW(),
+            #{corpId},
+            #{count},
+            #{status}
+            )
+        ON DUPLICATE KEY UPDATE `gmt_modified` = NOW(),
+        `count` = VALUES(count),`status` = VALUES(status)
+    </insert>
+</mapper>

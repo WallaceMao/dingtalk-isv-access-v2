@@ -14,7 +14,7 @@
             `id`,
             `gmt_create`,
             `gmt_modified`,
-            `config_key`
+            `config_key`,
             `auto_filter`,
             `auto_filter_threshold` 
         FROM

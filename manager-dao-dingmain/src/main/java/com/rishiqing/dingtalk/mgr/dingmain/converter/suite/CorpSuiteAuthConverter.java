@@ -7,6 +7,9 @@ import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthDeptVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthUserVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthVO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Wallace Mao
  * Date: 2018-12-24 15:02
@@ -58,6 +61,15 @@ public class CorpSuiteAuthConverter {
         return deptVO;
     }
 
+    public static List<CorpSuiteAuthDeptVO> listCorpSuiteAuthDeptDO2corpSuiteAuthDeptVO(List<CorpSuiteAuthDeptDO> corpSuiteAuthDeptDOList) {
+        if (corpSuiteAuthDeptDOList == null) return null;
+        List<CorpSuiteAuthDeptVO> corpSuiteAuthDeptVOList=new ArrayList<>(corpSuiteAuthDeptDOList.size());
+        for (CorpSuiteAuthDeptDO corpSuiteAuthDeptDO : corpSuiteAuthDeptDOList) {
+            corpSuiteAuthDeptVOList.add(corpSuiteAuthDeptDO2corpSuiteAuthDeptVO(corpSuiteAuthDeptDO));
+        }
+        return corpSuiteAuthDeptVOList;
+    }
+
     public static CorpSuiteAuthDeptDO corpSuiteAuthDeptVO2corpSuiteAuthDeptDO(CorpSuiteAuthDeptVO corpSuiteAuthDeptVO) {
         if (corpSuiteAuthDeptVO == null) {
             return null;
@@ -84,6 +96,15 @@ public class CorpSuiteAuthConverter {
         userVO.setCorpId(corpSuiteAuthUserDO.getCorpId());
         userVO.setUserId(corpSuiteAuthUserDO.getUserId());
         return userVO;
+    }
+
+    public static List<CorpSuiteAuthUserVO> listCorpSuiteAuthUserDO2corpSuiteAuthUserVO(List<CorpSuiteAuthUserDO> corpSuiteAuthUserDOList) {
+        if (corpSuiteAuthUserDOList == null) return null;
+        List<CorpSuiteAuthUserVO> corpSuiteAuthUserVOList = new ArrayList<>(corpSuiteAuthUserDOList.size());
+        for (CorpSuiteAuthUserDO corpSuiteAuthUserDO : corpSuiteAuthUserDOList) {
+            corpSuiteAuthUserVOList.add(corpSuiteAuthUserDO2corpSuiteAuthUserVO(corpSuiteAuthUserDO));
+        }
+        return corpSuiteAuthUserVOList;
     }
 
     public static CorpSuiteAuthUserDO corpSuiteAuthUserVO2corpSuiteAuthUserDO(CorpSuiteAuthUserVO corpSuiteAuthUserVO) {

@@ -21,6 +21,8 @@
     <bean id="suiteService" class="com.rishiqing.dingtalk.svc.service.biz.impl.SuiteService"/>
     <bean id="deptService" class="com.rishiqing.dingtalk.svc.service.biz.impl.DeptService"/>
     <bean id="staffService" class="com.rishiqing.dingtalk.svc.service.biz.impl.StaffService"/>
+    <!--配置service-->
+    <bean id="configService" class="com.rishiqing.dingtalk.svc.service.config.map.ConfigServiceImpl"/>
 
     <!--eventBus-->
     <!--eventBus: 新建时，同步到日事清的corpOrgCreated-->

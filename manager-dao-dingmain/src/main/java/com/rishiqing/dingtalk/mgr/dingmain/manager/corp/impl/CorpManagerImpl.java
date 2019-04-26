@@ -56,7 +56,8 @@ public class CorpManagerImpl implements CorpManager {
     private CorpStatisticDao corpStatisticDao;
     @Autowired
     private SuiteRequestHelper suiteRequestHelper;
-
+    @Autowired
+    private CorpSyncFilterDao corpSyncFilterDao;
     @Override
     public void saveOrUpdateCorp(CorpVO corpVO){
         corpDao.saveOrUpdateCorp(
@@ -320,5 +321,10 @@ public class CorpManagerImpl implements CorpManager {
     @Override
     public List<CorpDO> listCorpBetweenDate(Date startDate, Date endDate) {
         return corpDao.listCorpBetweenDate(startDate,endDate);
+    }
+
+    @Override
+    public void saveOrUpdateCorpSyncFilter(CorpSyncFilterDO corpSyncFilterDO) {
+        corpSyncFilterDao.saveOrUpdateCorpSyncFilter(corpSyncFilterDO);
     }
 }

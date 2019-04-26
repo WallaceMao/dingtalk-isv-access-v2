@@ -1,26 +1,24 @@
 package com.rishiqing.dingtalk.svc.service.biz.impl;
 
-import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
-import com.rishiqing.dingtalk.svc.service.util.QueueService;
-import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
-import com.rishiqing.dingtalk.api.model.vo.corp.CorpStaffVO;
-import com.rishiqing.dingtalk.api.model.vo.corp.CorpStatisticVO;
-import com.rishiqing.dingtalk.api.model.vo.corp.CorpTokenVO;
+import com.rishiqing.dingtalk.api.model.vo.corp.*;
+import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
-import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
+import com.rishiqing.dingtalk.svc.service.util.QueueService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Wallace Mao
  * Date: 2018-11-07 2:48
  */
 public class StaffService {
+    private static final Logger LOG= LoggerFactory.getLogger(StaffService.class);
     private static long DEFAULT_PAGE_SIZE = 50;
     @Autowired
     private CorpRequestHelper corpRequestHelper;
@@ -70,6 +68,7 @@ public class StaffService {
 
     /**
      * 保存deptId的部门，以及其所有的子部门的员工
+     *
      * @param corpId
      * @param deptId
      * @param scopeVersion
@@ -98,6 +97,7 @@ public class StaffService {
      * 1  用户还在可见范围之内，那么保留用户，更新用户所在的部门
      * 2  用户不在可见范围之内，那么删除用户。
      * 以上两种操作完成之后都需要同步到日事清中
+     *
      * @param corpId
      * @param deptId
      * @param scopeVersion
@@ -266,4 +266,100 @@ public class StaffService {
             newIsLeaderInDept.putAll(dbIsLeaderInDept);
         }
     }
+
+    /*
+    -------------------------------------------------分割线--------------------------------------------------------------
+    以下新增功能：人数限制
+     */
+
+    /**
+     * 获取公司指定部门下的用户数量，不保存到数据库。
+     * 注意，在钉钉中，部门获取的规则是这样的：
+     * 假设dept-A是dept-B的父部门
+     * 1.dept-B中含有员工staff-1，那么在获取dept-A部门的员工时，是获取不到staff-1的
+     * 2.企业授权套件时：授权dept-A，那么dept-B的员工也是可以使用的，真是爆炸！
+     *
+     * @param corpId
+     * @param deptId
+     * @return 返回指定部门内的所有用户（不含子部门）
+     */
+    private List<CorpStaffVO> listGetDepartmentStaff(String corpId, Long deptId) {
+        boolean hasMore = true;
+        long offset = 0;
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        List<CorpStaffVO> staffList = new ArrayList<>();
+        while (hasMore) {
+            Map<String, Object> staffPageList = corpRequestHelper.getCorpDepartmentStaffByPage(
+                    corpTokenVO.getCorpToken(), corpId, deptId, offset, DEFAULT_PAGE_SIZE
+            );
+            //add
+            staffList.addAll((List<CorpStaffVO>) staffPageList.get("list"));
+            offset += DEFAULT_PAGE_SIZE;
+            hasMore = (Boolean) staffPageList.get("hasMore");
+        }
+        return staffList;
+    }
+
+    /**
+     * 获取deptId的部门员工，以及其所有的子部门的员工
+     *
+     * @param corpId
+     * @param deptId
+     * @return
+     */
+    public void listGetCorpDepartmentStaffRecursive(String corpId, Long deptId, List<CorpStaffVO> corpStaffVOList) {
+        //  获取当前部门员工
+        corpStaffVOList.addAll(this.listGetDepartmentStaff(corpId, deptId));
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        List<CorpDepartmentVO> deptList = corpRequestHelper.getChildCorpDepartment(
+                corpTokenVO.getCorpToken(), corpId, deptId);
+        //  如果无子部门，那么就返回
+        if (deptList == null || deptList.size() == 0) {
+            return;
+        }
+        //  递归获取子部门员工
+        for (CorpDepartmentVO dept : deptList) {
+            this.listGetCorpDepartmentStaffRecursive(corpId, dept.getDeptId(), corpStaffVOList);
+        }
+    }
+
+    /**
+     * 去重统计企业总授权人数
+     *
+     * @param authedUserIdList 企业授权的员工userId列表
+     * @param authedDeptIdList 企业授权的部门id列表
+     * @return
+     */
+    public Long getCorpStaffCountByCorpAuthScopeInfo(List<String> authedUserIdList,List<Long> authedDeptIdList, String corpId) {
+        //根据corpId获取token
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        //根据员工id查询list，防止和下面部门内的员工重复，最终一并去重
+        List<CorpStaffVO> corpStaffVOList = new ArrayList<>();
+        for (String userId : authedUserIdList) {
+            //不需要调用http接口，浪费性能，除非以下去重规则有变化！
+            //corpStaffVOList.add(corpRequestHelper.getCorpStaff(corpTokenVO.getCorpToken(), corpId, userId));
+            CorpStaffVO corpStaffVO = new CorpStaffVO();
+            corpStaffVO.setUserId(userId);
+            corpStaffVOList.add(corpStaffVO);
+        }
+        for (Long authedDeptId : authedDeptIdList) {
+            //递归部门查询部门以及子部门员工
+            listGetCorpDepartmentStaffRecursive(corpId, authedDeptId, corpStaffVOList);
+        }
+        //企业授权的部门内的员工去重
+        Set<CorpStaffVO> corpStaffVOSet = new TreeSet<>(new Comparator<CorpStaffVO>() {
+            @Override
+            public int compare(CorpStaffVO o1, CorpStaffVO o2) {
+                return o1.getUserId().equals(o2.getUserId()) ? 0 : -1;
+            }
+        });
+        corpStaffVOSet.addAll(corpStaffVOList);
+        corpStaffVOList.clear();
+        corpStaffVOList.addAll(corpStaffVOSet);
+        LOG.debug(corpStaffVOList.toString());
+        //统计
+        return (long) corpStaffVOList.size();
+    }
+
+
 }

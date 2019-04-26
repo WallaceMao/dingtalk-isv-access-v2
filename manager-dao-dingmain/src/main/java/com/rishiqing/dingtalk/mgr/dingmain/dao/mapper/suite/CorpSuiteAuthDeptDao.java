@@ -31,4 +31,6 @@ public interface CorpSuiteAuthDeptDao {
             @Param("corpId") String corpId,
             @Param("deptId") Long deptId
     );
+
+    List<CorpSuiteAuthDeptDO> listGetCorpSuiteAuthDeptByCorpId(@Param("corpId") String corpId);
 }

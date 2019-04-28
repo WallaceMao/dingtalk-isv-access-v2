@@ -8,6 +8,4 @@ public interface SuiteDbCheckBizService {
     void checkDingPushEvent();
 
     void checkDingMediumPushEvent();
-
-    Long getAuthedStaffCount(String corpId);
 }

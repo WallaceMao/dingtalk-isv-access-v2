@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
  * Date: 2018-11-03 15:16
  */
 @ApiModel(description = "isv存储的公司成员信息")
-public class CorpStaffVO implements Serializable, Comparator<CorpStaffVO> {
+public class CorpStaffVO implements Serializable {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
@@ -372,14 +371,5 @@ public class CorpStaffVO implements Serializable, Comparator<CorpStaffVO> {
                 ", rsqLoginToken='" + rsqLoginToken + '\'' +
                 ", scopeVersion=" + scopeVersion +
                 '}';
-    }
-
-    @Override
-    public int compare(CorpStaffVO o1, CorpStaffVO o2) {
-        if(o1.getCorpId().equals(o2.getCorpId()) && o1.getUserId().equals(o2.getUserId())){
-            return 0;
-        }else{
-            return -1;
-        }
     }
 }

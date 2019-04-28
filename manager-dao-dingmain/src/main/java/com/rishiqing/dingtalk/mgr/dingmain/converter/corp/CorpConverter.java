@@ -5,9 +5,6 @@ import com.rishiqing.dingtalk.api.model.domain.corp.CorpStaffDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpCountWithCreatorVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpVO;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Wallace Mao
  * Date: 2018-12-24 14:42
@@ -76,16 +73,5 @@ public class CorpConverter {
             corpVO.setCreatorRsqUserId(creatorDO.getRsqUserId());
         }
         return corpVO;
-    }
-
-    public static List<CorpVO> CorpDOList2CorpVOList(List<CorpDO> corpDOList) {
-        if(corpDOList == null) {
-            return null;
-        }
-        List<CorpVO> list = new ArrayList<>(corpDOList.size());
-        for (CorpDO corpDO : corpDOList) {
-            list.add(CorpDO2CorpVO(corpDO));
-        }
-        return list;
     }
 }

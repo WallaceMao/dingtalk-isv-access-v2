@@ -2,19 +2,19 @@ package com.rishiqing.dingtalk.mgr.dingmain.manager.corp.impl;
 
 import com.rishiqing.common.log.LogFormatter;
 import com.rishiqing.dingtalk.api.model.domain.corp.*;
+import com.rishiqing.dingtalk.api.model.domain.suite.CorpSuiteAuthDO;
+import com.rishiqing.dingtalk.api.model.domain.suite.SuiteDO;
+import com.rishiqing.dingtalk.api.model.domain.suite.SuiteTicketDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.*;
-import com.rishiqing.dingtalk.req.dingtalk.auth.http.SuiteRequestHelper;
 import com.rishiqing.dingtalk.mgr.dingmain.constant.CorpLockType;
+import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpSuiteAuthDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.SuiteDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.SuiteTicketDao;
-import com.rishiqing.dingtalk.api.model.domain.suite.CorpSuiteAuthDO;
-import com.rishiqing.dingtalk.api.model.domain.suite.SuiteDO;
-import com.rishiqing.dingtalk.api.model.domain.suite.SuiteTicketDO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
-import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.*;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.SuiteRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -326,5 +326,10 @@ public class CorpManagerImpl implements CorpManager {
     @Override
     public void saveOrUpdateCorpSyncFilter(CorpSyncFilterDO corpSyncFilterDO) {
         corpSyncFilterDao.saveOrUpdateCorpSyncFilter(corpSyncFilterDO);
+    }
+
+    @Override
+    public CorpSyncFilterDO getCorpSyncFilterByCorpId(String corpId) {
+        return corpSyncFilterDao.getCorpSyncFilterByCorpId(corpId);
     }
 }

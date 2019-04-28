@@ -332,7 +332,7 @@ public class StaffService {
      */
     public Long getCorpStaffCountByCorpAuthScopeInfo(List<String> authedUserIdList,List<Long> authedDeptIdList, String corpId) {
         //根据corpId获取token
-        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        //CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
         //根据员工id查询list，防止和下面部门内的员工重复，最终一并去重
         List<CorpStaffVO> corpStaffVOList = new ArrayList<>();
         for (String userId : authedUserIdList) {

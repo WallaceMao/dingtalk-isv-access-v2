@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository("corpSyncFilterDao")
 public interface CorpSyncFilterDao {
     void saveOrUpdateCorpSyncFilter(CorpSyncFilterDO corpSyncFilterDO);
+
+    CorpSyncFilterDO getCorpSyncFilterByCorpId(String corpId);
 }

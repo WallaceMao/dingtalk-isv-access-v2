@@ -1,8 +1,9 @@
-package com.rishiqing.dingtalk.svc.service.config.map;
+package com.rishiqing.dingtalk.svc.service.config.impl;
 
 import com.rishiqing.dingtalk.api.model.domain.config.ConfigDO;
 import com.rishiqing.dingtalk.api.service.config.ConfigService;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.config.ConfigManager;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ public class ConfigServiceImpl implements ConfigService {
     private static final String STAFF_COUNT_LIMIT_CONFIG_KEY = "staff_count_limit";
     @Autowired
     private ConfigManager configManager;
-
+    @Autowired
+    private CorpManager corpManager;
     /**
      * 员工总数是否高于阈值
      * 1.开启事务

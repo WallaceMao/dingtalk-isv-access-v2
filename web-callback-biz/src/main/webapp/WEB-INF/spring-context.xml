@@ -18,10 +18,10 @@
         </property>
     </bean>
 
-    <!--<util:map id="isvGlobal">-->
+    <!--<util:impl id="isvGlobal">-->
     <!--<entry key="suiteKey" value="${isv.suite.key}" />-->
     <!--<entry key="appId" value="${isv.app.id}" />-->
-    <!--</util:map>-->
+    <!--</util:impl>-->
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-service-dingmain.xml"/>

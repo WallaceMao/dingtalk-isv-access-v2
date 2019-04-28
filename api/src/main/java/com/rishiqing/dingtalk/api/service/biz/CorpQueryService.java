@@ -16,4 +16,6 @@ public interface CorpQueryService {
     Long getPageCorpTotal(Map<String, Object> clause);
 
     List<CorpCountWithCreatorVO> listCorpBetweenDate(Date startDate, Date endDate);
+
+    Boolean isAboveCorpStaffCountThreshold(String corpId);
 }

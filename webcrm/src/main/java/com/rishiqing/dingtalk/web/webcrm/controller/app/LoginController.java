@@ -65,7 +65,7 @@ public class LoginController {
             response.addHeader("token",token);
 
             Map<String, Object> map = new HashMap<>();
-            /*map.put("errcode", 0);*/
+            /*impl.put("errcode", 0);*/
             return HttpResult.getSuccess(null);
         }catch(Exception e){
             bizLogger.error(LogFormatter.format(

@@ -1,6 +1,6 @@
 package com.rishiqing.dingtalk.web.dingcloud.controller.app;
 
-import com.rishiqing.dingtalk.api.service.biz.SuiteDbCheckBizService;
+import com.rishiqing.dingtalk.api.service.biz.CorpQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("check")
 public class CheckController {
     @Autowired
-    private SuiteDbCheckBizService suiteDbCheckBizService;
+    private CorpQueryService corpQueryService;
 
     @GetMapping("staffCount/aboveThreshold")
     public Boolean isAboveCorpStaffCountThreshold(@RequestParam() String corpId) {
-        return suiteDbCheckBizService.isStaffCountAboveThreshold(corpId);
+        return corpQueryService.isAboveCorpStaffCountThreshold(corpId);
     }
 }

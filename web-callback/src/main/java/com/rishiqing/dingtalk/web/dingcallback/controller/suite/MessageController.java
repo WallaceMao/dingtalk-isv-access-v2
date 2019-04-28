@@ -204,10 +204,10 @@ public class MessageController {
 //                quartzRemindScheduler.scheduleJob(job, trigger);
 //            }
 //
-//            Map<String, Object> map = new HashMap<String, Object>();
-//            map.put("errcode", 0);
+//            Map<String, Object> impl = new HashMap<String, Object>();
+//            impl.put("errcode", 0);
 //
-//            return HttpResult.getSuccess(map);
+//            return HttpResult.getSuccess(impl);
 //        }catch(Exception e){
 //            bizLogger.error(LogFormatter.getKVLogData(LogFormatter.LogEvent.END,
 //                    "系统错误",

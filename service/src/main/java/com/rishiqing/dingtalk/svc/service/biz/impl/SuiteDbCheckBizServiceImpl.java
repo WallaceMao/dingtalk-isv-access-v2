@@ -190,20 +190,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
         String syncAction = SuiteDbCheckConverter.json2SyncActionString(dataJsonObject);
         //如果同步行为需要特殊处理
         if (USER_ADD_ORG.equals(syncAction)) {
-            //查询当前企业可见范围
-            List<CorpSuiteAuthDeptVO> corpSuiteAuthDeptVOS = corpSuiteAuthManager.listGetCorpSuiteAuthDeptByCorpId(corpId);
-            List<Long> deptIdList = new ArrayList<>(corpSuiteAuthDeptVOS.size());
-            for (CorpSuiteAuthDeptVO corpSuiteAuthDeptVO : corpSuiteAuthDeptVOS) {
-                deptIdList.add(Long.parseLong(corpSuiteAuthDeptVO.getDeptId()));
-            }
-            List<CorpSuiteAuthUserVO> corpSuiteAuthUserVOS = corpSuiteAuthManager.listGetCorpSuiteAuthUserByCorpId(corpId);
-            List<String> userIdList = new ArrayList<>(corpSuiteAuthUserVOS.size());
-            for (CorpSuiteAuthUserVO corpSuiteAuthUserVO : corpSuiteAuthUserVOS) {
-                userIdList.add(corpSuiteAuthUserVO.getUserId());
-            }
-            //统计总授权员工数
-            Long corpStaffCount = staffService.getCorpStaffCountByCorpAuthScopeInfo(userIdList, deptIdList, corpId);
-            //检查是否高于阈值
+            Long corpStaffCount = getAuthedStaffCount(corpId);
             Boolean staffCountAboveThreshold = configService.isStaffCountAboveThreshold(corpStaffCount);
             //如果高于阈值
             if (staffCountAboveThreshold) {
@@ -224,7 +211,7 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
         }
     }
     @Override
-    public Boolean isStaffCountAboveThreshold(String corpId){
+    public Long getAuthedStaffCount(String corpId){
         //查询当前企业可见范围
         List<CorpSuiteAuthDeptVO> corpSuiteAuthDeptVOS = corpSuiteAuthManager.listGetCorpSuiteAuthDeptByCorpId(corpId);
         List<Long> deptIdList = new ArrayList<>(corpSuiteAuthDeptVOS.size());
@@ -237,8 +224,6 @@ public class SuiteDbCheckBizServiceImpl implements SuiteDbCheckBizService {
             userIdList.add(corpSuiteAuthUserVO.getUserId());
         }
         //统计总授权员工数
-        Long corpStaffCount = staffService.getCorpStaffCountByCorpAuthScopeInfo(userIdList, deptIdList, corpId);
-        //检查是否高于阈值
-        return configService.isStaffCountAboveThreshold(corpStaffCount);
+        return staffService.getCorpStaffCountByCorpAuthScopeInfo(userIdList, deptIdList, corpId);
     }
 }

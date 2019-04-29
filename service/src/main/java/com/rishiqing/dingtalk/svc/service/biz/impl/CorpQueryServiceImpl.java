@@ -1,7 +1,6 @@
 package com.rishiqing.dingtalk.svc.service.biz.impl;
 
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpDO;
-import com.rishiqing.dingtalk.api.model.domain.corp.CorpSyncFilterDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpCountWithCreatorVO;
 import com.rishiqing.dingtalk.api.service.biz.CorpQueryService;
 import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.CorpConverter;
@@ -57,11 +56,5 @@ public class CorpQueryServiceImpl implements CorpQueryService {
             voList.add(corpVO);
         }
         return voList;
-    }
-
-    @Override
-    public Boolean isAboveCorpStaffCountThreshold(String corpId) {
-        CorpSyncFilterDO corpSyncFilterByCorpId = corpManager.getCorpSyncFilterByCorpId(corpId);
-        return corpSyncFilterByCorpId != null;
     }
 }

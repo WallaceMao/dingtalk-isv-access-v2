@@ -26,6 +26,6 @@
     <bean id="popupManager" class="com.rishiqing.dingtalk.mgr.dingmain.manager.front.impl.PopupManagerImpl"/>
     <bean id="authGlobalLockManager"
           class="com.rishiqing.dingtalk.mgr.dingmain.manager.suite.impl.AuthGlobalLockManagerImpl"/>
-    <bean id="configManager"
-          class="com.rishiqing.dingtalk.mgr.dingmain.manager.config.impl.ConfigManagerImpl"/>
+    <bean id="filterManager"
+          class="com.rishiqing.dingtalk.mgr.dingmain.manager.filter.impl.FilterManagerImpl"/>
 </beans>

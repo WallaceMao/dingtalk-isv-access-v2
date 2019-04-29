@@ -53,7 +53,7 @@
           class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.OrgRemoveSyncActionHandler"/>
     <bean id="defaultSyncActionHandler" class="com.rishiqing.dingtalk.svc.dingpush.handler.impl.DefaultSyncActionHandler"/>
     <!--用来处理套件级别的SyncAction-->
-    <bean id="suiteSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.handler.SuiteSyncActionManager">
+    <bean id="baseSuiteSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.manager.impl.BaseSuiteSyncActionManagerImpl">
         <property name="syncActionMap">
             <map>
                 <entry key="suite_ticket" value-ref="suiteTicketSyncActionHandler"/>
@@ -69,7 +69,7 @@
         </property>
     </bean>
     <!--用来处理公司级别的SyncAction，优先级相对较低-->
-    <bean id="corpSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.handler.CorpSyncActionManager">
+    <bean id="baseCorpSyncActionManager" class="com.rishiqing.dingtalk.svc.dingpush.manager.impl.BaseCorpSyncActionManagerImpl">
         <property name="syncActionMap">
             <map>
                 <entry key="user_add_org" value-ref="userAddOrgSyncActionHandler"/>
@@ -94,4 +94,10 @@
             </map>
         </property>
     </bean>
+    <!--增强处理企业公司级别的SyncAction：企业人数超员限制功能-->
+    <bean id="filterCorpSyncActionManager"
+          class="com.rishiqing.dingtalk.svc.dingpush.manager.impl.FilterCorpSyncActionManagerImpl"/>
+    <!--增强处理套件级别的SyncAction：企业人数超员限制功能-->
+    <bean id="filterSuiteSyncActionManager"
+          class="com.rishiqing.dingtalk.svc.dingpush.manager.impl.FilterSuiteSyncActionManagerImpl"/>
 </beans>

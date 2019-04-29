@@ -1,4 +1,4 @@
-package com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp;
+package com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.filter;
 
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpSyncFilterDO;
 import org.springframework.stereotype.Repository;

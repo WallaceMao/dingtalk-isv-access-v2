@@ -69,7 +69,5 @@ public interface CorpManager {
             @Param("startDate") Date startDate,
             @Param("endDate") Date endDate);
 
-    void saveOrUpdateCorpSyncFilter(CorpSyncFilterDO corpSyncFilterDO);
 
-    CorpSyncFilterDO getCorpSyncFilterByCorpId(String corpId);
 }

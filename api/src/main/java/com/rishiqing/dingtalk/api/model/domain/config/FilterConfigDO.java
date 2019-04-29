@@ -6,11 +6,11 @@ import java.util.Date;
  * @author: Da Shuai
  * @create: 2019-04-24 17:11
  */
-public class ConfigDO {
+public class FilterConfigDO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
-    private String configKey;
+    private String filterKey;
     private Boolean autoFilter;
     private Long autoFilterThreshold;
 
@@ -38,12 +38,12 @@ public class ConfigDO {
         this.gmtModified = gmtModified;
     }
 
-    public String getConfigKey() {
-        return configKey;
+    public String getFilterKey() {
+        return filterKey;
     }
 
-    public void setConfigKey(String configKey) {
-        this.configKey = configKey;
+    public void setFilterKey(String filterKey) {
+        this.filterKey = filterKey;
     }
 
     public Boolean getAutoFilter() {
@@ -64,11 +64,11 @@ public class ConfigDO {
 
     @Override
     public String toString() {
-        return "ConfigDO{" +
+        return "FilterConfigDO{" +
                 "id=" + id +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
-                ", configKey='" + configKey + '\'' +
+                ", filterKey='" + filterKey + '\'' +
                 ", autoFilter=" + autoFilter +
                 ", autoFilterThreshold=" + autoFilterThreshold +
                 '}';

@@ -1,14 +1,18 @@
 package com.rishiqing.dingtalk.svc.service.biz.impl;
 
-import com.rishiqing.dingtalk.api.model.vo.corp.*;
+import com.rishiqing.dingtalk.api.exception.CorpOverstaffedException;
+import com.rishiqing.dingtalk.api.model.domain.config.FilterConfigDO;
+import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
+import com.rishiqing.dingtalk.api.model.vo.corp.CorpStaffVO;
+import com.rishiqing.dingtalk.api.model.vo.corp.CorpStatisticVO;
+import com.rishiqing.dingtalk.api.model.vo.corp.CorpTokenVO;
 import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.filter.FilterManager;
 import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
 import com.rishiqing.dingtalk.svc.service.util.QueueService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -18,8 +22,8 @@ import java.util.*;
  * Date: 2018-11-07 2:48
  */
 public class StaffService {
-    private static final Logger LOG= LoggerFactory.getLogger(StaffService.class);
     private static long DEFAULT_PAGE_SIZE = 50;
+    private static final String STAFF_COUNT_LIMIT_FILTER_KEY = "staff_count_limit";
     @Autowired
     private CorpRequestHelper corpRequestHelper;
     @Autowired
@@ -32,6 +36,8 @@ public class StaffService {
     private RsqAccountBizService rsqAccountBizService;
     @Autowired(required = false)
     private QueueService queueService;
+    @Autowired
+    private FilterManager filterManager;
 
     /**
      * 根据userIdList中的id，从钉钉处获取用户，然后保存到本地
@@ -281,35 +287,40 @@ public class StaffService {
      *
      * @param corpId
      * @param deptId
-     * @return 返回指定部门内的所有用户（不含子部门）
+     * @return 返回指定部门内的所有用户Id（不含子部门）
      */
-    private List<CorpStaffVO> listGetDepartmentStaff(String corpId, Long deptId) {
+    private Set<String> listGetDepartmentStaffId(String corpId, Long deptId) {
         boolean hasMore = true;
         long offset = 0;
         CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
-        List<CorpStaffVO> staffList = new ArrayList<>();
+        Set<String> staffIdSet = new HashSet<>();
         while (hasMore) {
-            Map<String, Object> staffPageList = corpRequestHelper.getCorpDepartmentStaffByPage(
+            Map<String, Object> staffPageList = corpRequestHelper.getCorpDepartmentStaffIdByPage(
                     corpTokenVO.getCorpToken(), corpId, deptId, offset, DEFAULT_PAGE_SIZE
             );
             //add
-            staffList.addAll((List<CorpStaffVO>) staffPageList.get("list"));
+            staffIdSet.addAll((Set<String>) staffPageList.get("set"));
             offset += DEFAULT_PAGE_SIZE;
             hasMore = (Boolean) staffPageList.get("hasMore");
         }
-        return staffList;
+        return staffIdSet;
     }
 
     /**
-     * 获取deptId的部门员工，以及其所有的子部门的员工
+     * 获取deptId的部门员工Id，以及其所有的子部门的员工Id，
+     * 每次Set中添加元素时，判断set的大小，一旦超过阈值，抛出异常
      *
      * @param corpId
      * @param deptId
-     * @return
+     * @param corpStaffIdSet
+     * @param staffCountThreshold
      */
-    public void listGetCorpDepartmentStaffRecursive(String corpId, Long deptId, List<CorpStaffVO> corpStaffVOList) {
+    private void listGetCorpDepartmentStaffIdRecursive(String corpId, Long deptId, Set<String> corpStaffIdSet, Long staffCountThreshold) {
         //  获取当前部门员工
-        corpStaffVOList.addAll(this.listGetDepartmentStaff(corpId, deptId));
+        corpStaffIdSet.addAll(this.listGetDepartmentStaffId(corpId, deptId));
+        if (corpStaffIdSet.size() > staffCountThreshold) {
+            throw new CorpOverstaffedException("企业授权员工人数超标");
+        }
         CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
         List<CorpDepartmentVO> deptList = corpRequestHelper.getChildCorpDepartment(
                 corpTokenVO.getCorpToken(), corpId, deptId);
@@ -319,47 +330,34 @@ public class StaffService {
         }
         //  递归获取子部门员工
         for (CorpDepartmentVO dept : deptList) {
-            this.listGetCorpDepartmentStaffRecursive(corpId, dept.getDeptId(), corpStaffVOList);
+            this.listGetCorpDepartmentStaffIdRecursive(corpId, dept.getDeptId(), corpStaffIdSet, staffCountThreshold);
         }
     }
 
-    /**
-     * 去重统计企业总授权人数
-     *
-     * @param authedUserIdList 企业授权的员工userId列表
-     * @param authedDeptIdList 企业授权的部门id列表
-     * @return
-     */
-    public Long getCorpStaffCountByCorpAuthScopeInfo(List<String> authedUserIdList,List<Long> authedDeptIdList, String corpId) {
-        //根据corpId获取token
-        //CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
-        //根据员工id查询list，防止和下面部门内的员工重复，最终一并去重
-        List<CorpStaffVO> corpStaffVOList = new ArrayList<>();
-        for (String userId : authedUserIdList) {
-            //不需要调用http接口，浪费性能，除非以下去重规则有变化！
-            //corpStaffVOList.add(corpRequestHelper.getCorpStaff(corpTokenVO.getCorpToken(), corpId, userId));
-            CorpStaffVO corpStaffVO = new CorpStaffVO();
-            corpStaffVO.setUserId(userId);
-            corpStaffVOList.add(corpStaffVO);
+    public Boolean isCorpStaffCountAboveThreshold(List<String> authedUserIdList, List<Long> authedDeptIdList, String corpId) {
+        //先判断是否开启超员过滤器
+        FilterConfigDO staffCountFilter = filterManager.getFilterConfigByFilterKey(STAFF_COUNT_LIMIT_FILTER_KEY);
+        if(staffCountFilter==null){
+            //初始化默认值：关闭,100L
+            staffCountFilter=new FilterConfigDO();
+            staffCountFilter.setAutoFilter(false);
+            staffCountFilter.setFilterKey(STAFF_COUNT_LIMIT_FILTER_KEY);
+            staffCountFilter.setAutoFilterThreshold(100L);
+            filterManager.saveOrUpdateFilterConfig(staffCountFilter);
         }
-        for (Long authedDeptId : authedDeptIdList) {
-            //递归部门查询部门以及子部门员工
-            listGetCorpDepartmentStaffRecursive(corpId, authedDeptId, corpStaffVOList);
-        }
-        //企业授权的部门内的员工去重
-        Set<CorpStaffVO> corpStaffVOSet = new TreeSet<>(new Comparator<CorpStaffVO>() {
-            @Override
-            public int compare(CorpStaffVO o1, CorpStaffVO o2) {
-                return o1.getUserId().equals(o2.getUserId()) ? 0 : -1;
+        //如果过滤器处于关闭状态，直接返回false:未超员
+        if (!staffCountFilter.getAutoFilter()) {
+            return false;
+        } else {
+            //阈值
+            Long autoFilterThreshold = staffCountFilter.getAutoFilterThreshold();
+            //可能会出现重复员工，利用set去重
+            Set<String> corpStaffIdSet = new HashSet<>(authedUserIdList);
+            for (Long authedDeptId : authedDeptIdList) {
+                //递归部门查询部门以及子部门员工，如果超标直接抛出异常
+                listGetCorpDepartmentStaffIdRecursive(corpId, authedDeptId, corpStaffIdSet, autoFilterThreshold);
             }
-        });
-        corpStaffVOSet.addAll(corpStaffVOList);
-        corpStaffVOList.clear();
-        corpStaffVOList.addAll(corpStaffVOSet);
-        LOG.debug(corpStaffVOList.toString());
-        //统计
-        return (long) corpStaffVOList.size();
+            return false;
+        }
     }
-
-
 }

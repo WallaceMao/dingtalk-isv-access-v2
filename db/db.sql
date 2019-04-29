@@ -624,3 +624,27 @@ CREATE TABLE `isv_corp_message_publish_log` (
                                           UNIQUE KEY `u_corp_message_task` (`task_id`),
                                           INDEX `i_corp_message_corp_id`(`corp_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='发送消息通知的记录';
+
+#企业授权员工过滤配置
+CREATE TABLE `isv_filter`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime NOT NULL,
+  `filter_key` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `auto_filter` bit(1) NULL DEFAULT NULL,
+  `auto_filter_threshold` bigint(20) UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `config_key`(`filter_key`) USING BTREE COMMENT '唯一'
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+
+# 超员企业记录
+CREATE TABLE `isv_corp_sync_filter`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime NOT NULL,
+  `corp_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `count` bigint(20) UNSIGNED NULL DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `copr_id`(`corp_id`) USING BTREE COMMENT '唯一'
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;

@@ -22,7 +22,7 @@
     <bean id="deptService" class="com.rishiqing.dingtalk.svc.service.biz.impl.DeptService"/>
     <bean id="staffService" class="com.rishiqing.dingtalk.svc.service.biz.impl.StaffService"/>
     <!--配置service-->
-    <bean id="configService" class="com.rishiqing.dingtalk.svc.service.config.impl.ConfigServiceImpl"/>
+    <bean id="configService" class="com.rishiqing.dingtalk.svc.service.config.impl.FilterServiceImpl"/>
 
     <!--eventBus-->
     <!--eventBus: 新建时，同步到日事清的corpOrgCreated-->

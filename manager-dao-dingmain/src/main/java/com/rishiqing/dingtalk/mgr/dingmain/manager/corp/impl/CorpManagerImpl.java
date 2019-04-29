@@ -8,6 +8,7 @@ import com.rishiqing.dingtalk.api.model.domain.suite.SuiteTicketDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.constant.CorpLockType;
 import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.*;
+import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.filter.CorpSyncFilterDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpSuiteAuthDao;
@@ -58,22 +59,23 @@ public class CorpManagerImpl implements CorpManager {
     private SuiteRequestHelper suiteRequestHelper;
     @Autowired
     private CorpSyncFilterDao corpSyncFilterDao;
+
     @Override
-    public void saveOrUpdateCorp(CorpVO corpVO){
+    public void saveOrUpdateCorp(CorpVO corpVO) {
         corpDao.saveOrUpdateCorp(
                 CorpConverter.CorpVO2CorpDO(corpVO)
         );
     }
 
     @Override
-    public void saveOrUpdateCorpJSTicket(CorpJSAPITicketVO corpJSAPITicketVO){
+    public void saveOrUpdateCorpJSTicket(CorpJSAPITicketVO corpJSAPITicketVO) {
         corpJSAPITicketDao.saveOrUpdateCorpJSAPITicket(
                 CorpJSAPITicketConverter.corpJSTicketVO2CorpJSTicketDO(corpJSAPITicketVO)
         );
     }
 
     @Override
-    public CorpDO getCorpById(Long id){
+    public CorpDO getCorpById(Long id) {
         return corpDao.getCorpById(id);
     }
 
@@ -97,7 +99,7 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
-    public CorpTokenVO getCorpTokenByCorpId(String corpId){
+    public CorpTokenVO getCorpTokenByCorpId(String corpId) {
         CorpTokenDO corpTokenDO = corpTokenDao.getCorpTokenByCorpId(corpId);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -106,7 +108,7 @@ public class CorpManagerImpl implements CorpManager {
         if (null == corpTokenDO || calendar.getTime().compareTo(corpTokenDO.getExpiredTime()) > 0) {
             CorpLockDO lock = requireLock(corpId, CorpLockType.TOKEN);
             //  如果获取到锁，则更新token
-            if(null != lock){
+            if (null != lock) {
                 SuiteDO suiteDO = suiteDao.getSuite();
                 SuiteTicketDO suiteTicketDO = suiteTicketDao.getSuiteTicket();
 
@@ -133,7 +135,7 @@ public class CorpManagerImpl implements CorpManager {
         if (null == corpJSTicketDO || calendar.getTime().compareTo(corpJSTicketDO.getExpiredTime()) > 0) {
             CorpLockDO lock = requireLock(corpId, CorpLockType.JSAPI_TICKET);
             //  如果获取到锁，则更新token
-            if(null != lock){
+            if (null != lock) {
                 CorpTokenVO corpTokenVO = this.getCorpTokenByCorpId(corpId);
                 CorpJSAPITicketVO corpJSTicketVO = suiteRequestHelper.getCorpJSAPITicket(corpTokenVO);
                 corpJSTicketDO = CorpJSAPITicketConverter.corpJSTicketVO2CorpJSTicketDO(corpJSTicketVO);
@@ -146,7 +148,7 @@ public class CorpManagerImpl implements CorpManager {
     }
 
     @Override
-    public CorpChargeStatusVO getCorpChargeStatusByCorpId(String corpId){
+    public CorpChargeStatusVO getCorpChargeStatusByCorpId(String corpId) {
         return CorpChargeStatusConverter.corpChargeStatusDO2CorpChargeStatusVO(
                 corpChargeStatusDao.getCorpChargeStatusByCorpId(corpId)
         );
@@ -157,53 +159,54 @@ public class CorpManagerImpl implements CorpManager {
      * 1. 理想情况下：首先查找corp的corpSuiteAuth表中的authUserId字段，如果该字段不为空，且可以根据userId查找到该用户，那么就使用这个用户
      * 2. 如果1不满足，那么查找数据库中corp中的一个管理员，作为团队创建者
      * 3. 如果2仍然找不到，那么就找id最小的一个用户作为创建者
+     *
      * @param corpId
      * @return
      */
     @Override
-    public CorpStaffVO findATeamCreator(String corpId){
+    public CorpStaffVO findATeamCreator(String corpId) {
         CorpSuiteAuthDO corpSuiteAuthDO = corpSuiteAuthDao.getCorpSuiteAuthByCorpId(corpId);
-        if(corpSuiteAuthDO.getAuthUserId() != null){
+        if (corpSuiteAuthDO.getAuthUserId() != null) {
             CorpStaffDO corpStaffDO = corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, corpSuiteAuthDO.getAuthUserId());
-            if(null != corpStaffDO){
+            if (null != corpStaffDO) {
                 return CorpStaffConverter.corpStaffDO2CorpStaffVO(corpStaffDO);
             }
         }
         List<CorpStaffDO> adminList = corpStaffDao.getCorpStaffListByCorpIdAndIsAdmin(corpId, true);
-        if(adminList != null && adminList.size() > 0){
+        if (adminList != null && adminList.size() > 0) {
             return CorpStaffConverter.corpStaffDO2CorpStaffVO(adminList.get(0));
         }
         List<CorpStaffDO> firstCommonUser = corpStaffDao.getPageCorpStaffListByCorpId(corpId, 1L, 0L);
-        if(firstCommonUser != null && firstCommonUser.size() > 0){
+        if (firstCommonUser != null && firstCommonUser.size() > 0) {
             return CorpStaffConverter.corpStaffDO2CorpStaffVO(firstCommonUser.get(0));
         }
         return null;
     }
 
     @Override
-    public void deleteCorpSuiteAuthByCorpId(String corpId){
+    public void deleteCorpSuiteAuthByCorpId(String corpId) {
         corpSuiteAuthDao.deleteCorpSuiteAuthByCorpId(corpId);
     }
 
     @Override
-    public void deleteCorpAppByCorpId(String corpId, Long appId){
+    public void deleteCorpAppByCorpId(String corpId, Long appId) {
         corpAppDao.deleteCorpAppByCorpIdAndAppId(corpId, appId);
     }
 
     @Override
-    public void deleteCorpTokenByCorpId(String corpId){
+    public void deleteCorpTokenByCorpId(String corpId) {
         corpTokenDao.deleteCorpTokenByCorpId(corpId);
     }
 
     @Override
-    public void deleteCorpJSAPITicketByCorpId(String corpId){
+    public void deleteCorpJSAPITicketByCorpId(String corpId) {
         corpJSAPITicketDao.deleteCorpJSAPITicketByCorpId(corpId);
     }
 
     @Override
     public void saveOrUpdateCorpStatisticUserCount(String corpId, Long userCount) {
         CorpStatisticDO corpStatisticDO = corpStatisticDao.getCorpStatisticByCorpId(corpId);
-        if(corpStatisticDO == null) {
+        if (corpStatisticDO == null) {
             corpStatisticDO = new CorpStatisticDO();
             corpStatisticDO.setCorpId(corpId);
         }
@@ -254,6 +257,7 @@ public class CorpManagerImpl implements CorpManager {
      * 3  查看lock是否超时。如果超时，则表示可以获取到该锁，并将锁的下次超时时间更新为当前时间加超时阀值
      * 4  如果lock未超时，说明该锁已被占用，则获取锁失败。
      * 5  释放锁时，更新lock的超时时间为当前时间，锁可有其他请求获取。
+     *
      * @return
      */
     @Override
@@ -273,15 +277,15 @@ public class CorpManagerImpl implements CorpManager {
 
         corpLock = corpLockDao.getCorpLockByLockKey(lockKey);
         //  如果不存在，则直接保存
-        if(null == corpLock){
+        if (null == corpLock) {
             corpLock = new CorpLockDO();
             corpLock.setLockKey(lockKey);
             corpLock.setExpire(date);
         } else {
             //  如果lock的期限已到，则重新设置期限
-            if(corpLock.getExpire().compareTo(new Date()) <= 0){
+            if (corpLock.getExpire().compareTo(new Date()) <= 0) {
                 corpLock.setExpire(date);
-            }else{
+            } else {
                 //  如果lock的期限未到，说明锁已被占用，则返回null，表示请求锁失败
                 return null;
             }
@@ -292,6 +296,7 @@ public class CorpManagerImpl implements CorpManager {
 
     /**
      * 释放锁时，更新lock的超时时间为当前时间，锁可有其他请求获取。
+     *
      * @param corpId
      * @param lockType
      * @return
@@ -304,7 +309,7 @@ public class CorpManagerImpl implements CorpManager {
 
         corpLock = corpLockDao.getCorpLockByLockKey(lockKey);
         //  如果不存在，则直接保存
-        if(null == corpLock){
+        if (null == corpLock) {
             bizLogger.warn(LogFormatter.format(
                     LogFormatter.LogEvent.END,
                     "释放锁异常：锁不存在",
@@ -320,16 +325,6 @@ public class CorpManagerImpl implements CorpManager {
 
     @Override
     public List<CorpDO> listCorpBetweenDate(Date startDate, Date endDate) {
-        return corpDao.listCorpBetweenDate(startDate,endDate);
-    }
-
-    @Override
-    public void saveOrUpdateCorpSyncFilter(CorpSyncFilterDO corpSyncFilterDO) {
-        corpSyncFilterDao.saveOrUpdateCorpSyncFilter(corpSyncFilterDO);
-    }
-
-    @Override
-    public CorpSyncFilterDO getCorpSyncFilterByCorpId(String corpId) {
-        return corpSyncFilterDao.getCorpSyncFilterByCorpId(corpId);
+        return corpDao.listCorpBetweenDate(startDate, endDate);
     }
 }

@@ -1,10 +1,9 @@
 package com.rishiqing.dingtalk.mgr.dingmain.manager.corp;
 
-import com.rishiqing.dingtalk.api.model.domain.corp.CorpSyncFilterDO;
-import com.rishiqing.dingtalk.api.model.vo.corp.*;
-import com.rishiqing.dingtalk.mgr.dingmain.constant.CorpLockType;
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpDO;
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpLockDO;
+import com.rishiqing.dingtalk.api.model.vo.corp.*;
+import com.rishiqing.dingtalk.mgr.dingmain.constant.CorpLockType;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +67,4 @@ public interface CorpManager {
     List<CorpDO> listCorpBetweenDate(
             @Param("startDate") Date startDate,
             @Param("endDate") Date endDate);
-
-
 }

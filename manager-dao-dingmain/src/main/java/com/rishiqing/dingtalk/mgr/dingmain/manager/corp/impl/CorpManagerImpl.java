@@ -8,7 +8,6 @@ import com.rishiqing.dingtalk.api.model.domain.suite.SuiteTicketDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.constant.CorpLockType;
 import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.*;
-import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.filter.CorpSyncFilterDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.corp.*;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpAppDao;
 import com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.suite.CorpSuiteAuthDao;
@@ -57,8 +56,6 @@ public class CorpManagerImpl implements CorpManager {
     private CorpStatisticDao corpStatisticDao;
     @Autowired
     private SuiteRequestHelper suiteRequestHelper;
-    @Autowired
-    private CorpSyncFilterDao corpSyncFilterDao;
 
     @Override
     public void saveOrUpdateCorp(CorpVO corpVO) {

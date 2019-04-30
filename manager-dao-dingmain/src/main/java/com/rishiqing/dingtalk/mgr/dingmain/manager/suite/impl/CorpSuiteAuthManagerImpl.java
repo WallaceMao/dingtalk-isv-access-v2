@@ -73,6 +73,18 @@ public class CorpSuiteAuthManagerImpl implements CorpSuiteAuthManager {
         );
     }
 
+    @Override
+    public List<CorpSuiteAuthDeptVO> listGetCorpSuiteAuthDeptByCorpId(String corpId) {
+        List<CorpSuiteAuthDeptDO> corpSuiteAuthDeptByCorpId = corpSuiteAuthDeptDao.listGetCorpSuiteAuthDeptByCorpId(corpId);
+        return CorpSuiteAuthConverter.listCorpSuiteAuthDeptDO2corpSuiteAuthDeptVO(corpSuiteAuthDeptByCorpId);
+    }
+
+    @Override
+    public List<CorpSuiteAuthUserVO> listGetCorpSuiteAuthUserByCorpId(String corpId) {
+        List<CorpSuiteAuthUserDO> corpSuiteAuthUserByCorpId = corpSuiteAuthUserDao.listGetCorpSuiteAuthUserByCorpId(corpId);
+        return CorpSuiteAuthConverter.listCorpSuiteAuthUserDO2corpSuiteAuthUserVO(corpSuiteAuthUserByCorpId);
+    }
+
     private void saveBatchCorpSuiteAuthDept(String suiteKey, String corpId, List<Long> corpSuiteAuthDeptIdList) {
         List<CorpSuiteAuthDeptDO> deptDOList = new ArrayList<>(corpSuiteAuthDeptIdList.size());
         for (Long deptId : corpSuiteAuthDeptIdList) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.filter.FilterConfigDao">
+    <resultMap id="filterConfigMap" type="com.rishiqing.dingtalk.api.model.domain.config.FilterConfigDO">
+        <id property="id" column="id"></id>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="gmtModified" column="gmt_modified"></result>
+        <result property="filterKey" column="filter_key"></result>
+        <result property="autoFilter" column="auto_filter"></result>
+        <result property="autoFilterThreshold" column="auto_filter_threshold"></result>
+    </resultMap>
+    <select id="getFilterConfigByFilterKey" resultMap="filterConfigMap">
+        SELECT
+            `id`,
+            `gmt_create`,
+            `gmt_modified`,
+            `filter_key`,
+            `auto_filter`,
+            `auto_filter_threshold` 
+        FROM
+            isv_filter_config
+        WHERE
+            `filter_key`=#{filterKey}
+    </select>
+    <insert id="saveOrUpdateFilterConfig">
+        INSERT INTO `isv_filter_config` (
+            `gmt_create`,
+            `gmt_modified`,
+            `filter_key`,
+            `auto_filter`,
+            `auto_filter_threshold`
+        )
+        VALUES
+            (
+            NOW(),
+            NOW(),
+            #{filterKey},
+            #{autoFilter},
+            #{autoFilterThreshold}
+            )
+        ON DUPLICATE KEY UPDATE gmt_modified=NOW(),
+        `auto_filter`=VALUES(auto_filter),`auto_filter_threshold`=VALUES(auto_filter_threshold)
+    </insert>
+</mapper>

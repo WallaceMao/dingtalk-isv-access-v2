@@ -1,15 +1,15 @@
 package com.rishiqing.dingtalk.web.dingcloud.controller.demo;
 
-import com.rishiqing.dingtalk.svc.service.util.QueueService;
-import com.rishiqing.dingtalk.svc.dingpush.handler.SuiteSyncActionManager;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.api.model.vo.dingpush.OpenSyncBizDataVO;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import com.rishiqing.dingtalk.mgr.dingpush.manager.OpenSyncBizDataManager;
-import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
+import com.rishiqing.dingtalk.svc.dingpush.manager.SuiteSyncActionManager;
+import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,9 +33,8 @@ public class DemoController {
     @Autowired
     private OpenSyncBizDataManager openSyncBizDataManager;
     @Autowired
+    @Qualifier("filterSuiteSyncActionManager")
     private SuiteSyncActionManager suiteSyncActionManager;
-    @Autowired
-    private RsqAccountBizService rsqAccountBizService;
 
     @RequestMapping("/syncAuth")
     @ResponseBody

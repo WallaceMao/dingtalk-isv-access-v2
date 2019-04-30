@@ -1,9 +1,9 @@
 package com.rishiqing.dingtalk.svc.service.biz.impl;
 
-import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.api.model.domain.corp.CorpDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpCountWithCreatorVO;
 import com.rishiqing.dingtalk.api.service.biz.CorpQueryService;
+import com.rishiqing.dingtalk.mgr.dingmain.converter.corp.CorpConverter;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class CorpQueryServiceImpl implements CorpQueryService {
 
     @Override
     public List<CorpCountWithCreatorVO> listCorpBetweenDate(Date startDate, Date endDate) {
-        List<CorpDO> doList = corpManager.listCorpBetweenDate(startDate,endDate);
+        List<CorpDO> doList = corpManager.listCorpBetweenDate(startDate, endDate);
         List<CorpCountWithCreatorVO> voList = new ArrayList<>(doList.size());
         for (CorpDO corpDO : doList) {
             String corpId = corpDO.getCorpId();
@@ -57,6 +57,4 @@ public class CorpQueryServiceImpl implements CorpQueryService {
         }
         return voList;
     }
-
-
 }

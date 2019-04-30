@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.dingtalk.mgr.dingmain.dao.mapper.filter.CorpSyncFilterDao">
+    <resultMap id="corpSyncFilterMap" type="com.rishiqing.dingtalk.api.model.domain.corp.CorpSyncFilterDO">
+        <id property="id" column="id"></id>
+        <result property="gmtModified" column="gmt_modified"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="corpId" column="corp_id"></result>
+        <result property="count" column="count"></result>
+        <result property="status" column="status"></result>
+    </resultMap>
+    <insert id="saveOrUpdateCorpSyncFilter">
+        INSERT INTO `isv_corp_sync_filter` (
+            `gmt_create`,
+            `gmt_modified`,
+            `corp_id`,
+            `count`,
+            `status`
+        )
+        VALUES
+            (
+            NOW(),
+            NOW(),
+            #{corpId},
+            #{count},
+            #{status}
+            )
+        ON DUPLICATE KEY UPDATE `gmt_modified` = NOW(),
+        `count` = VALUES(count),`status` = VALUES(status)
+    </insert>
+
+    <select id="getCorpSyncFilterByCorpId" resultMap="corpSyncFilterMap">
+        SELECT
+            `id`,
+            `gmt_create`,
+            `gmt_modified`,
+            `corp_id`,
+            `count`,
+            `status`
+        FROM
+            isv_corp_sync_filter
+        WHERE
+            corp_id = #{corpId}
+    </select>
+</mapper>

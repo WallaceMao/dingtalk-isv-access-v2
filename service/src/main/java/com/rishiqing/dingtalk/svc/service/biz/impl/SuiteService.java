@@ -17,6 +17,9 @@ public class SuiteService {
     @Autowired
     private SuiteRequestHelper suiteRequestHelper;
 
+    /**
+     * 更新套件token
+     */
     public void fetchAndSaveSuiteToken() {
         SuiteVO suite = suiteManager.getSuite();
         SuiteTicketVO suiteTicket = suiteManager.getSuiteTicket();

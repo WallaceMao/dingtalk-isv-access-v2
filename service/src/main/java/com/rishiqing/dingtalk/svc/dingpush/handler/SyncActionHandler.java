@@ -7,5 +7,5 @@ import com.rishiqing.dingtalk.api.model.vo.dingpush.OpenSyncBizDataVO;
  * Date: 2018-11-10 13:51
  */
 public interface SyncActionHandler {
-    public void handleSyncAction(OpenSyncBizDataVO data);
+    void handleSyncAction(OpenSyncBizDataVO data);
 }

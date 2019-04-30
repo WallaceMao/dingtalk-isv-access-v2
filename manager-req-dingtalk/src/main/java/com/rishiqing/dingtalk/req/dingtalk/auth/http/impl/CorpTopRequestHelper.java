@@ -4,20 +4,20 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
-import com.dingtalk.api.request.*;
+import com.dingtalk.api.request.OapiDepartmentListRequest;
+import com.dingtalk.api.request.OapiUserGetOrgUserCountRequest;
+import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
+import com.dingtalk.api.request.OapiUserListRequest;
 import com.dingtalk.api.response.*;
-import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestCommonHelper;
-import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
 import com.rishiqing.dingtalk.api.exception.BizRuntimeException;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpStaffVO;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestCommonHelper;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Wallace Mao
@@ -59,7 +59,6 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
 
     /**
      * 获取子部门列表
-     *
      *
      * @param token
      * @param corpId
@@ -179,6 +178,31 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
     }
 
     @Override
+    public Map<String, Object> getCorpDepartmentStaffIdByPage(String token, String corpId, Long deptId, Long offset, Long size) {
+        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/list");
+        OapiUserListRequest req = new OapiUserListRequest();
+        req.setDepartmentId(deptId);
+        req.setOffset(offset);
+        req.setSize(size);
+        req.setHttpMethod("GET");
+        try {
+            OapiUserListResponse resp = client.execute(req, token);
+            List<OapiUserListResponse.Userlist> list = resp.getUserlist();
+            Set<String> staffIdSet = new HashSet<>(list.size());
+            for (OapiUserListResponse.Userlist user : list) {
+                staffIdSet.add(user.getUserid());
+            }
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("hasMore", resp.getHasMore());
+            result.put("set", staffIdSet);
+            return result;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    @Override
     public CorpStaffVO getCorpStaffByAuthCode(String token, String corpId, String authCode) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
         OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
@@ -190,6 +214,28 @@ public class CorpTopRequestHelper implements CorpRequestHelper {
             staffVO.setCorpId(corpId);
             staffVO.setUserId(resp.getUserid());
             return staffVO;
+        } catch (ApiException e) {
+            throw new BizRuntimeException(e);
+        }
+    }
+
+    /**
+     * 注意：
+     * 企业人数：企业真实人数，非企业授权可使用应用的人数
+     *
+     * @param token
+     * @param onlyActive 0：包含未激活钉钉的人员数量 1：不包含未激活钉钉的人员数量
+     * @return
+     */
+    @Override
+    public Long getCorpStaffCount(String token, Long onlyActive) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get_org_user_count");
+        OapiUserGetOrgUserCountRequest request = new OapiUserGetOrgUserCountRequest();
+        request.setOnlyActive(onlyActive);
+        request.setHttpMethod("GET");
+        try {
+            OapiUserGetOrgUserCountResponse response = client.execute(request, token);
+            return response.getCount();
         } catch (ApiException e) {
             throw new BizRuntimeException(e);
         }

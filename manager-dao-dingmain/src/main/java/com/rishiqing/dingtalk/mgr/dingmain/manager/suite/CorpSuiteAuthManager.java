@@ -4,6 +4,8 @@ import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthDeptVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthUserVO;
 import com.rishiqing.dingtalk.api.model.vo.suite.CorpSuiteAuthVO;
 
+import java.util.List;
+
 /**
  * @author Wallace Mao
  * Date: 2018-11-03 20:25
@@ -18,4 +20,10 @@ public interface CorpSuiteAuthManager {
 
     CorpSuiteAuthUserVO getCorpSuiteAuthUserByCorpIdAndUserId(
             String corpId, String userId);
+
+    List<CorpSuiteAuthDeptVO> listGetCorpSuiteAuthDeptByCorpId(
+            String corpId);
+
+    List<CorpSuiteAuthUserVO> listGetCorpSuiteAuthUserByCorpId(
+            String corpId);
 }

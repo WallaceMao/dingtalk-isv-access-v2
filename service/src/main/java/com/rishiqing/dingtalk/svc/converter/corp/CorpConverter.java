@@ -1,8 +1,10 @@
 package com.rishiqing.dingtalk.svc.converter.corp;
 
 import com.csvreader.CsvWriter;
+import com.rishiqing.dingtalk.api.model.domain.corp.CorpSyncFilterDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpAuthInfoVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpCountWithCreatorVO;
+import com.rishiqing.dingtalk.api.model.vo.corp.CorpSyncFilterVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpVO;
 
 import java.io.File;
@@ -54,5 +56,14 @@ public class CorpConverter {
         }
         csvWriter.close();
         return tempFile;
+    }
+
+    public static CorpSyncFilterVO corpSyncFilterDO2CorpSyncFilterVO(CorpSyncFilterDO corpSyncFilterDO) {
+        if (corpSyncFilterDO == null) return null;
+        CorpSyncFilterVO corpSyncFilterVO = new CorpSyncFilterVO();
+        corpSyncFilterVO.setCorpId(corpSyncFilterDO.getCorpId());
+        corpSyncFilterVO.setCount(corpSyncFilterDO.getCount());
+        corpSyncFilterVO.setStatus(corpSyncFilterDO.getStatus());
+        return corpSyncFilterVO;
     }
 }

@@ -30,4 +30,6 @@ public interface CorpSuiteAuthUserDao {
             @Param("corpId") String corpId,
             @Param("userId") String userId
     );
+
+    List<CorpSuiteAuthUserDO> listGetCorpSuiteAuthUserByCorpId(@Param("corpId") String corpId);
 }

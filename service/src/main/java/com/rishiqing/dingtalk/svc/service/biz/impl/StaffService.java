@@ -1,20 +1,21 @@
 package com.rishiqing.dingtalk.svc.service.biz.impl;
 
-import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
-import com.rishiqing.dingtalk.svc.service.util.QueueService;
+import com.rishiqing.dingtalk.api.exception.CorpOverstaffedException;
+import com.rishiqing.dingtalk.api.model.domain.config.FilterConfigDO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpDepartmentVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpStaffVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpStatisticVO;
 import com.rishiqing.dingtalk.api.model.vo.corp.CorpTokenVO;
+import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpDepartmentManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpManager;
 import com.rishiqing.dingtalk.mgr.dingmain.manager.corp.CorpStaffManager;
-import com.rishiqing.dingtalk.api.service.rsq.RsqAccountBizService;
+import com.rishiqing.dingtalk.mgr.dingmain.manager.filter.FilterManager;
+import com.rishiqing.dingtalk.req.dingtalk.auth.http.CorpRequestHelper;
+import com.rishiqing.dingtalk.svc.service.util.QueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Wallace Mao
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 public class StaffService {
     private static long DEFAULT_PAGE_SIZE = 50;
+    private static final String STAFF_COUNT_LIMIT_FILTER_KEY = "staff_count_limit";
     @Autowired
     private CorpRequestHelper corpRequestHelper;
     @Autowired
@@ -34,6 +36,8 @@ public class StaffService {
     private RsqAccountBizService rsqAccountBizService;
     @Autowired(required = false)
     private QueueService queueService;
+    @Autowired
+    private FilterManager filterManager;
 
     /**
      * 根据userIdList中的id，从钉钉处获取用户，然后保存到本地
@@ -70,6 +74,7 @@ public class StaffService {
 
     /**
      * 保存deptId的部门，以及其所有的子部门的员工
+     *
      * @param corpId
      * @param deptId
      * @param scopeVersion
@@ -98,6 +103,7 @@ public class StaffService {
      * 1  用户还在可见范围之内，那么保留用户，更新用户所在的部门
      * 2  用户不在可见范围之内，那么删除用户。
      * 以上两种操作完成之后都需要同步到日事清中
+     *
      * @param corpId
      * @param deptId
      * @param scopeVersion
@@ -264,6 +270,94 @@ public class StaffService {
                 targetStaff.setIsLeaderInDepts(newIsLeaderInDept);
             }
             newIsLeaderInDept.putAll(dbIsLeaderInDept);
+        }
+    }
+
+    /*
+    -------------------------------------------------分割线--------------------------------------------------------------
+    以下新增功能：人数限制
+     */
+
+    /**
+     * 获取公司指定部门下的用户数量，不保存到数据库。
+     * 注意，在钉钉中，部门获取的规则是这样的：
+     * 假设dept-A是dept-B的父部门
+     * 1.dept-B中含有员工staff-1，那么在获取dept-A部门的员工时，是获取不到staff-1的
+     * 2.企业授权套件时：授权dept-A，那么dept-B的员工也是可以使用的，真是爆炸！
+     *
+     * @param corpId
+     * @param deptId
+     * @return 返回指定部门内的所有用户Id（不含子部门）
+     */
+    private Set<String> listGetDepartmentStaffId(String corpId, Long deptId) {
+        boolean hasMore = true;
+        long offset = 0;
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        Set<String> staffIdSet = new HashSet<>();
+        while (hasMore) {
+            Map<String, Object> staffPageList = corpRequestHelper.getCorpDepartmentStaffIdByPage(
+                    corpTokenVO.getCorpToken(), corpId, deptId, offset, DEFAULT_PAGE_SIZE
+            );
+            //add
+            staffIdSet.addAll((Set<String>) staffPageList.get("set"));
+            offset += DEFAULT_PAGE_SIZE;
+            hasMore = (Boolean) staffPageList.get("hasMore");
+        }
+        return staffIdSet;
+    }
+
+    /**
+     * 获取deptId的部门员工Id，以及其所有的子部门的员工Id，
+     * 每次Set中添加元素时，判断set的大小，一旦超过阈值，抛出异常
+     *
+     * @param corpId
+     * @param deptId
+     * @param corpStaffIdSet
+     * @param staffCountThreshold
+     */
+    private void listGetCorpDepartmentStaffIdRecursive(String corpId, Long deptId, Set<String> corpStaffIdSet, Long staffCountThreshold) {
+        //  获取当前部门员工
+        corpStaffIdSet.addAll(this.listGetDepartmentStaffId(corpId, deptId));
+        if (corpStaffIdSet.size() > staffCountThreshold) {
+            throw new CorpOverstaffedException("企业授权员工人数超标");
+        }
+        CorpTokenVO corpTokenVO = corpManager.getCorpTokenByCorpId(corpId);
+        List<CorpDepartmentVO> deptList = corpRequestHelper.getChildCorpDepartment(
+                corpTokenVO.getCorpToken(), corpId, deptId);
+        //  如果无子部门，那么就返回
+        if (deptList == null || deptList.size() == 0) {
+            return;
+        }
+        //  递归获取子部门员工
+        for (CorpDepartmentVO dept : deptList) {
+            this.listGetCorpDepartmentStaffIdRecursive(corpId, dept.getDeptId(), corpStaffIdSet, staffCountThreshold);
+        }
+    }
+
+    public Boolean isCorpStaffCountAboveThreshold(List<String> authedUserIdList, List<Long> authedDeptIdList, String corpId) {
+        //先判断是否开启超员过滤器
+        FilterConfigDO staffCountFilter = filterManager.getFilterConfigByFilterKey(STAFF_COUNT_LIMIT_FILTER_KEY);
+        if(staffCountFilter==null){
+            //初始化默认值：关闭,100L
+            staffCountFilter=new FilterConfigDO();
+            staffCountFilter.setAutoFilter(false);
+            staffCountFilter.setFilterKey(STAFF_COUNT_LIMIT_FILTER_KEY);
+            staffCountFilter.setAutoFilterThreshold(100L);
+            filterManager.saveOrUpdateFilterConfig(staffCountFilter);
+        }
+        //如果过滤器处于关闭状态，直接返回false:未超员
+        if (!staffCountFilter.getAutoFilter()) {
+            return false;
+        } else {
+            //阈值
+            Long autoFilterThreshold = staffCountFilter.getAutoFilterThreshold();
+            //可能会出现重复员工，利用set去重
+            Set<String> corpStaffIdSet = new HashSet<>(authedUserIdList);
+            for (Long authedDeptId : authedDeptIdList) {
+                //递归部门查询部门以及子部门员工，如果超标直接抛出异常
+                listGetCorpDepartmentStaffIdRecursive(corpId, authedDeptId, corpStaffIdSet, autoFilterThreshold);
+            }
+            return false;
         }
     }
 }

@@ -52,4 +52,13 @@
 			WHERE corp_id=#{corpId} AND user_id=#{userId}
 		 ]]>
     </select>
+
+    <select id="listGetCorpSuiteAuthUserByCorpId" resultMap="corpSuiteAuthUserMap">
+        SELECT
+        <include refid="select-all-fields"/>
+        FROM isv_corp_suite_auth_user
+        <![CDATA[
+			WHERE corp_id=#{corpId}
+		 ]]>
+    </select>
 </mapper>

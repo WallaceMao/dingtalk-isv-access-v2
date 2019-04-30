@@ -19,5 +19,9 @@ public interface CorpRequestHelper {
 
     Map<String, Object> getCorpDepartmentStaffByPage(String token, String corpId, Long deptId, Long offset, Long size);
 
+    Map<String, Object> getCorpDepartmentStaffIdByPage(String token,String corpId,Long deptId,Long offset,Long size);
+
     CorpStaffVO getCorpStaffByAuthCode(String token, String corpId, String authCode);
+
+    Long getCorpStaffCount(String token,Long onlyActive);
 }

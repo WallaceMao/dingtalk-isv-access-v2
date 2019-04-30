@@ -626,7 +626,7 @@ CREATE TABLE `isv_corp_message_publish_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COMMENT='发送消息通知的记录';
 
 #企业授权员工过滤配置
-CREATE TABLE `isv_filter`  (
+CREATE TABLE `isv_filter_config`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime NOT NULL,

@@ -108,10 +108,9 @@ public class MessageController {
         ));
         try{
             JSONObject content = json.getJSONObject("textcard");
-            //  针对文集、笔记、邀请类型的通知，不发送钉钉通知
-            if("corpus".equals(content.getString("from"))
-                    || "invite".equals(content.getString("from"))
-                    || "summary".equals(content.getString("from"))){
+            //  针对邀请类型的通知，不发送钉钉通知
+            if("invite".equals(content.getString("from"))){
+                bizLogger.warn("notification type not implemented.... " + content);
                 Map<String, Object> map = new HashMap<>();
                 map.put("errcode", 0);
 

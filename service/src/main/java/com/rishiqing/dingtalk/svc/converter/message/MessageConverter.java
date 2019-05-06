@@ -113,16 +113,21 @@ public class MessageConverter {
         List<MessageBody.OABody.Body.Form> formList = new ArrayList<MessageBody.OABody.Body.Form>();
 
         MessageBody.OABody.Body.Form titleItem = new MessageBody.OABody.Body.Form();
-        titleItem.setKey("任务: ");
-        titleItem.setValue(title);
-        formList.add(titleItem);
 
+        String titleKey = "任务: ";
         if(json.containsKey("from")){
             from = json.getString("from");
+            if ("summary".equals(from) || "corpus".equals(from)) {
+                titleKey = "笔记: ";
+            }
         }
         if(json.containsKey("type")){
             type = json.getString("type");
         }
+        titleItem.setKey(titleKey);
+        titleItem.setValue(title);
+        formList.add(titleItem);
+
         if(json.containsKey("receiverName")){
             receiverName = json.getString("receiverName");
             if(receiverName != null){
@@ -144,7 +149,7 @@ public class MessageConverter {
             }
         }
         MessageBody.OABody.Body.Form btnItem = new MessageBody.OABody.Body.Form();
-        btnItem.setKey("点击查看>>");
+        btnItem.setKey(btntxt);
         btnItem.setValue("");
         formList.add(btnItem);
 
